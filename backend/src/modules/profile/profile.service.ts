@@ -27,7 +27,8 @@ export class ProfileService {
 
   async update(data: Partial<Profile>) {
     const profile = await this.get();
-    await this.repo.update(profile.id, data);
+    const { id, ...updateData } = data;
+    await this.repo.update(profile.id, updateData);
     return this.repo.findOneBy({ id: profile.id });
   }
 }

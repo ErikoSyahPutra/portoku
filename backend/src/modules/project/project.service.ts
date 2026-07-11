@@ -28,7 +28,8 @@ export class ProjectService {
   }
 
   async update(id: number, data: Partial<Project>) {
-    await this.repo.update(id, data);
+    const { id: _, ...updateData } = data;
+    await this.repo.update(id, updateData);
     return this.findOne(id);
   }
 

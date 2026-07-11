@@ -41,7 +41,8 @@ export class BlogService {
     if (data.content) {
       data.readTime = Math.ceil(data.content.split(/\s+/).length / 200);
     }
-    await this.repo.update(id, data);
+    const { id: _, ...updateData } = data;
+    await this.repo.update(id, updateData);
     return this.findOne(id);
   }
 
