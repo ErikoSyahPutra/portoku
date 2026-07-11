@@ -12,9 +12,13 @@ import { existsSync, mkdirSync } from 'fs';
 
 const uploadDir = join(process.cwd(), 'uploads');
 
-// Ensure uploads directory exists
-if (!existsSync(uploadDir)) {
-  mkdirSync(uploadDir, { recursive: true });
+// Ensure uploads directory exists (skip on Vercel read-only filesystem)
+try {
+  if (!process.env.VERCEL && !existsSync(uploadDir)) {
+    mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (error) {
+  console.warn('Skipped or failed creating local uploads directory:', error.message);
 }
 
 @Controller('upload')
