@@ -9,12 +9,24 @@ import { Award } from './modules/award/award.entity';
 import { Profile } from './modules/profile/profile.entity';
 
 async function seed() {
-  const ds = new DataSource({
-    type: 'sqlite',
-    database: join(__dirname, '..', 'database.sqlite'),
-    entities: [Project, Academic, Experience, Blog, Award, Profile],
-    synchronize: true,
-  });
+  const ds = new DataSource(
+    process.env.DATABASE_URL
+      ? {
+          type: 'postgres',
+          url: process.env.DATABASE_URL,
+          entities: [Project, Academic, Experience, Blog, Award, Profile],
+          synchronize: true,
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        }
+      : {
+          type: 'sqlite',
+          database: join(__dirname, '..', 'database.sqlite'),
+          entities: [Project, Academic, Experience, Blog, Award, Profile],
+          synchronize: true,
+        }
+  );
 
   await ds.initialize();
   console.log('📦 Database connected. Seeding...');
