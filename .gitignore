@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Next.js build output
+.next/
+**/.next/
+out/
+**/out/
+
+# NestJS build output
+dist/
+**/dist/
+
+# SQLite databases
+*.sqlite
+*.sqlite-journal
+backend/database.sqlite
+
+# Local Environment Variables
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Uploads / Static Assets
+backend/uploads/*
+!backend/uploads/ecommerce.png
+!backend/uploads/healthcare.png
+!backend/uploads/project_management.png

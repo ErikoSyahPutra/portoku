@@ -1,0 +1,582 @@
+"use client";
+import { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
+import "./admin.css";
+import * as api from "@/lib/admin-api";
+
+// Icons from react-icons (Heroicons outline)
+import {
+  HiOutlineUser,
+  HiOutlineComputerDesktop,
+  HiOutlineBriefcase,
+  HiOutlineAcademicCap,
+  HiOutlineDocumentText,
+  HiOutlineTrophy,
+  HiOutlineArrowLeft,
+  HiOutlinePencilSquare,
+  HiOutlineTrash,
+  HiOutlinePlus,
+  HiOutlineXMark,
+  HiOutlinePhoto,
+  HiOutlineCloudArrowUp,
+  HiOutlineCheckCircle,
+  HiOutlineArrowRightOnRectangle,
+} from "react-icons/hi2";
+
+const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+
+const TABS = [
+  { key: "profile", label: "Profile", icon: HiOutlineUser },
+  { key: "projects", label: "Projects", icon: HiOutlineComputerDesktop },
+  { key: "experiences", label: "Experience", icon: HiOutlineBriefcase },
+  { key: "academics", label: "Education", icon: HiOutlineAcademicCap },
+  { key: "blogs", label: "Blog", icon: HiOutlineDocumentText },
+  { key: "awards", label: "Awards", icon: HiOutlineTrophy },
+];
+
+type Toast = { message: string; type: "success" | "error" } | null;
+
+export default function AdminPage() {
+  const [tab, setTab] = useState("profile");
+  const [toast, setToast] = useState<Toast>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  };
+
+  const showToast = useCallback((message: string, type: "success" | "error" = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
+
+  if (isAuthenticated === null) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-secondary)" }}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />;
+  }
+
+  return (
+    <div className="admin-layout">
+      <aside className="admin-sidebar">
+        <div className="admin-sidebar-header">
+          <h2>Admin Panel</h2>
+          <p>Manage portfolio</p>
+        </div>
+        <ul className="admin-nav">
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            return (
+              <li key={t.key}>
+                <button className={tab === t.key ? "active" : ""} onClick={() => setTab(t.key)}>
+                  <Icon /> <span>{t.label}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="admin-sidebar-footer" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <Link href="/"><HiOutlineArrowLeft /> <span>Back to Site</span></Link>
+          <button
+            onClick={handleSignOut}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#ef4444",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontSize: "0.8rem",
+              cursor: "pointer",
+              padding: 0,
+              opacity: 0.8,
+              transition: "var(--transition)",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.8")}
+          >
+            <HiOutlineArrowRightOnRectangle size={14} /> <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      <div className="admin-main">
+        {tab === "profile" && <ProfilePanel showToast={showToast} />}
+        {tab === "projects" && <CrudPanel entity="projects" showToast={showToast} fields={projectFields} columns={["title","technologies","featured"]} />}
+        {tab === "experiences" && <CrudPanel entity="experiences" showToast={showToast} fields={experienceFields} columns={["position","company","startDate","current"]} />}
+        {tab === "academics" && <CrudPanel entity="academics" showToast={showToast} fields={academicFields} columns={["institution","degree","field","startYear"]} />}
+        {tab === "blogs" && <CrudPanel entity="blogs" showToast={showToast} fields={blogFields} columns={["title","slug","published","readTime"]} />}
+        {tab === "awards" && <CrudPanel entity="awards" showToast={showToast} fields={awardFields} columns={["title","issuer","year"]} />}
+      </div>
+
+      {toast && (
+        <div className={`toast ${toast.type}`}>
+          <HiOutlineCheckCircle style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} />
+          {toast.message}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═══════════ Image Upload Component ═══════════ */
+function ImageUpload({ value, onChange, round }: { value?: string; onChange: (url: string) => void; round?: boolean }) {
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const imgSrc = value ? (value.startsWith("http") ? value : `${BACKEND}${value}`) : null;
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const res = await api.uploadFile(file);
+      onChange(res.url);
+    } catch {
+      alert("Upload failed");
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
+  return (
+    <div className="image-upload">
+      <div className={`image-upload-preview ${round ? "large" : ""}`}>
+        {imgSrc ? <img src={imgSrc} alt="Preview" /> : <HiOutlinePhoto size={24} />}
+      </div>
+      <div className="image-upload-controls">
+        <input type="file" ref={fileRef} accept="image/*" onChange={handleFile} hidden />
+        <button type="button" className={`image-upload-btn ${uploading ? "uploading" : ""}`} onClick={() => fileRef.current?.click()}>
+          <HiOutlineCloudArrowUp size={16} />
+          {uploading ? "Uploading..." : "Upload Image"}
+        </button>
+        <span className="image-upload-hint">JPG, PNG, WebP. Max 5MB.</span>
+        {value && (
+          <button type="button" className="image-upload-remove" onClick={() => onChange("")}>
+            Remove image
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════ Profile Panel ═══════════ */
+function ProfilePanel({ showToast }: { showToast: (m: string, t?: "success"|"error") => void }) {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { api.getProfile().then(setData).finally(() => setLoading(false)); }, []);
+
+  const handleSave = async () => {
+    try {
+      await api.updateProfile(data);
+      showToast("Profile updated!");
+    } catch { showToast("Failed to update", "error"); }
+  };
+
+  if (loading) return <p style={{ color: "var(--text-muted)" }}>Loading...</p>;
+  if (!data) return null;
+
+  const set = (k: string, v: any) => setData({ ...data, [k]: v });
+
+  return (
+    <>
+      <div className="admin-topbar">
+        <h1>Profile</h1>
+        <button className="btn btn-primary" onClick={handleSave}>
+          <HiOutlineCheckCircle size={18} /> Save Changes
+        </button>
+      </div>
+      <div className="admin-table-wrap" style={{ padding: 24 }}>
+        {/* Avatar */}
+        <div className="form-group">
+          <label>Avatar</label>
+          <ImageUpload value={data.avatarUrl} onChange={(url) => set("avatarUrl", url)} round />
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Name</label>
+            <input className="form-input" value={data.name || ""} onChange={(e) => set("name", e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>Title</label>
+            <input className="form-input" value={data.title || ""} onChange={(e) => set("title", e.target.value)} />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Bio (short)</label>
+          <textarea className="form-input" value={data.bio || ""} onChange={(e) => set("bio", e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label>About Me (full)</label>
+          <textarea className="form-input" rows={6} value={data.aboutMe || ""} onChange={(e) => set("aboutMe", e.target.value)} />
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Email</label>
+            <input className="form-input" value={data.email || ""} onChange={(e) => set("email", e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>Location</label>
+            <input className="form-input" value={data.location || ""} onChange={(e) => set("location", e.target.value)} />
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>GitHub URL</label>
+            <input className="form-input" value={data.githubUrl || ""} onChange={(e) => set("githubUrl", e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>LinkedIn URL</label>
+            <input className="form-input" value={data.linkedinUrl || ""} onChange={(e) => set("linkedinUrl", e.target.value)} />
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Twitter URL</label>
+            <input className="form-input" value={data.twitterUrl || ""} onChange={(e) => set("twitterUrl", e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>Website URL</label>
+            <input className="form-input" value={data.websiteUrl || ""} onChange={(e) => set("websiteUrl", e.target.value)} />
+          </div>
+        </div>
+
+        {/* Resume */}
+        <div className="form-group">
+          <label>Resume URL</label>
+          <input className="form-input" value={data.resumeUrl || ""} onChange={(e) => set("resumeUrl", e.target.value)} placeholder="Link or upload path" />
+        </div>
+
+        {/* Feature Toggles */}
+        <div style={{ marginTop: 24, paddingTop: 24, borderTop: "1px solid var(--border-color)" }}>
+          <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: 16, letterSpacing: "0.04em" }}>FEATURE VISIBILITY</label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+            <div className="form-check">
+              <input type="checkbox" id="showProjects" checked={data.showProjects !== false} onChange={(e) => set("showProjects", e.target.checked)} />
+              <label htmlFor="showProjects">Show Projects Section</label>
+            </div>
+            <div className="form-check">
+              <input type="checkbox" id="showExperiences" checked={data.showExperiences !== false} onChange={(e) => set("showExperiences", e.target.checked)} />
+              <label htmlFor="showExperiences">Show Experience Section</label>
+            </div>
+            <div className="form-check">
+              <input type="checkbox" id="showAcademics" checked={data.showAcademics !== false} onChange={(e) => set("showAcademics", e.target.checked)} />
+              <label htmlFor="showAcademics">Show Education Section</label>
+            </div>
+            <div className="form-check">
+              <input type="checkbox" id="showBlog" checked={data.showBlog !== false} onChange={(e) => set("showBlog", e.target.checked)} />
+              <label htmlFor="showBlog">Show Blog Section</label>
+            </div>
+            <div className="form-check">
+              <input type="checkbox" id="showAwards" checked={data.showAwards !== false} onChange={(e) => set("showAwards", e.target.checked)} />
+              <label htmlFor="showAwards">Show Awards Section</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ═══════════ Generic CRUD Panel ═══════════ */
+type FieldDef = { key: string; label: string; type: "text" | "textarea" | "number" | "checkbox" | "tags" | "image" };
+
+const apiMap: Record<string, { getAll: () => Promise<any>; create: (d: any) => Promise<any>; update: (id: number, d: any) => Promise<any>; remove: (id: number) => Promise<any> }> = {
+  projects: { getAll: api.getProjects, create: api.createProject, update: api.updateProject, remove: api.deleteProject },
+  experiences: { getAll: api.getExperiences, create: api.createExperience, update: api.updateExperience, remove: api.deleteExperience },
+  academics: { getAll: api.getAcademics, create: api.createAcademic, update: api.updateAcademic, remove: api.deleteAcademic },
+  blogs: { getAll: api.getBlogs, create: api.createBlog, update: api.updateBlog, remove: api.deleteBlog },
+  awards: { getAll: api.getAwards, create: api.createAward, update: api.updateAward, remove: api.deleteAward },
+};
+
+function CrudPanel({ entity, showToast, fields, columns }: { entity: string; showToast: (m: string, t?: "success"|"error") => void; fields: FieldDef[]; columns: string[] }) {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState<"create" | "edit" | null>(null);
+  const [current, setCurrent] = useState<any>({});
+
+  const load = useCallback(() => {
+    setLoading(true);
+    apiMap[entity].getAll().then(setItems).finally(() => setLoading(false));
+  }, [entity]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const openCreate = () => { setCurrent({}); setModal("create"); };
+  const openEdit = (item: any) => {
+    const copy = { ...item };
+    fields.forEach((f) => {
+      if (f.type === "tags" && Array.isArray(copy[f.key])) {
+        copy[f.key] = copy[f.key].join(", ");
+      }
+    });
+    setCurrent(copy);
+    setModal("edit");
+  };
+
+  const handleSave = async () => {
+    try {
+      const payload = { ...current };
+      fields.forEach((f) => {
+        if (f.type === "tags" && typeof payload[f.key] === "string") {
+          payload[f.key] = payload[f.key].split(",").map((s: string) => s.trim()).filter(Boolean);
+        }
+      });
+      if (modal === "create") {
+        await apiMap[entity].create(payload);
+        showToast("Created successfully!");
+      } else {
+        await apiMap[entity].update(current.id, payload);
+        showToast("Updated successfully!");
+      }
+      setModal(null);
+      load();
+    } catch { showToast("Operation failed", "error"); }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this item?")) return;
+    try {
+      await apiMap[entity].remove(id);
+      showToast("Deleted successfully!");
+      load();
+    } catch { showToast("Delete failed", "error"); }
+  };
+
+  const renderCellValue = (item: any, col: string) => {
+    const val = item[col];
+    if (typeof val === "boolean") return <span className={`table-badge ${val ? "green" : "yellow"}`}>{val ? "Yes" : "No"}</span>;
+    if (Array.isArray(val)) return val.slice(0, 3).join(", ") + (val.length > 3 ? "…" : "");
+    return String(val ?? "—");
+  };
+
+  const title = entity.charAt(0).toUpperCase() + entity.slice(1);
+
+  return (
+    <>
+      <div className="admin-topbar">
+        <h1>{title}</h1>
+        <div className="admin-topbar-actions">
+          <button className="btn btn-primary" onClick={openCreate}><HiOutlinePlus size={18} /> Add New</button>
+        </div>
+      </div>
+
+      <div className="admin-table-wrap">
+        {loading ? (
+          <div className="empty-state"><p>Loading...</p></div>
+        ) : items.length === 0 ? (
+          <div className="empty-state">
+            <p>No {entity} yet.</p>
+            <button className="btn btn-secondary" onClick={openCreate}>Create your first one</button>
+          </div>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                {columns.map((c) => <th key={c}>{c.replace(/([A-Z])/g, " $1").trim()}</th>)}
+                <th className="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  {columns.map((c) => <td key={c}>{renderCellValue(item, c)}</td>)}
+                  <td className="col-actions">
+                    <div className="actions-cell">
+                      <button className="btn-icon" title="Edit" onClick={() => openEdit(item)}>
+                        <HiOutlinePencilSquare size={16} />
+                      </button>
+                      <button className="btn-icon danger" title="Delete" onClick={() => handleDelete(item.id)}>
+                        <HiOutlineTrash size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Modal */}
+      {modal && (
+        <div className="modal-overlay" onClick={() => setModal(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{modal === "create" ? `Add New` : `Edit`} {title.endsWith("s") ? title.slice(0, -1) : title}</h2>
+              <button className="modal-close" onClick={() => setModal(null)}><HiOutlineXMark size={20} /></button>
+            </div>
+            <div className="modal-body">
+              {fields.map((f) => {
+                if (f.type === "image") {
+                  return (
+                    <div className="form-group" key={f.key}>
+                      <label>{f.label}</label>
+                      <ImageUpload value={current[f.key]} onChange={(url) => setCurrent({ ...current, [f.key]: url })} />
+                    </div>
+                  );
+                }
+                if (f.type === "checkbox") {
+                  return (
+                    <div className="form-group" key={f.key}>
+                      <div className="form-check">
+                        <input type="checkbox" id={`${f.key}-${entity}`} checked={!!current[f.key]} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.checked })} />
+                        <label htmlFor={`${f.key}-${entity}`}>{f.label}</label>
+                      </div>
+                    </div>
+                  );
+                }
+                return (
+                  <div className="form-group" key={f.key}>
+                    <label>{f.label}</label>
+                    {f.type === "textarea" ? (
+                      <textarea className="form-input" rows={4} value={current[f.key] || ""} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value })} />
+                    ) : f.type === "number" ? (
+                      <input className="form-input" type="number" value={current[f.key] ?? ""} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value === "" ? "" : Number(e.target.value) })} />
+                    ) : (
+                      <input className="form-input" value={current[f.key] || ""} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value })} placeholder={f.type === "tags" ? "Comma-separated values" : ""} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={() => setModal(null)}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleSave}>
+                <HiOutlineCheckCircle size={16} /> {modal === "create" ? "Create" : "Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ═══════════ Field Definitions ═══════════ */
+const projectFields: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "description", label: "Description", type: "textarea" },
+  { key: "imageUrl", label: "Project Image", type: "image" },
+  { key: "liveUrl", label: "Live URL", type: "text" },
+  { key: "githubUrl", label: "GitHub URL", type: "text" },
+  { key: "technologies", label: "Technologies", type: "tags" },
+  { key: "featured", label: "Featured", type: "checkbox" },
+  { key: "order", label: "Sort Order", type: "number" },
+];
+
+const experienceFields: FieldDef[] = [
+  { key: "position", label: "Position", type: "text" },
+  { key: "company", label: "Company", type: "text" },
+  { key: "logoUrl", label: "Company Logo", type: "image" },
+  { key: "location", label: "Location", type: "text" },
+  { key: "startDate", label: "Start Date (YYYY-MM)", type: "text" },
+  { key: "endDate", label: "End Date (YYYY-MM)", type: "text" },
+  { key: "current", label: "Currently Working Here", type: "checkbox" },
+  { key: "description", label: "Description", type: "textarea" },
+  { key: "skills", label: "Skills", type: "tags" },
+  { key: "order", label: "Sort Order", type: "number" },
+];
+
+const academicFields: FieldDef[] = [
+  { key: "institution", label: "Institution", type: "text" },
+  { key: "logoUrl", label: "Institution Logo", type: "image" },
+  { key: "degree", label: "Degree", type: "text" },
+  { key: "field", label: "Field of Study", type: "text" },
+  { key: "startYear", label: "Start Year", type: "number" },
+  { key: "endYear", label: "End Year", type: "number" },
+  { key: "gpa", label: "GPA", type: "text" },
+  { key: "description", label: "Description", type: "textarea" },
+  { key: "order", label: "Sort Order", type: "number" },
+];
+
+const blogFields: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "slug", label: "Slug (auto-generated if empty)", type: "text" },
+  { key: "coverImageUrl", label: "Cover Image", type: "image" },
+  { key: "excerpt", label: "Excerpt", type: "textarea" },
+  { key: "content", label: "Content (Markdown)", type: "textarea" },
+  { key: "tags", label: "Tags", type: "tags" },
+  { key: "published", label: "Published", type: "checkbox" },
+];
+
+const awardFields: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "issuer", label: "Issuer", type: "text" },
+  { key: "imageUrl", label: "Award Image", type: "image" },
+  { key: "year", label: "Year", type: "number" },
+  { key: "description", label: "Description", type: "textarea" },
+  { key: "credentialUrl", label: "Credential URL", type: "text" },
+  { key: "order", label: "Sort Order", type: "number" },
+];
+
+/* ═══════════ Login Screen Component ═══════════ */
+function LoginScreen({ onLoginSuccess }: { onLoginSuccess: () => void }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await api.login(username, password);
+      localStorage.setItem("token", res.token);
+      onLoginSuccess();
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Invalid username or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "var(--bg-primary)", padding: 24 }}>
+      <div className="admin-table-wrap" style={{ width: "100%", maxWidth: 400, padding: 32, boxShadow: "var(--shadow-lg)" }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <h2 style={{ fontSize: "1.5rem", fontWeight: 700, background: "var(--gradient-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", marginBottom: 6 }}>Admin Sign In</h2>
+          <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Enter credentials to manage your portfolio</p>
+        </div>
+        
+        {error && (
+          <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: "var(--radius-sm)", padding: "10px 14px", color: "#ef4444", fontSize: "0.85rem", marginBottom: 20 }}>
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" className="form-input" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          </div>
+          <div className="form-group" style={{ marginBottom: 24 }}>
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" className="form-input" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center", padding: "12px" }} disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
