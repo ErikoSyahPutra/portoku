@@ -180,8 +180,16 @@ export default async function Home() {
                       {p.technologies?.map((t) => <span className="tech-tag" key={t}>{t}</span>)}
                     </div>
                     <div className="project-links">
-                      {p.liveUrl && <a href={p.liveUrl} target="_blank" rel="noreferrer"><HiOutlineArrowTopRightOnSquare size={14} /> Live Demo</a>}
-                      {p.githubUrl && <a href={p.githubUrl} target="_blank" rel="noreferrer"><HiOutlineCodeBracket size={14} /> Source</a>}
+                      {p.liveUrl && (
+                        <a href={p.liveUrl} target="_blank" rel="noreferrer" className="stretched-link">
+                          <HiOutlineArrowTopRightOnSquare size={14} /> Live Demo
+                        </a>
+                      )}
+                      {p.githubUrl && (
+                        <a href={p.githubUrl} target="_blank" rel="noreferrer" className={!p.liveUrl ? "stretched-link" : ""}>
+                          <HiOutlineCodeBracket size={14} /> Source
+                        </a>
+                      )}
                     </div>
                   </div>
                 );
