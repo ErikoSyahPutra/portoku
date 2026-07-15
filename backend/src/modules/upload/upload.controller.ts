@@ -4,6 +4,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
@@ -16,11 +17,15 @@ export class UploadController {
   private imagekit: ImageKit | null = null;
 
   constructor() {
-    if (process.env.IMAGEKIT_PRIVATE_KEY) {
+    if (
+      process.env.IMAGEKIT_PRIVATE_KEY &&
+      process.env.IMAGEKIT_PUBLIC_KEY &&
+      process.env.IMAGEKIT_URL_ENDPOINT
+    ) {
       this.imagekit = new ImageKit({
-        publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
-        privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
-        urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || '',
+        publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+        privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+        urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
       });
     }
   }
@@ -30,9 +35,28 @@ export class UploadController {
     FileInterceptor('file', {
       storage: memoryStorage(),
       fileFilter: (_req, file, cb) => {
-        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp|svg\+xml)$/)) {
-          return cb(new BadRequestException('Only image files are allowed'), false);
+        const allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedMimeTypes.includes(file.mimetype)) {
+          return cb(new BadRequestException('Only image files (JPG, PNG, GIF, WebP) are allowed'), false);
         }
+
+        const ext = extname(file.originalname).toLowerCase();
+        const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        if (!allowedExtensions.includes(ext)) {
+          return cb(new BadRequestException('Invalid file extension'), false);
+        }
+
+        const mimeToExt: Record<string, string[]> = {
+          'image/png': ['.png'],
+          'image/jpeg': ['.jpg', '.jpeg'],
+          'image/jpg': ['.jpg', '.jpeg'],
+          'image/gif': ['.gif'],
+          'image/webp': ['.webp'],
+        };
+        if (!mimeToExt[file.mimetype]?.includes(ext)) {
+          return cb(new BadRequestException('MIME-type does not match file extension'), false);
+        }
+
         cb(null, true);
       },
       limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
@@ -44,7 +68,7 @@ export class UploadController {
     }
 
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const ext = extname(file.originalname);
+    const ext = extname(file.originalname).toLowerCase();
     const filename = `${uniqueSuffix}${ext}`;
 
     // 1. Upload to ImageKit if keys are configured
@@ -60,8 +84,8 @@ export class UploadController {
           filename: response.name,
           size: response.size,
         };
-      } catch (error) {
-        throw new BadRequestException(`ImageKit upload failed: ${error.message}`);
+      } catch (error: any) {
+        throw new InternalServerErrorException(`ImageKit upload failed: ${error?.message || error}`);
       }
     }
 
@@ -73,8 +97,8 @@ export class UploadController {
       }
       const localPath = join(uploadDir, filename);
       writeFileSync(localPath, file.buffer);
-    } catch (error) {
-      throw new BadRequestException(`Local disk save failed: ${error.message}`);
+    } catch (error: any) {
+      throw new InternalServerErrorException(`Local disk save failed: ${error?.message || error}`);
     }
 
     return {
