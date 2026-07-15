@@ -17,6 +17,11 @@ export class UploadController {
   private imagekit: ImageKit | null = null;
 
   constructor() {
+    console.log('ImageKit Config Check:', {
+      privateKeyExists: !!process.env.IMAGEKIT_PRIVATE_KEY,
+      publicKeyExists: !!process.env.IMAGEKIT_PUBLIC_KEY,
+      urlEndpointExists: !!process.env.IMAGEKIT_URL_ENDPOINT,
+    });
     if (
       process.env.IMAGEKIT_PRIVATE_KEY &&
       process.env.IMAGEKIT_PUBLIC_KEY &&
