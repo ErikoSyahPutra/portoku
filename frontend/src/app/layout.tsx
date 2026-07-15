@@ -6,7 +6,7 @@ import LayoutShell from "@/components/LayoutShell";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Mahesa | Portfolio",
+  title: "Eriko Syah | Portfolio",
   description: "Full Stack Developer — Crafting digital experiences with modern technologies",
 };
 

@@ -36,14 +36,14 @@ async function seed() {
   const existingProfile = await profileRepo.find();
   if (existingProfile.length === 0) {
     await profileRepo.save({
-      name: 'Mahesa',
+      name: 'Eriko Syah',
       title: 'Full Stack Developer',
       bio: 'Crafting digital experiences with modern technologies. Passionate about clean code, elegant design, and building products that make a difference.',
       aboutMe: 'I am a Full Stack Developer with a deep passion for creating beautiful, performant web applications. With expertise spanning from pixel-perfect frontends to robust backend architectures, I bring ideas to life through code.\n\nMy journey in tech started with curiosity and has evolved into a career dedicated to pushing the boundaries of what\'s possible on the web. I believe in writing clean, maintainable code and creating experiences that users love.\n\nWhen I\'m not coding, you can find me exploring new technologies, contributing to open source, or sharing knowledge through my blog.',
-      email: 'hello@mahesa.dev',
+      email: 'hello@erikosyah.dev',
       location: 'Indonesia',
-      githubUrl: 'https://github.com/mahesa',
-      linkedinUrl: 'https://linkedin.com/in/mahesa',
+      githubUrl: 'https://github.com/ErikoSyahPutra',
+      linkedinUrl: 'https://linkedin.com/in/erikosyah',
       showProjects: true,
       showExperiences: true,
       showAcademics: true,

@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-const SECRET_KEY = process.env.JWT_SECRET || 'mahesa-portfolio-super-secret-key-12345';
+const SECRET_KEY = process.env.JWT_SECRET || 'erikosyah-portfolio-super-secret-key-12345';
 
 export function hashPassword(password: string, salt: string): string {
   return crypto.scryptSync(password, salt, 64).toString('hex');

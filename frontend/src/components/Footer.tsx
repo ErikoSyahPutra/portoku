@@ -12,7 +12,7 @@ export default function Footer() {
         </ul>
         <p>
           <HiOutlineHeart size={14} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4, color: "var(--accent-primary)" }} />
-          &copy; {new Date().getFullYear()} Mahesa. Built with Next.js &amp; NestJS.
+          &copy; {new Date().getFullYear()} Eriko Syah. Built with Next.js &amp; NestJS.
         </p>
       </div>
     </footer>
