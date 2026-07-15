@@ -9,7 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { extname, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import ImageKit from 'imagekit';
+import ImageKit = require('imagekit');
 
 @Controller('upload')
 export class UploadController {
