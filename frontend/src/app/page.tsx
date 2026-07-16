@@ -109,7 +109,7 @@ export default async function Home() {
               {profile.email && (
                 <div className="about-info-item">
                   <div className="icon"><HiOutlineEnvelope size={18} /></div>
-                  <div><div className="label">Email</div><div className="value">{profile.email}</div></div>
+                  <div><div className="label">Email</div><div className="value"><a href={`mailto:${profile.email}`}>{profile.email}</a></div></div>
                 </div>
               )}
               {profile.githubUrl && (
