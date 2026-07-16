@@ -92,7 +92,7 @@ export default async function Home() {
               {avatarSrc && (
                 <div style={{ marginBottom: 24 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={avatarSrc} alt={profile.name} style={{ width: 180, height: 180, borderRadius: "16px", objectFit: "contain", border: "5px solid var(--accent-primary)", background: "var(--bg-secondary)" }} />
+                  <img src={avatarSrc} alt={profile.name} style={{ width: 240, height: 240, borderRadius: "16px", objectFit: "contain", border: "3px solid var(--accent-primary)", background: "var(--bg-secondary)" }} />
                 </div>
               )}
               {profile.aboutMe?.split("\n").filter(Boolean).map((p: string, i: number) => (
