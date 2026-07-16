@@ -28,6 +28,21 @@ function img(url?: string) {
   return url.startsWith("http") ? url : `${BACKEND}${url}`;
 }
 
+function formatUrl(url?: string): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("mailto:") ||
+    trimmed.startsWith("tel:") ||
+    trimmed.startsWith("/")
+  ) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+
 export default async function Home() {
   let profile, projects, academics, experiences, blogs, awards;
   try {
@@ -100,19 +115,19 @@ export default async function Home() {
               {profile.githubUrl && (
                 <div className="about-info-item">
                   <div className="icon"><HiOutlineCodeBracket size={18} /></div>
-                  <div><div className="label">GitHub</div><div className="value"><a href={profile.githubUrl} target="_blank" rel="noreferrer">{profile.githubUrl.replace("https://", "")}</a></div></div>
+                  <div><div className="label">GitHub</div><div className="value"><a href={formatUrl(profile.githubUrl)} target="_blank" rel="noreferrer">{profile.githubUrl.replace("https://", "")}</a></div></div>
                 </div>
               )}
               {profile.linkedinUrl && (
                 <div className="about-info-item">
                   <div className="icon"><HiOutlineBriefcase size={18} /></div>
-                  <div><div className="label">LinkedIn</div><div className="value"><a href={profile.linkedinUrl} target="_blank" rel="noreferrer">{profile.linkedinUrl.replace("https://", "")}</a></div></div>
+                  <div><div className="label">LinkedIn</div><div className="value"><a href={formatUrl(profile.linkedinUrl)} target="_blank" rel="noreferrer">{profile.linkedinUrl.replace("https://", "")}</a></div></div>
                 </div>
               )}
               {profile.websiteUrl && (
                 <div className="about-info-item">
                   <div className="icon"><HiOutlineGlobeAlt size={18} /></div>
-                  <div><div className="label">Website</div><div className="value"><a href={profile.websiteUrl} target="_blank" rel="noreferrer">{profile.websiteUrl.replace("https://", "")}</a></div></div>
+                  <div><div className="label">Website</div><div className="value"><a href={formatUrl(profile.websiteUrl)} target="_blank" rel="noreferrer">{profile.websiteUrl.replace("https://", "")}</a></div></div>
                 </div>
               )}
             </div>
@@ -181,12 +196,12 @@ export default async function Home() {
                     </div>
                     <div className="project-links">
                       {p.liveUrl && (
-                        <a href={p.liveUrl} target="_blank" rel="noreferrer" className="stretched-link">
+                        <a href={formatUrl(p.liveUrl)} target="_blank" rel="noreferrer" className="stretched-link">
                           <HiOutlineArrowTopRightOnSquare size={14} /> Live Demo
                         </a>
                       )}
                       {p.githubUrl && (
-                        <a href={p.githubUrl} target="_blank" rel="noreferrer" className={!p.liveUrl ? "stretched-link" : ""}>
+                        <a href={formatUrl(p.githubUrl)} target="_blank" rel="noreferrer" className={!p.liveUrl ? "stretched-link" : ""}>
                           <HiOutlineCodeBracket size={14} /> Source
                         </a>
                       )}
@@ -336,7 +351,7 @@ export default async function Home() {
                     <div className="issuer">{a.issuer}</div>
                     {a.description && <p>{a.description}</p>}
                     {a.credentialUrl && (
-                      <a href={a.credentialUrl} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: 16, padding: "8px 16px", fontSize: "0.8rem" }}>
+                      <a href={formatUrl(a.credentialUrl)} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: 16, padding: "8px 16px", fontSize: "0.8rem" }}>
                         <HiOutlineCheckBadge size={14} /> View Credential
                       </a>
                     )}
