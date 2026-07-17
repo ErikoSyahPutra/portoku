@@ -4,11 +4,20 @@ import { api } from "@/lib/api";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function BlogDetail({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogDetail({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { slug } = await params;
+  const resolvedSearchParams = await searchParams;
+  const lang = typeof resolvedSearchParams.lang === "string" ? resolvedSearchParams.lang : "id";
+
   let blog;
   try {
-    blog = await api.getBlog(slug);
+    blog = await api.getBlog(slug, lang);
   } catch {
     notFound();
   }
@@ -32,14 +41,14 @@ export default async function BlogDetail({ params }: { params: Promise<{ slug: s
     <div className="blog-detail">
       <div className="container">
         <div className="blog-detail-header">
-          <Link href="/#blog" className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem" }}>
-            ← Back to Blog
+          <Link href={`/?lang=${lang}#blog`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem" }}>
+            {lang === "en" ? "← Back to Blog" : "← Kembali ke Blog"}
           </Link>
           <h1>{blog.title}</h1>
           <div className="blog-detail-meta">
-            <span>{new Date(blog.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
+            <span>{new Date(blog.createdAt).toLocaleDateString(lang === "en" ? "en-US" : "id-ID", { year: "numeric", month: "long", day: "numeric" })}</span>
             <span>·</span>
-            <span>{blog.readTime} min read</span>
+            <span>{blog.readTime} {lang === "en" ? "min read" : "menit baca"}</span>
           </div>
           <div className="blog-tags" style={{ marginBottom: 24 }}>
             {blog.tags?.map((t) => <span className="tech-tag" key={t}>{t}</span>)}

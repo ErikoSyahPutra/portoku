@@ -18,7 +18,9 @@ export default function Navbar() {
 
   const changeLanguage = (lang: string) => {
     localStorage.setItem("lang", lang);
-    window.location.search = `?lang=${lang}`;
+    const params = new URLSearchParams(window.location.search);
+    params.set("lang", lang);
+    window.location.search = "?" + params.toString();
   };
 
   useEffect(() => {
@@ -29,10 +31,17 @@ export default function Navbar() {
   useEffect(() => {
     const localLang = localStorage.getItem("lang");
     const urlLang = searchParams.get("lang");
-    if (localLang && localLang !== urlLang) {
-      window.location.search = `?lang=${localLang}`;
-    } else if (!localLang && urlLang) {
-      localStorage.setItem("lang", urlLang);
+
+    if (urlLang) {
+      if (localLang !== urlLang) {
+        localStorage.setItem("lang", urlLang);
+      }
+    } else {
+      if (localLang) {
+        const params = new URLSearchParams(window.location.search);
+        params.set("lang", localLang);
+        window.location.search = "?" + params.toString();
+      }
     }
   }, [searchParams]);
 
