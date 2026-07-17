@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { api } from "@/lib/api";
 import Link from "next/link";
+import { translations } from "@/lib/translations";
 import {
   HiOutlineMapPin,
   HiOutlineEnvelope,
@@ -43,12 +44,15 @@ function formatUrl(url?: string): string {
   return `https://${trimmed}`;
 }
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const { lang = "id" } = await searchParams;
+  const t = translations[lang] || translations.id;
+
   let profile, projects, academics, experiences, blogs, awards;
   try {
     [profile, projects, academics, experiences, blogs, awards] = await Promise.all([
-      api.getProfile(), api.getProjects(), api.getAcademics(),
-      api.getExperiences(), api.getBlogs(), api.getAwards(),
+      api.getProfile(lang), api.getProjects(lang), api.getAcademics(lang),
+      api.getExperiences(lang), api.getBlogs(lang), api.getAwards(lang),
     ]);
   } catch {
     return <FallbackPage />;
@@ -65,7 +69,7 @@ export default async function Home() {
         <div className="container">
           <div className="hero-content">
             <div className="hero-badge">
-              <span className="dot" /> Available for work
+              <span className="dot" /> {t.availableBadge}
             </div>
             <h1>
               Hi, I&apos;m <span className="gradient-text">{profile.name}</span>
@@ -73,8 +77,8 @@ export default async function Home() {
             </h1>
             <p className="hero-desc">{profile.bio}</p>
             <div className="hero-actions">
-              <a href="#projects" className="btn btn-primary"><HiOutlineRocketLaunch size={18} /> View My Work</a>
-              <a href="#about" className="btn btn-secondary">About Me</a>
+              <a href="#projects" className="btn btn-primary"><HiOutlineRocketLaunch size={18} /> {t.viewWork}</a>
+              <a href="#about" className="btn btn-secondary">{t.aboutMe}</a>
             </div>
           </div>
         </div>
@@ -84,8 +88,8 @@ export default async function Home() {
       <section className="section" id="about">
         <div className="container">
           <div className="section-header">
-            <p className="section-label">About</p>
-            <h2 className="section-title">A little about me</h2>
+            <p className="section-label">{t.about}</p>
+            <h2 className="section-title">{t.littleAboutMe}</h2>
           </div>
           <div className="about-grid">
             <div className="about-text">
@@ -103,13 +107,13 @@ export default async function Home() {
               {profile.location && (
                 <div className="about-info-item">
                   <div className="icon"><HiOutlineMapPin size={18} /></div>
-                  <div><div className="label">Location</div><div className="value">{profile.location}</div></div>
+                  <div><div className="label">{t.location}</div><div className="value">{profile.location}</div></div>
                 </div>
               )}
               {profile.email && (
                 <div className="about-info-item">
                   <div className="icon"><HiOutlineEnvelope size={18} /></div>
-                  <div><div className="label">Email</div><div className="value"><a href={`mailto:${profile.email}`}>{profile.email}</a></div></div>
+                  <div><div className="label">{t.email}</div><div className="value"><a href={`mailto:${profile.email}`}>{profile.email}</a></div></div>
                 </div>
               )}
               {profile.githubUrl && (
@@ -143,25 +147,25 @@ export default async function Home() {
               {profile.showProjects !== false && (
                 <div className="stat-card">
                   <div className="stat-number">{projects.length}+</div>
-                  <div className="stat-label">Projects</div>
+                  <div className="stat-label">{t.projects}</div>
                 </div>
               )}
               {profile.showExperiences !== false && (
                 <div className="stat-card">
                   <div className="stat-number">{experiences.length}+</div>
-                  <div className="stat-label">Years Exp</div>
+                  <div className="stat-label">{t.yearsExp}</div>
                 </div>
               )}
               {profile.showAwards !== false && (
                 <div className="stat-card">
                   <div className="stat-number">{awards.length}+</div>
-                  <div className="stat-label">Awards</div>
+                  <div className="stat-label">{t.awards}</div>
                 </div>
               )}
               {profile.showBlog !== false && (
                 <div className="stat-card">
                   <div className="stat-number">{blogs.length}+</div>
-                  <div className="stat-label">Articles</div>
+                  <div className="stat-label">{t.articles}</div>
                 </div>
               )}
             </div>
@@ -174,9 +178,9 @@ export default async function Home() {
         <section className="section" id="projects">
           <div className="container">
             <div className="section-header">
-              <p className="section-label">Portfolio</p>
-              <h2 className="section-title">Featured Projects</h2>
-              <p className="section-desc">A selection of projects I&apos;ve built — from full-stack applications to complex systems.</p>
+              <p className="section-label">{t.portfolio}</p>
+              <h2 className="section-title">{t.featuredProjects}</h2>
+              <p className="section-desc">{t.projectsSubtitle}</p>
             </div>
             <div className="projects-grid">
               {projects.map((p) => {
@@ -197,12 +201,12 @@ export default async function Home() {
                     <div className="project-links">
                       {p.liveUrl && (
                         <a href={formatUrl(p.liveUrl)} target="_blank" rel="noreferrer" className="stretched-link">
-                          <HiOutlineArrowTopRightOnSquare size={14} /> Live Demo
+                          <HiOutlineArrowTopRightOnSquare size={14} /> {t.liveDemo}
                         </a>
                       )}
                       {p.githubUrl && (
                         <a href={formatUrl(p.githubUrl)} target="_blank" rel="noreferrer" className={!p.liveUrl ? "stretched-link" : ""}>
-                          <HiOutlineCodeBracket size={14} /> Source
+                          <HiOutlineCodeBracket size={14} /> {t.sourceCode}
                         </a>
                       )}
                     </div>
@@ -219,9 +223,9 @@ export default async function Home() {
         <section className="section" id="experience">
           <div className="container">
             <div className="section-header">
-              <p className="section-label">Career</p>
-              <h2 className="section-title">Work Experience</h2>
-              <p className="section-desc">My professional journey in the tech industry.</p>
+              <p className="section-label">{t.career}</p>
+              <h2 className="section-title">{t.workExperience}</h2>
+              <p className="section-desc">{t.experienceSubtitle}</p>
             </div>
             <div className="timeline">
               {experiences.map((e) => {
@@ -229,7 +233,7 @@ export default async function Home() {
                 return (
                   <div className={`timeline-item ${e.current ? "current" : ""}`} key={e.id}>
                     <div className="timeline-dot" />
-                    <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{e.startDate} — {e.current ? "Present" : e.endDate}</div>
+                    <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{e.startDate} — {e.current ? t.present : e.endDate}</div>
                     <div className="timeline-card">
                       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
                         {eLogo && (
@@ -259,8 +263,8 @@ export default async function Home() {
         <section className="section" id="education">
           <div className="container">
             <div className="section-header">
-              <p className="section-label">Education</p>
-              <h2 className="section-title">Academic Background</h2>
+              <p className="section-label">{t.education}</p>
+              <h2 className="section-title">{t.academicBackground}</h2>
             </div>
             <div className="education-grid">
               {academics.map((a) => {
@@ -278,7 +282,7 @@ export default async function Home() {
                     <div>
                       <h3>{a.institution}</h3>
                       <div className="edu-degree">{a.degree} in {a.field}{a.gpa && <span className="edu-gpa">GPA: {a.gpa}</span>}</div>
-                      <div className="edu-year">{a.startYear} — {a.endYear || "Present"}</div>
+                      <div className="edu-year">{a.startYear} — {a.endYear || t.present}</div>
                       {a.description && <p>{a.description}</p>}
                     </div>
                   </div>
@@ -294,9 +298,9 @@ export default async function Home() {
         <section className="section" id="blog">
           <div className="container">
             <div className="section-header">
-              <p className="section-label">Blog</p>
-              <h2 className="section-title">Latest Articles</h2>
-              <p className="section-desc">Thoughts on development, design, and technology.</p>
+              <p className="section-label">{t.blog}</p>
+              <h2 className="section-title">{t.latestArticles}</h2>
+              <p className="section-desc">{t.blogSubtitle}</p>
             </div>
             <div className="blog-grid">
               {blogs.map((b) => {
@@ -312,7 +316,7 @@ export default async function Home() {
                     <div className="blog-meta">
                       <span><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 3 }} />{new Date(b.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
                       <span>·</span>
-                      <span><HiOutlineClock size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 3 }} />{b.readTime} min read</span>
+                      <span><HiOutlineClock size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 3 }} />{b.readTime} {t.readTime}</span>
                     </div>
                     <h3>{b.title}</h3>
                     <p>{b.excerpt}</p>
@@ -332,8 +336,8 @@ export default async function Home() {
         <section className="section" id="awards">
           <div className="container">
             <div className="section-header">
-              <p className="section-label">Recognition</p>
-              <h2 className="section-title">Awards & Achievements</h2>
+              <p className="section-label">{t.recognition}</p>
+              <h2 className="section-title">{t.awardsAchievements}</h2>
             </div>
             <div className="awards-grid">
               {awards.map((a) => {
@@ -352,7 +356,7 @@ export default async function Home() {
                     {a.description && <p>{a.description}</p>}
                     {a.credentialUrl && (
                       <a href={formatUrl(a.credentialUrl)} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: 16, padding: "8px 16px", fontSize: "0.8rem" }}>
-                        <HiOutlineCheckBadge size={14} /> View Credential
+                        <HiOutlineCheckBadge size={14} /> {t.viewCredential}
                       </a>
                     )}
                   </div>

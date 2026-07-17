@@ -27,6 +27,9 @@ export const translations: Record<string, Record<string, string>> = {
     experienceSubtitle: "Perjalanan profesional saya di industri teknologi.",
     blogSubtitle: "Pemikiran tentang pengembangan web, desain, dan teknologi.",
     availableBadge: "Tersedia untuk bekerja",
+    present: "Sekarang",
+    liveDemo: "Demo Langsung",
+    sourceCode: "Kode Sumber",
   },
   en: {
     availableForWork: "Available for work",
@@ -56,5 +59,8 @@ export const translations: Record<string, Record<string, string>> = {
     experienceSubtitle: "My professional journey in the tech industry.",
     blogSubtitle: "Thoughts on development, design, and technology.",
     availableBadge: "Available for work",
+    present: "Present",
+    liveDemo: "Live Demo",
+    sourceCode: "Source Code",
   }
 };

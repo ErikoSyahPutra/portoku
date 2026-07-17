@@ -3,20 +3,44 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { HiOutlineBars3, HiOutlineXMark, HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
 import { api, Profile } from "@/lib/api";
+import { useRouter, useSearchParams } from "next/navigation";
+import { translations } from "@/lib/translations";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentLang = searchParams.get("lang") || "id";
+  const t = translations[currentLang] || translations.id;
+
+  const changeLanguage = (lang: string) => {
+    localStorage.setItem("lang", lang);
+    window.location.search = `?lang=${lang}`;
+  };
+
   useEffect(() => {
     const isLight = document.documentElement.classList.contains("light");
     setIsDark(!isLight);
+  }, []);
 
-    api.getProfile()
+  useEffect(() => {
+    const localLang = localStorage.getItem("lang");
+    const urlLang = searchParams.get("lang");
+    if (localLang && localLang !== urlLang) {
+      window.location.search = `?lang=${localLang}`;
+    } else if (!localLang && urlLang) {
+      localStorage.setItem("lang", urlLang);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    api.getProfile(currentLang)
       .then((data) => setProfile(data))
       .catch((err) => console.error("Error loading profile in Navbar:", err));
-  }, []);
+  }, [currentLang]);
 
   const toggleTheme = () => {
     const root = document.documentElement;
@@ -34,19 +58,19 @@ export default function Navbar() {
   };
 
   const links = [
-    { href: "#about", label: "About" },
-    ...(profile?.showProjects !== false ? [{ href: "#projects", label: "Projects" }] : []),
-    ...(profile?.showExperiences !== false ? [{ href: "#experience", label: "Experience" }] : []),
-    ...(profile?.showAcademics !== false ? [{ href: "#education", label: "Education" }] : []),
-    ...(profile?.showBlog !== false ? [{ href: "#blog", label: "Blog" }] : []),
-    ...(profile?.showAwards !== false ? [{ href: "#awards", label: "Awards" }] : []),
+    { href: "#about", label: t.about || "About" },
+    ...(profile?.showProjects !== false ? [{ href: "#projects", label: t.projects || "Projects" }] : []),
+    ...(profile?.showExperiences !== false ? [{ href: "#experience", label: t.career || "Experience" }] : []),
+    ...(profile?.showAcademics !== false ? [{ href: "#education", label: t.education || "Education" }] : []),
+    ...(profile?.showBlog !== false ? [{ href: "#blog", label: t.blog || "Blog" }] : []),
+    ...(profile?.showAwards !== false ? [{ href: "#awards", label: t.recognition || "Awards" }] : []),
   ];
 
   return (
     <nav className="navbar" id="navbar">
       <div className="container navbar-inner">
         <Link href="/" className="navbar-logo">Eriko Syah</Link>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <ul className={`navbar-links ${open ? "open" : ""}`}>
             {links.map((l) => (
               <li key={l.href}>
@@ -54,6 +78,20 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
+          <div className="lang-toggle">
+            <button
+              onClick={() => changeLanguage("id")}
+              className={currentLang === "id" ? "active" : ""}
+            >
+              ID
+            </button>
+            <button
+              onClick={() => changeLanguage("en")}
+              className={currentLang === "en" ? "active" : ""}
+            >
+              EN
+            </button>
+          </div>
           <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
             {isDark ? <HiOutlineSun size={20} /> : <HiOutlineMoon size={20} />}
           </button>

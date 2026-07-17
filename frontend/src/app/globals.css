@@ -828,3 +828,30 @@ a { color: inherit; text-decoration: none; }
   color: var(--text-primary);
   background: var(--accent-glow);
 }
+
+/* Language Toggle Button Styles */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.lang-toggle button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  color: var(--text-secondary);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.lang-toggle button.active {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  box-shadow: 0 0 8px var(--accent-primary);
+}
