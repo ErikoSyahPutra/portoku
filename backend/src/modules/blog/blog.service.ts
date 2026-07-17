@@ -2,28 +2,53 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Blog } from './blog.entity';
+import { TranslationService } from '../translation/translation.service';
 
 @Injectable()
 export class BlogService {
   constructor(
     @InjectRepository(Blog)
     private readonly repo: Repository<Blog>,
+    private readonly translationService: TranslationService,
   ) {}
 
-  findAll() {
-    return this.repo.find({ order: { createdAt: 'DESC' } });
+  async translateItem(item: Blog | null, lang?: string): Promise<Blog | null> {
+    if (!item || lang !== 'en') {
+      return item;
+    }
+    item.title = await this.translationService.translate(item.title, 'en');
+    if (item.excerpt) {
+      item.excerpt = await this.translationService.translate(item.excerpt, 'en');
+    }
+    item.content = await this.translationService.translate(item.content, 'en');
+    return item;
   }
 
-  findPublished() {
-    return this.repo.find({ where: { published: true }, order: { createdAt: 'DESC' } });
+  async translateItems(items: Blog[], lang?: string): Promise<Blog[]> {
+    if (lang !== 'en') {
+      return items;
+    }
+    return Promise.all(items.map(item => this.translateItem(item, lang) as Promise<Blog>));
   }
 
-  findBySlug(slug: string) {
-    return this.repo.findOneBy({ slug });
+  async findAll(lang?: string) {
+    const items = await this.repo.find({ order: { createdAt: 'DESC' } });
+    return this.translateItems(items, lang);
   }
 
-  findOne(id: number) {
-    return this.repo.findOneBy({ id });
+  async findPublished(lang?: string) {
+    const items = await this.repo.find({ where: { published: true }, order: { createdAt: 'DESC' } });
+    return this.translateItems(items, lang);
+  }
+
+  async findBySlug(slug: string, lang?: string) {
+    const item = await this.repo.findOneBy({ slug });
+    return this.translateItem(item, lang);
+  }
+
+  async findOne(id: number, lang?: string) {
+    const item = await this.repo.findOneBy({ id });
+    return this.translateItem(item, lang);
   }
 
   create(data: Partial<Blog>) {

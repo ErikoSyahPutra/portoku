@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { AcademicService } from './academic.service';
 import { Academic } from './academic.entity';
 
@@ -7,13 +7,13 @@ export class AcademicController {
   constructor(private readonly service: AcademicService) {}
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(@Query('lang') lang?: string) {
+    return this.service.findAll(lang);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.service.findOne(id);
+  findOne(@Param('id') id: number, @Query('lang') lang?: string) {
+    return this.service.findOne(id, lang);
   }
 
   @Post()

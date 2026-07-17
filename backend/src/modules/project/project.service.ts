@@ -2,24 +2,45 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from './project.entity';
+import { TranslationService } from '../translation/translation.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private readonly repo: Repository<Project>,
+    private readonly translationService: TranslationService,
   ) {}
 
-  findAll() {
-    return this.repo.find({ order: { order: 'ASC', createdAt: 'DESC' } });
+  async translateItem(item: Project | null, lang?: string): Promise<Project | null> {
+    if (!item || lang !== 'en') {
+      return item;
+    }
+    item.title = await this.translationService.translate(item.title, 'en');
+    item.description = await this.translationService.translate(item.description, 'en');
+    return item;
   }
 
-  findFeatured() {
-    return this.repo.find({ where: { featured: true }, order: { order: 'ASC' } });
+  async translateItems(items: Project[], lang?: string): Promise<Project[]> {
+    if (lang !== 'en') {
+      return items;
+    }
+    return Promise.all(items.map(item => this.translateItem(item, lang) as Promise<Project>));
   }
 
-  findOne(id: number) {
-    return this.repo.findOneBy({ id });
+  async findAll(lang?: string) {
+    const items = await this.repo.find({ order: { order: 'ASC', createdAt: 'DESC' } });
+    return this.translateItems(items, lang);
+  }
+
+  async findFeatured(lang?: string) {
+    const items = await this.repo.find({ where: { featured: true }, order: { order: 'ASC' } });
+    return this.translateItems(items, lang);
+  }
+
+  async findOne(id: number, lang?: string) {
+    const item = await this.repo.findOneBy({ id });
+    return this.translateItem(item, lang);
   }
 
   create(data: Partial<Project>) {

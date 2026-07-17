@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { ExperienceService } from './experience.service';
 import { Experience } from './experience.entity';
 
@@ -7,13 +7,13 @@ export class ExperienceController {
   constructor(private readonly service: ExperienceService) {}
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(@Query('lang') lang?: string) {
+    return this.service.findAll(lang);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.service.findOne(id);
+  findOne(@Param('id') id: number, @Query('lang') lang?: string) {
+    return this.service.findOne(id, lang);
   }
 
   @Post()

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { Blog } from './blog.entity';
 
@@ -7,23 +7,23 @@ export class BlogController {
   constructor(private readonly service: BlogService) {}
 
   @Get()
-  findAll() {
-    return this.service.findPublished();
+  findAll(@Query('lang') lang?: string) {
+    return this.service.findPublished(lang);
   }
 
   @Get('all')
-  findAllIncludingDrafts() {
-    return this.service.findAll();
+  findAllIncludingDrafts(@Query('lang') lang?: string) {
+    return this.service.findAll(lang);
   }
 
   @Get('slug/:slug')
-  findBySlug(@Param('slug') slug: string) {
-    return this.service.findBySlug(slug);
+  findBySlug(@Param('slug') slug: string, @Query('lang') lang?: string) {
+    return this.service.findBySlug(slug, lang);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.service.findOne(id);
+  findOne(@Param('id') id: number, @Query('lang') lang?: string) {
+    return this.service.findOne(id, lang);
   }
 
   @Post()

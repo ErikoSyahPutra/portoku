@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { Project } from './project.entity';
 
@@ -7,18 +7,18 @@ export class ProjectController {
   constructor(private readonly service: ProjectService) {}
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(@Query('lang') lang?: string) {
+    return this.service.findAll(lang);
   }
 
   @Get('featured')
-  findFeatured() {
-    return this.service.findFeatured();
+  findFeatured(@Query('lang') lang?: string) {
+    return this.service.findFeatured(lang);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.service.findOne(id);
+  findOne(@Param('id') id: number, @Query('lang') lang?: string) {
+    return this.service.findOne(id, lang);
   }
 
   @Post()
