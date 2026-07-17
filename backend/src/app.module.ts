@@ -11,6 +11,7 @@ import { AwardModule } from './modules/award/award.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { TranslationModule } from './modules/translation/translation.module';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -46,6 +47,7 @@ import { APP_GUARD } from '@nestjs/core';
     ProfileModule,
     UploadModule,
     AuthModule,
+    TranslationModule,
   ],
   providers: [
     {
