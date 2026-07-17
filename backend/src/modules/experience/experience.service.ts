@@ -13,18 +13,18 @@ export class ExperienceService {
   ) {}
 
   async translateItem(item: Experience | null, lang?: string): Promise<Experience | null> {
-    if (!item || lang !== 'en') {
+    if (!item || (lang !== 'en' && lang !== 'id')) {
       return item;
     }
     const cloned = { ...item };
-    cloned.position = await this.translationService.translate(item.position, 'en');
-    cloned.location = await this.translationService.translate(item.location, 'en');
-    cloned.description = await this.translationService.translate(item.description, 'en');
+    cloned.position = await this.translationService.translate(item.position, lang);
+    cloned.location = await this.translationService.translate(item.location, lang);
+    cloned.description = await this.translationService.translate(item.description, lang);
     return cloned;
   }
 
   async translateItems(items: Experience[], lang?: string): Promise<Experience[]> {
-    if (lang !== 'en') {
+    if (lang !== 'en' && lang !== 'id') {
       return items;
     }
     return Promise.all(items.map(item => this.translateItem(item, lang) as Promise<Experience>));

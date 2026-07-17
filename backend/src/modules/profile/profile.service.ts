@@ -28,11 +28,11 @@ export class ProfileService {
       item = profiles[0];
     }
 
-    if (lang === 'en') {
+    if (lang === 'en' || lang === 'id') {
       const cloned = { ...item };
-      cloned.title = await this.translationService.translate(item.title, 'en');
-      cloned.bio = await this.translationService.translate(item.bio, 'en');
-      cloned.aboutMe = await this.translationService.translateMarkdown(item.aboutMe, 'en');
+      cloned.title = await this.translationService.translate(item.title, lang);
+      cloned.bio = await this.translationService.translate(item.bio, lang);
+      cloned.aboutMe = await this.translationService.translateMarkdown(item.aboutMe, lang);
       return cloned;
     }
 

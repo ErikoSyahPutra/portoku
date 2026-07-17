@@ -13,20 +13,20 @@ export class BlogService {
   ) {}
 
   async translateItem(item: Blog | null, lang?: string): Promise<Blog | null> {
-    if (!item || lang !== 'en') {
+    if (!item || (lang !== 'en' && lang !== 'id')) {
       return item;
     }
     const cloned = { ...item };
-    cloned.title = await this.translationService.translate(item.title, 'en');
+    cloned.title = await this.translationService.translate(item.title, lang);
     if (item.excerpt) {
-      cloned.excerpt = await this.translationService.translateMarkdown(item.excerpt, 'en');
+      cloned.excerpt = await this.translationService.translateMarkdown(item.excerpt, lang);
     }
-    cloned.content = await this.translationService.translateMarkdown(item.content, 'en');
+    cloned.content = await this.translationService.translateMarkdown(item.content, lang);
     return cloned;
   }
 
   async translateItems(items: Blog[], lang?: string): Promise<Blog[]> {
-    if (lang !== 'en') {
+    if (lang !== 'en' && lang !== 'id') {
       return items;
     }
     return Promise.all(items.map(item => this.translateItem(item, lang) as Promise<Blog>));

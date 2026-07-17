@@ -13,17 +13,17 @@ export class ProjectService {
   ) {}
 
   async translateItem(item: Project | null, lang?: string): Promise<Project | null> {
-    if (!item || lang !== 'en') {
+    if (!item || (lang !== 'en' && lang !== 'id')) {
       return item;
     }
     const cloned = { ...item };
-    cloned.title = await this.translationService.translate(item.title, 'en');
-    cloned.description = await this.translationService.translate(item.description, 'en');
+    cloned.title = await this.translationService.translate(item.title, lang);
+    cloned.description = await this.translationService.translate(item.description, lang);
     return cloned;
   }
 
   async translateItems(items: Project[], lang?: string): Promise<Project[]> {
-    if (lang !== 'en') {
+    if (lang !== 'en' && lang !== 'id') {
       return items;
     }
     return Promise.all(items.map(item => this.translateItem(item, lang) as Promise<Project>));

@@ -19,7 +19,7 @@ export class TranslationService {
   }
 
   async translate(text: string, targetLang: string): Promise<string> {
-    if (!text || !text.trim() || targetLang === 'id') {
+    if (!text || !text.trim()) {
       return text;
     }
     const trimmed = text.trim();
@@ -62,7 +62,7 @@ export class TranslationService {
   }
 
   async translateMarkdown(text: string, targetLang: string): Promise<string> {
-    if (!text || !text.trim() || targetLang === 'id') {
+    if (!text || !text.trim()) {
       return text;
     }
     const paragraphs = text.split('\n\n');

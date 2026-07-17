@@ -13,19 +13,19 @@ export class AcademicService {
   ) {}
 
   async translateItem(item: Academic | null, lang?: string): Promise<Academic | null> {
-    if (!item || lang !== 'en') {
+    if (!item || (lang !== 'en' && lang !== 'id')) {
       return item;
     }
     const cloned = { ...item };
-    cloned.institution = await this.translationService.translate(item.institution, 'en');
-    cloned.degree = await this.translationService.translate(item.degree, 'en');
-    cloned.field = await this.translationService.translate(item.field, 'en');
-    cloned.description = await this.translationService.translate(item.description, 'en');
+    cloned.institution = await this.translationService.translate(item.institution, lang);
+    cloned.degree = await this.translationService.translate(item.degree, lang);
+    cloned.field = await this.translationService.translate(item.field, lang);
+    cloned.description = await this.translationService.translate(item.description, lang);
     return cloned;
   }
 
   async translateItems(items: Academic[], lang?: string): Promise<Academic[]> {
-    if (lang !== 'en') {
+    if (lang !== 'en' && lang !== 'id') {
       return items;
     }
     return Promise.all(items.map(item => this.translateItem(item, lang) as Promise<Academic>));
