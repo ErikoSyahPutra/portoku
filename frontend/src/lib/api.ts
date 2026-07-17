@@ -1,7 +1,8 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
-async function fetcher<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${API}${endpoint}`, { cache: "no-store" });
+async function fetcher<T>(endpoint: string, lang?: string): Promise<T> {
+  const query = lang ? `?lang=${lang}` : '';
+  const res = await fetch(`${API}${endpoint}${query}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
@@ -34,11 +35,11 @@ export interface Award {
 }
 
 export const api = {
-  getProfile: () => fetcher<Profile>("/profile"),
-  getProjects: () => fetcher<Project[]>("/projects"),
-  getAcademics: () => fetcher<Academic[]>("/academics"),
-  getExperiences: () => fetcher<Experience[]>("/experiences"),
-  getBlogs: () => fetcher<Blog[]>("/blogs"),
-  getBlog: (slug: string) => fetcher<Blog>(`/blogs/slug/${slug}`),
-  getAwards: () => fetcher<Award[]>("/awards"),
+  getProfile: (lang?: string) => fetcher<Profile>("/profile", lang),
+  getProjects: (lang?: string) => fetcher<Project[]>("/projects", lang),
+  getAcademics: (lang?: string) => fetcher<Academic[]>("/academics", lang),
+  getExperiences: (lang?: string) => fetcher<Experience[]>("/experiences", lang),
+  getBlogs: (lang?: string) => fetcher<Blog[]>("/blogs", lang),
+  getBlog: (slug: string, lang?: string) => fetcher<Blog>(`/blogs/slug/${slug}`, lang),
+  getAwards: (lang?: string) => fetcher<Award[]>("/awards", lang),
 };
