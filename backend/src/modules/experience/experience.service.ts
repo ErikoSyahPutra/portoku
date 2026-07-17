@@ -16,10 +16,11 @@ export class ExperienceService {
     if (!item || lang !== 'en') {
       return item;
     }
-    item.position = await this.translationService.translate(item.position, 'en');
-    item.location = await this.translationService.translate(item.location, 'en');
-    item.description = await this.translationService.translate(item.description, 'en');
-    return item;
+    const cloned = { ...item };
+    cloned.position = await this.translationService.translate(item.position, 'en');
+    cloned.location = await this.translationService.translate(item.location, 'en');
+    cloned.description = await this.translationService.translate(item.description, 'en');
+    return cloned;
   }
 
   async translateItems(items: Experience[], lang?: string): Promise<Experience[]> {

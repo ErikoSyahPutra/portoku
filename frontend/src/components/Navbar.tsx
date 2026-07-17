@@ -20,7 +20,7 @@ export default function Navbar() {
     localStorage.setItem("lang", lang);
     const params = new URLSearchParams(window.location.search);
     params.set("lang", lang);
-    window.location.search = "?" + params.toString();
+    router.push(`${window.location.pathname}?${params.toString()}${window.location.hash}`);
   };
 
   useEffect(() => {
@@ -40,10 +40,10 @@ export default function Navbar() {
       if (localLang) {
         const params = new URLSearchParams(window.location.search);
         params.set("lang", localLang);
-        window.location.search = "?" + params.toString();
+        router.replace(`${window.location.pathname}?${params.toString()}${window.location.hash}`);
       }
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   useEffect(() => {
     api.getProfile(currentLang)
@@ -72,13 +72,13 @@ export default function Navbar() {
     ...(profile?.showExperiences !== false ? [{ href: "#experience", label: t.career || "Experience" }] : []),
     ...(profile?.showAcademics !== false ? [{ href: "#education", label: t.education || "Education" }] : []),
     ...(profile?.showBlog !== false ? [{ href: "#blog", label: t.blog || "Blog" }] : []),
-    ...(profile?.showAwards !== false ? [{ href: "#awards", label: t.recognition || "Awards" }] : []),
+    ...(profile?.showAwards !== false ? [{ href: "#awards", label: t.awards || "Awards" }] : []),
   ];
 
   return (
     <nav className="navbar" id="navbar">
       <div className="container navbar-inner">
-        <Link href="/" className="navbar-logo">Eriko Syah</Link>
+        <Link href={`/?lang=${currentLang}`} className="navbar-logo">Eriko Syah</Link>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <ul className={`navbar-links ${open ? "open" : ""}`}>
             {links.map((l) => (

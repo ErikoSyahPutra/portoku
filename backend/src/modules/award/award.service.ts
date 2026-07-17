@@ -16,9 +16,10 @@ export class AwardService {
     if (!item || lang !== 'en') {
       return item;
     }
-    item.title = await this.translationService.translate(item.title, 'en');
-    item.description = await this.translationService.translate(item.description, 'en');
-    return item;
+    const cloned = { ...item };
+    cloned.title = await this.translationService.translate(item.title, 'en');
+    cloned.description = await this.translationService.translate(item.description, 'en');
+    return cloned;
   }
 
   async translateItems(items: Award[], lang?: string): Promise<Award[]> {

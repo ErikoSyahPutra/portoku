@@ -281,7 +281,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                     </div>
                     <div>
                       <h3>{a.institution}</h3>
-                      <div className="edu-degree">{a.degree} in {a.field}{a.gpa && <span className="edu-gpa">GPA: {a.gpa}</span>}</div>
+                      <div className="edu-degree">{a.degree} {lang === 'en' ? 'in' : 'bidang'} {a.field}{a.gpa && <span className="edu-gpa">{lang === 'en' ? 'GPA' : 'IPK'}: {a.gpa}</span>}</div>
                       <div className="edu-year">{a.startYear} — {a.endYear || t.present}</div>
                       {a.description && <p>{a.description}</p>}
                     </div>
@@ -306,7 +306,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               {blogs.map((b) => {
                 const bImg = img(b.coverImageUrl);
                 return (
-                  <Link href={`/blog/${b.slug}`} key={b.id} className="blog-card">
+                  <Link href={`/blog/${b.slug}?lang=${lang}`} key={b.id} className="blog-card">
                     {bImg && (
                       <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", marginTop: -4 }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}

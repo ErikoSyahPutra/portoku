@@ -18,7 +18,9 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
         <Navbar />
       </Suspense>
       <main>{children}</main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </>
   );
 }

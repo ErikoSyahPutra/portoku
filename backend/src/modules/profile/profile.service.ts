@@ -29,9 +29,11 @@ export class ProfileService {
     }
 
     if (lang === 'en') {
-      item.title = await this.translationService.translate(item.title, 'en');
-      item.bio = await this.translationService.translate(item.bio, 'en');
-      item.aboutMe = await this.translationService.translate(item.aboutMe, 'en');
+      const cloned = { ...item };
+      cloned.title = await this.translationService.translate(item.title, 'en');
+      cloned.bio = await this.translationService.translate(item.bio, 'en');
+      cloned.aboutMe = await this.translationService.translateMarkdown(item.aboutMe, 'en');
+      return cloned;
     }
 
     return item;

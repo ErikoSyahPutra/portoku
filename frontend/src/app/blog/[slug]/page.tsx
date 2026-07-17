@@ -41,7 +41,7 @@ export default async function BlogDetail({
     <div className="blog-detail">
       <div className="container">
         <div className="blog-detail-header">
-          <Link href={`/?lang=${lang}#blog`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem" }}>
+          <Link href={`/#blog?lang=${lang}`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem" }}>
             {lang === "en" ? "← Back to Blog" : "← Kembali ke Blog"}
           </Link>
           <h1>{blog.title}</h1>

@@ -16,12 +16,13 @@ export class BlogService {
     if (!item || lang !== 'en') {
       return item;
     }
-    item.title = await this.translationService.translate(item.title, 'en');
+    const cloned = { ...item };
+    cloned.title = await this.translationService.translate(item.title, 'en');
     if (item.excerpt) {
-      item.excerpt = await this.translationService.translate(item.excerpt, 'en');
+      cloned.excerpt = await this.translationService.translateMarkdown(item.excerpt, 'en');
     }
-    item.content = await this.translationService.translate(item.content, 'en');
-    return item;
+    cloned.content = await this.translationService.translateMarkdown(item.content, 'en');
+    return cloned;
   }
 
   async translateItems(items: Blog[], lang?: string): Promise<Blog[]> {

@@ -16,11 +16,12 @@ export class AcademicService {
     if (!item || lang !== 'en') {
       return item;
     }
-    item.institution = await this.translationService.translate(item.institution, 'en');
-    item.degree = await this.translationService.translate(item.degree, 'en');
-    item.field = await this.translationService.translate(item.field, 'en');
-    item.description = await this.translationService.translate(item.description, 'en');
-    return item;
+    const cloned = { ...item };
+    cloned.institution = await this.translationService.translate(item.institution, 'en');
+    cloned.degree = await this.translationService.translate(item.degree, 'en');
+    cloned.field = await this.translationService.translate(item.field, 'en');
+    cloned.description = await this.translationService.translate(item.description, 'en');
+    return cloned;
   }
 
   async translateItems(items: Academic[], lang?: string): Promise<Academic[]> {
