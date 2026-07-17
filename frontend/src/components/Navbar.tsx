@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { HiOutlineBars3, HiOutlineXMark, HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
 import { api, Profile } from "@/lib/api";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { translations } from "@/lib/translations";
 
 export default function Navbar() {
@@ -13,6 +13,7 @@ export default function Navbar() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const currentLang = searchParams.get("lang") || "id";
   const t = translations[currentLang] || translations.id;
 
@@ -20,7 +21,7 @@ export default function Navbar() {
     localStorage.setItem("lang", lang);
     const params = new URLSearchParams(window.location.search);
     params.set("lang", lang);
-    router.push(`${window.location.pathname}?${params.toString()}${window.location.hash}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   useEffect(() => {
@@ -36,14 +37,12 @@ export default function Navbar() {
       if (localLang !== urlLang) {
         localStorage.setItem("lang", urlLang);
       }
-    } else {
-      if (localLang) {
-        const params = new URLSearchParams(window.location.search);
-        params.set("lang", localLang);
-        router.replace(`${window.location.pathname}?${params.toString()}${window.location.hash}`);
-      }
+    } else if (localLang) {
+      const params = new URLSearchParams(window.location.search);
+      params.set("lang", localLang);
+      router.replace(`${pathname}?${params.toString()}`);
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, pathname]);
 
   useEffect(() => {
     api.getProfile(currentLang)
@@ -66,13 +65,20 @@ export default function Navbar() {
     }
   };
 
+  const getLinkHref = (hash: string) => {
+    if (pathname === "/") {
+      return hash;
+    }
+    return `/?lang=${currentLang}${hash}`;
+  };
+
   const links = [
-    { href: "#about", label: t.about || "About" },
-    ...(profile?.showProjects !== false ? [{ href: "#projects", label: t.projects || "Projects" }] : []),
-    ...(profile?.showExperiences !== false ? [{ href: "#experience", label: t.career || "Experience" }] : []),
-    ...(profile?.showAcademics !== false ? [{ href: "#education", label: t.education || "Education" }] : []),
-    ...(profile?.showBlog !== false ? [{ href: "#blog", label: t.blog || "Blog" }] : []),
-    ...(profile?.showAwards !== false ? [{ href: "#awards", label: t.awards || "Awards" }] : []),
+    { href: getLinkHref("#about"), label: t.about || "About" },
+    ...(profile?.showProjects !== false ? [{ href: getLinkHref("#projects"), label: t.projects || "Projects" }] : []),
+    ...(profile?.showExperiences !== false ? [{ href: getLinkHref("#experience"), label: t.career || "Experience" }] : []),
+    ...(profile?.showAcademics !== false ? [{ href: getLinkHref("#education"), label: t.education || "Education" }] : []),
+    ...(profile?.showBlog !== false ? [{ href: getLinkHref("#blog"), label: t.blog || "Blog" }] : []),
+    ...(profile?.showAwards !== false ? [{ href: getLinkHref("#awards"), label: t.awards || "Awards" }] : []),
   ];
 
   return (
