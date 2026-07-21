@@ -62,6 +62,30 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: profile.name,
+            url: "https://erikosyah.my.id",
+            jobTitle: profile.title,
+            description: profile.bio,
+            image: img(profile.avatarUrl),
+            sameAs: [
+              profile.githubUrl,
+              profile.linkedinUrl,
+              profile.websiteUrl,
+            ].filter(Boolean),
+            worksFor: experiences.map((e) => ({
+              "@type": "Organization",
+              name: e.company,
+              jobTitle: e.position,
+            })),
+          }),
+        }}
+      />
       {/* Hero */}
       <section className="hero" id="hero">
         <div className="hero-orb hero-orb-1" />

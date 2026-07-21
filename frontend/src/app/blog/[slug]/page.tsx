@@ -3,6 +3,52 @@ export const dynamic = "force-dynamic";
 import { api } from "@/lib/api";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+
+export async function generateMetadata(
+  { params, searchParams }: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const resolvedSearchParams = await searchParams;
+  const lang = typeof resolvedSearchParams.lang === "string" ? resolvedSearchParams.lang : "id";
+
+  try {
+    const blog = await api.getBlog(slug, lang);
+    if (!blog) return {};
+
+    return {
+      title: `${blog.title} | Eriko's Blog`,
+      description: blog.excerpt || blog.content.substring(0, 160),
+      keywords: blog.tags?.join(", "),
+      openGraph: {
+        title: blog.title,
+        description: blog.excerpt || blog.content.substring(0, 160),
+        type: "article",
+        url: `https://erikosyah.my.id/blog/${slug}`,
+        images: blog.coverImageUrl ? [{
+          url: blog.coverImageUrl.startsWith("http") ? blog.coverImageUrl : `http://localhost:3001${blog.coverImageUrl}`,
+          alt: blog.title,
+        }] : [],
+        publishedTime: new Date(blog.createdAt).toISOString(),
+        authors: ["Eriko Syah Putra"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: blog.title,
+        description: blog.excerpt || blog.content.substring(0, 160),
+        images: blog.coverImageUrl ? [blog.coverImageUrl.startsWith("http") ? blog.coverImageUrl : `http://localhost:3001${blog.coverImageUrl}`] : [],
+      },
+      alternates: {
+        canonical: `https://erikosyah.my.id/blog/${slug}`,
+      },
+    };
+  } catch {
+    return {};
+  }
+}
 
 export default async function BlogDetail({
   params,
@@ -39,6 +85,24 @@ export default async function BlogDetail({
 
   return (
     <div className="blog-detail">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: blog.title,
+            description: blog.excerpt || blog.content.substring(0, 160),
+            image: blog.coverImageUrl?.startsWith("http") ? blog.coverImageUrl : blog.coverImageUrl ? `http://localhost:3001${blog.coverImageUrl}` : undefined,
+            datePublished: new Date(blog.createdAt).toISOString(),
+            author: {
+              "@type": "Person",
+              name: "Eriko Syah Putra",
+            },
+            keywords: blog.tags?.join(", "),
+          }),
+        }}
+      />
       <div className="container">
         <div className="blog-detail-header">
           <Link href={`/#blog?lang=${lang}`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem" }}>
