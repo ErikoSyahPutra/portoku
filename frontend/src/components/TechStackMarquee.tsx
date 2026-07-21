@@ -14,7 +14,7 @@ import {
   SiGit,
   SiFigma,
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiGraphql,
   SiRedis,
 } from "react-icons/si";
@@ -39,7 +39,7 @@ const TECH_ITEMS: TechItem[] = [
   { name: "Git", icon: SiGit, color: "#F05032" },
   { name: "Figma", icon: SiFigma, color: "#F24E1E" },
   { name: "HTML5", icon: SiHtml5, color: "#E34F26" },
-  { name: "CSS3", icon: SiCss3, color: "#1572B6" },
+  { name: "CSS3", icon: SiCss, color: "#1572B6" },
   { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
   { name: "Redis", icon: SiRedis, color: "#DC382D" },
 ];

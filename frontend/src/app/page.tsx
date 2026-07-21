@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { api } from "@/lib/api";
 import Link from "next/link";
 import { translations } from "@/lib/translations";
+import TechStackMarquee from "@/components/TechStackMarquee";
 import {
   HiOutlineMapPin,
   HiOutlineEnvelope,
@@ -196,6 +197,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
           )}
         </div>
       </section>
+
+      <TechStackMarquee lang={lang} />
 
       {/* Projects */}
       {profile.showProjects !== false && (
