@@ -30,6 +30,9 @@ export const translations: Record<string, Record<string, string>> = {
     present: "Sekarang",
     liveDemo: "Demo Langsung",
     sourceCode: "Kode Sumber",
+    techStackLabel: "Tech Stack",
+    techStackTitle: "Teknologi & Tools Utama",
+    techStackSubtitle: "Teknologi modern yang biasa saya gunakan untuk membangun produk digital berkinerja tinggi.",
   },
   en: {
     availableForWork: "Available for work",
@@ -62,5 +65,8 @@ export const translations: Record<string, Record<string, string>> = {
     present: "Present",
     liveDemo: "Live Demo",
     sourceCode: "Source Code",
+    techStackLabel: "Tech Stack",
+    techStackTitle: "Core Technologies & Tools",
+    techStackSubtitle: "Modern technologies I routinely use to build high-performance digital products.",
   }
 };
