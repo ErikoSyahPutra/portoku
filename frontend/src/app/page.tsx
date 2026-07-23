@@ -273,9 +273,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                     <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{e.startDate} — {e.current ? t.present : e.endDate}</div>
                     <div className="timeline-card">
                       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
-                        {eLogo && (
+                        {eLogo ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={eLogo} alt={e.company} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
+                        ) : (
+                          <div className="timeline-icon-fallback" style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", color: "var(--accent-secondary)", border: "1px solid var(--border-color)", flexShrink: 0 }}>
+                            <HiOutlineBriefcase size={20} />
+                          </div>
                         )}
                         <div>
                           <h3>{e.position}</h3>
@@ -348,9 +352,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                     <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{org.startDate} — {org.current ? t.present : org.endDate}</div>
                     <div className="timeline-card">
                       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
-                        {orgLogo && (
+                        {orgLogo ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={orgLogo} alt={org.organization} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
+                        ) : (
+                          <div className="timeline-icon-fallback" style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", color: "var(--accent-secondary)", border: "1px solid var(--border-color)", flexShrink: 0 }}>
+                            <HiOutlineUserGroup size={20} />
+                          </div>
                         )}
                         <div>
                           <h3>{org.role}</h3>
