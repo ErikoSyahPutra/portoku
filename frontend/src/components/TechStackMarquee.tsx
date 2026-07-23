@@ -46,7 +46,13 @@ const TECH_ITEMS: TechItem[] = [
 
 export default function TechStackMarquee({ lang }: { lang: string }) {
   const t = translations[lang] || translations.id;
-  const displayItems = [...TECH_ITEMS, ...TECH_ITEMS];
+  
+  const half = Math.ceil(TECH_ITEMS.length / 2);
+  const row1 = TECH_ITEMS.slice(0, half);
+  const row2 = TECH_ITEMS.slice(half);
+
+  const displayRow1 = [...row1, ...row1];
+  const displayRow2 = [...row2, ...row2];
 
   return (
     <section className="section tech-stack-section" id="tech-stack">
@@ -60,12 +66,28 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
         </div>
       </div>
 
-      <div className="marquee-wrapper">
+      <div className="marquee-wrapper" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        {/* Row 1: Gerak Kiri */}
         <div className="marquee-track">
-          {displayItems.map((item, idx) => {
+          {displayRow1.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div className="tech-card" key={`${item.name}-${idx}`}>
+              <div className="tech-card" key={`r1-${item.name}-${idx}`}>
+                <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                  <Icon size={24} />
+                </div>
+                <span className="tech-name">{item.name}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Row 2: Gerak Kanan */}
+        <div className="marquee-track track-right">
+          {displayRow2.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div className="tech-card" key={`r2-${item.name}-${idx}`}>
                 <div className="tech-icon-wrapper" style={{ color: item.color }}>
                   <Icon size={24} />
                 </div>

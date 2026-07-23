@@ -941,6 +941,19 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+.marquee-track.track-right {
+  animation-name: marquee-right;
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* Disabled to force animation even if OS reduced motion is active */
   /* .marquee-track {
