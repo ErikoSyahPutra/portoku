@@ -70,7 +70,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
             {row1.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div className="tech-card" key={`r1-${item.name}-${idx}`}>
+                <div className="tech-card" key={`r1-1-${item.name}-${idx}`}>
                   <div className="tech-icon-wrapper" style={{ color: item.color }}>
                     <Icon size={24} />
                   </div>
@@ -83,7 +83,33 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
             {row1.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div className="tech-card" key={`r1-dup-${item.name}-${idx}`}>
+                <div className="tech-card" key={`r1-2-${item.name}-${idx}`}>
+                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                    <Icon size={24} />
+                  </div>
+                  <span className="tech-name">{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="marquee-group" aria-hidden="true">
+            {row1.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div className="tech-card" key={`r1-3-${item.name}-${idx}`}>
+                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                    <Icon size={24} />
+                  </div>
+                  <span className="tech-name">{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="marquee-group" aria-hidden="true">
+            {row1.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div className="tech-card" key={`r1-4-${item.name}-${idx}`}>
                   <div className="tech-icon-wrapper" style={{ color: item.color }}>
                     <Icon size={24} />
                   </div>
@@ -100,7 +126,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
             {row2.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div className="tech-card" key={`r2-${item.name}-${idx}`}>
+                <div className="tech-card" key={`r2-1-${item.name}-${idx}`}>
                   <div className="tech-icon-wrapper" style={{ color: item.color }}>
                     <Icon size={24} />
                   </div>
@@ -113,7 +139,33 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
             {row2.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div className="tech-card" key={`r2-dup-${item.name}-${idx}`}>
+                <div className="tech-card" key={`r2-2-${item.name}-${idx}`}>
+                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                    <Icon size={24} />
+                  </div>
+                  <span className="tech-name">{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="marquee-group group-right" aria-hidden="true">
+            {row2.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div className="tech-card" key={`r2-3-${item.name}-${idx}`}>
+                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                    <Icon size={24} />
+                  </div>
+                  <span className="tech-name">{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="marquee-group group-right" aria-hidden="true">
+            {row2.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div className="tech-card" key={`r2-4-${item.name}-${idx}`}>
                   <div className="tech-icon-wrapper" style={{ color: item.color }}>
                     <Icon size={24} />
                   </div>
