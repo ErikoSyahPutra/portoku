@@ -82,17 +82,69 @@ export default async function ProjectDetail({
     return `https://${trimmed}`;
   }
 
+  const parseInlineMarkdown = (text: string) => {
+    const parts: React.ReactNode[] = [];
+    let currentIdx = 0;
+    
+    // Regex matching either **bold** or [text](url)
+    const regex = /(\*\*(.*?)\*\*|\[(.*?)\]\((.*?)\))/g;
+    let match;
+    
+    while ((match = regex.exec(text)) !== null) {
+      const matchIndex = match.index;
+      
+      if (matchIndex > currentIdx) {
+        parts.push(text.substring(currentIdx, matchIndex));
+      }
+      
+      if (match[0].startsWith("**")) {
+        parts.push(<strong key={matchIndex} style={{ color: "var(--text-primary)", fontWeight: 600 }}>{match[2]}</strong>);
+      } else {
+        parts.push(
+          <a
+            key={matchIndex}
+            href={match[4]}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: "var(--color-primary, #3b82f6)", textDecoration: "underline" }}
+          >
+            {match[3]}
+          </a>
+        );
+      }
+      
+      currentIdx = regex.lastIndex;
+    }
+    
+    if (currentIdx < text.length) {
+      parts.push(text.substring(currentIdx));
+    }
+    
+    return parts.length > 0 ? parts : text;
+  };
+
   // Simple markdown-like rendering
   const renderContent = (content: string) => {
     return content.split("\n").map((line, i) => {
-      if (line.startsWith("### ")) return <h3 key={i} style={{ marginTop: 24, marginBottom: 12, color: "var(--text-primary)" }}>{line.slice(4)}</h3>;
-      if (line.startsWith("## ")) return <h2 key={i} style={{ marginTop: 32, marginBottom: 16, color: "var(--text-primary)" }}>{line.slice(3)}</h2>;
-      if (line.startsWith("# ")) return <h1 key={i} style={{ marginTop: 40, marginBottom: 20, color: "var(--text-primary)" }}>{line.slice(2)}</h1>;
-      if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} style={{ marginLeft: 16, marginBottom: 8 }}>{line.slice(2)}</li>;
-      if (line.match(/^\d+\.\s/)) return <li key={i} style={{ marginLeft: 16, marginBottom: 8 }}>{line.replace(/^\d+\.\s/, "")}</li>;
+      // Check block-level image
+      const imgMatch = line.match(/^\s*!\[(.*?)\]\((.*?)\)\s*$/);
+      if (imgMatch) {
+        return (
+          <div key={i} style={{ margin: "24px 0", borderRadius: 12, overflow: "hidden", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", padding: 8 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={imgMatch[2]} alt={imgMatch[1] || "Project Image"} style={{ maxWidth: "100%", height: "auto", display: "block", margin: "0 auto", borderRadius: 8 }} />
+          </div>
+        );
+      }
+
+      if (line.startsWith("### ")) return <h3 key={i} style={{ marginTop: 24, marginBottom: 12, color: "var(--text-primary)" }}>{parseInlineMarkdown(line.slice(4))}</h3>;
+      if (line.startsWith("## ")) return <h2 key={i} style={{ marginTop: 32, marginBottom: 16, color: "var(--text-primary)" }}>{parseInlineMarkdown(line.slice(3))}</h2>;
+      if (line.startsWith("# ")) return <h1 key={i} style={{ marginTop: 40, marginBottom: 20, color: "var(--text-primary)" }}>{parseInlineMarkdown(line.slice(2))}</h1>;
+      if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} style={{ marginLeft: 16, marginBottom: 8 }}>{parseInlineMarkdown(line.slice(2))}</li>;
+      if (line.match(/^\d+\.\s/)) return <li key={i} style={{ marginLeft: 16, marginBottom: 8 }}>{parseInlineMarkdown(line.replace(/^\d+\.\s/, ""))}</li>;
       if (line.startsWith("```")) return null;
       if (line.trim() === "") return <br key={i} />;
-      return <p key={i} style={{ marginBottom: 16 }}>{line.replace(/\*\*(.*?)\*\*/g, (_, t) => t)}</p>;
+      return <p key={i} style={{ marginBottom: 16 }}>{parseInlineMarkdown(line)}</p>;
     });
   };
 
