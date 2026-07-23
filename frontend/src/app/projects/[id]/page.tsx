@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import {
   HiOutlineGlobeAlt,
   HiOutlineCodeBracket,
+  HiOutlineComputerDesktop,
 } from "react-icons/hi2";
 
 export async function generateMetadata(
@@ -180,10 +181,14 @@ export default async function ProjectDetail({
             </div>
           </div>
 
-          {pImg && (
+          {pImg ? (
             <div style={{ width: "100%", maxHeight: "500px", borderRadius: 16, overflow: "hidden", border: "1px solid var(--border-color)", marginBottom: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={pImg} alt={project.title} style={{ width: "100%", height: "100%", maxHeight: "500px", objectFit: "cover", display: "block" }} />
+            </div>
+          ) : (
+            <div style={{ width: "100%", height: "300px", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", border: "1px solid var(--border-color)", color: "var(--accent-secondary)", marginBottom: 40 }}>
+              <HiOutlineComputerDesktop size={64} />
             </div>
           )}
 

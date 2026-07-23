@@ -223,10 +223,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                 return (
                   <div className="project-card" key={p.id} style={{ display: "flex", flexDirection: "column" }}>
                     <Link href={`/projects/${p.id}?lang=${lang}`} className="project-card-link" style={{ flex: 1, display: "block", color: "inherit", textDecoration: "none" }}>
-                      {pImg && (
+                      {pImg ? (
                         <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={pImg} alt={p.title} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                        </div>
+                      ) : (
+                        <div style={{ marginBottom: 16, borderRadius: 8, height: 180, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", border: "1px solid var(--border-color)", color: "var(--accent-secondary)" }}>
+                          <HiOutlineComputerDesktop size={40} />
                         </div>
                       )}
                       <h3>{p.title}</h3>
