@@ -214,6 +214,61 @@ function MarkdownTextarea({
     }
   };
 
+  const insertFormat = (type: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selected = text.substring(start, end);
+    const before = text.substring(0, start);
+    const after = text.substring(end, text.length);
+
+    let replacement = "";
+    let cursorOffset = 0;
+
+    switch (type) {
+      case "h1":
+        replacement = `\n# ${selected || "Header 1"}\n`;
+        cursorOffset = replacement.length;
+        break;
+      case "h2":
+        replacement = `\n## ${selected || "Header 2"}\n`;
+        cursorOffset = replacement.length;
+        break;
+      case "h3":
+        replacement = `\n### ${selected || "Header 3"}\n`;
+        cursorOffset = replacement.length;
+        break;
+      case "bold":
+        replacement = `**${selected || "Teks Tebal"}**`;
+        cursorOffset = replacement.length;
+        break;
+      case "italic":
+        replacement = `*${selected || "Teks Miring"}*`;
+        cursorOffset = replacement.length;
+        break;
+      case "list":
+        replacement = `\n- ${selected || "Item list"}\n`;
+        cursorOffset = replacement.length;
+        break;
+      case "link":
+        replacement = `[${selected || "Judul Link"}](https://example.com)`;
+        cursorOffset = selected ? replacement.length : 12 + (selected || "Judul Link").length; // cursor in URL
+        break;
+      default:
+        return;
+    }
+
+    onChange(before + replacement + after);
+
+    setTimeout(() => {
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + cursorOffset;
+    }, 50);
+  };
+
   const handleInsertImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -274,8 +329,19 @@ function MarkdownTextarea({
 
   return (
     <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 8 }}>
-      <div style={{ display: "flex", gap: 8, background: "var(--bg-secondary)", padding: "6px 12px", border: "1px solid var(--border-color)", borderBottom: "none", borderRadius: "8px 8px 0 0", alignItems: "center" }}>
-        <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.04em" }}>MARKDOWN EDITOR</span>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, background: "var(--bg-secondary)", padding: "8px 12px", border: "1px solid var(--border-color)", borderBottom: "none", borderRadius: "8px 8px 0 0", alignItems: "center" }}>
+        <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.04em", marginRight: 8 }}>MARKDOWN</span>
+        
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto" }} onClick={() => insertFormat("h1")}>H1</button>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto" }} onClick={() => insertFormat("h2")}>H2</button>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto" }} onClick={() => insertFormat("h3")}>H3</button>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto", fontWeight: "bold" }} onClick={() => insertFormat("bold")}>B</button>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto", fontStyle: "italic" }} onClick={() => insertFormat("italic")}>I</button>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto" }} onClick={() => insertFormat("list")}>• List</button>
+          <button type="button" className="btn btn-secondary" style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto" }} onClick={() => insertFormat("link")}>🔗 Link</button>
+        </div>
+
         <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
           <input type="file" ref={fileRef} accept="image/*" onChange={handleInsertImage} style={{ display: "none" }} />
           <button

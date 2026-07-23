@@ -86,8 +86,8 @@ export default async function ProjectDetail({
     const parts: React.ReactNode[] = [];
     let currentIdx = 0;
     
-    // Regex matching either **bold** or [text](url)
-    const regex = /(\*\*(.*?)\*\*|\[(.*?)\]\((.*?)\))/g;
+    // Regex matching either **bold**, *italic*, or [text](url)
+    const regex = /(\*\*(.*?)\*\*|\*(.*?)\*|\[(.*?)\]\((.*?)\))/g;
     let match;
     
     while ((match = regex.exec(text)) !== null) {
@@ -99,16 +99,18 @@ export default async function ProjectDetail({
       
       if (match[0].startsWith("**")) {
         parts.push(<strong key={matchIndex} style={{ color: "var(--text-primary)", fontWeight: 600 }}>{match[2]}</strong>);
+      } else if (match[0].startsWith("*")) {
+        parts.push(<em key={matchIndex} style={{ fontStyle: "italic" }}>{match[3]}</em>);
       } else {
         parts.push(
           <a
             key={matchIndex}
-            href={match[4]}
+            href={match[5]}
             target="_blank"
             rel="noreferrer"
             style={{ color: "var(--color-primary, #3b82f6)", textDecoration: "underline" }}
           >
-            {match[3]}
+            {match[4]}
           </a>
         );
       }
