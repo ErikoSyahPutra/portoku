@@ -2,7 +2,7 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
 async function fetcher<T>(endpoint: string, lang?: string): Promise<T> {
   const query = lang ? `?lang=${lang}` : '';
-  const res = await fetch(`${API}${endpoint}${query}`, { cache: "no-store" });
+  const res = await fetch(`${API}${endpoint}${query}`, { next: { revalidate: 300 } });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
