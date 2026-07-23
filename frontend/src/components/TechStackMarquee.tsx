@@ -61,118 +61,118 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
             {t.techStackSubtitle || "Teknologi yang saya gunakan dalam pengembangan perangkat lunak."}
           </p>
         </div>
-      </div>
 
-      <div className="marquee-wrapper" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-        {/* Row 1: Gerak Kiri */}
-        <div className="marquee-track">
-          <div className="marquee-group">
-            {row1.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r1-1-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+        <div className="marquee-wrapper" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {/* Row 1: Gerak Kiri */}
+          <div className="marquee-track">
+            <div className="marquee-group">
+              {row1.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r1-1-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="marquee-group" aria-hidden="true">
-            {row1.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r1-2-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+                );
+              })}
+            </div>
+            <div className="marquee-group" aria-hidden="true">
+              {row1.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r1-2-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="marquee-group" aria-hidden="true">
-            {row1.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r1-3-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+                );
+              })}
+            </div>
+            <div className="marquee-group" aria-hidden="true">
+              {row1.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r1-3-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="marquee-group" aria-hidden="true">
-            {row1.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r1-4-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+                );
+              })}
+            </div>
+            <div className="marquee-group" aria-hidden="true">
+              {row1.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r1-4-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Row 2: Gerak Kanan */}
-        <div className="marquee-track">
-          <div className="marquee-group group-right">
-            {row2.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r2-1-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+          {/* Row 2: Gerak Kanan */}
+          <div className="marquee-track">
+            <div className="marquee-group group-right">
+              {row2.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r2-1-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="marquee-group group-right" aria-hidden="true">
-            {row2.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r2-2-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+                );
+              })}
+            </div>
+            <div className="marquee-group group-right" aria-hidden="true">
+              {row2.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r2-2-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="marquee-group group-right" aria-hidden="true">
-            {row2.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r2-3-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+                );
+              })}
+            </div>
+            <div className="marquee-group group-right" aria-hidden="true">
+              {row2.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r2-3-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="marquee-group group-right" aria-hidden="true">
-            {row2.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div className="tech-card" key={`r2-4-${item.name}-${idx}`}>
-                  <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                    <Icon size={24} />
+                );
+              })}
+            </div>
+            <div className="marquee-group group-right" aria-hidden="true">
+              {row2.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div className="tech-card" key={`r2-4-${item.name}-${idx}`}>
+                    <div className="tech-icon-wrapper" style={{ color: item.color }}>
+                      <Icon size={24} />
+                    </div>
+                    <span className="tech-name">{item.name}</span>
                   </div>
-                  <span className="tech-name">{item.name}</span>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
