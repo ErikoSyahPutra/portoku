@@ -177,6 +177,88 @@ function ImageUpload({ value, onChange, round }: { value?: string; onChange: (ur
   );
 }
 
+/* ═══════════ Markdown Textarea Component ═══════════ */
+function MarkdownTextarea({
+  value,
+  onChange,
+  rows = 6,
+  placeholder = "Tulis konten Markdown di sini...",
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  rows?: number;
+  placeholder?: string;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleInsertImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const res = await api.uploadFile(file);
+      const fullUrl = res.url.startsWith("http") ? res.url : `${BACKEND}${res.url}`;
+      
+      const markdownImage = `\n![Image](${fullUrl})\n`;
+      
+      const textarea = textareaRef.current;
+      if (textarea) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        const before = text.substring(0, start);
+        const after = text.substring(end, text.length);
+        
+        onChange(before + markdownImage + after);
+        
+        setTimeout(() => {
+          textarea.focus();
+          textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length;
+        }, 50);
+      } else {
+        onChange(value + markdownImage);
+      }
+    } catch {
+      alert("Image upload failed");
+    } finally {
+      setUploading(false);
+      if (e.target) e.target.value = "";
+    }
+  };
+
+  return (
+    <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", gap: 8, background: "var(--bg-secondary)", padding: "6px 12px", border: "1px solid var(--border-color)", borderBottom: "none", borderRadius: "8px 8px 0 0", alignItems: "center" }}>
+        <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.04em" }}>MARKDOWN EDITOR</span>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+          <input type="file" ref={fileRef} accept="image/*" onChange={handleInsertImage} style={{ display: "none" }} />
+          <button
+            type="button"
+            className="btn btn-secondary"
+            style={{ padding: "4px 8px", fontSize: "0.75rem", height: "auto" }}
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? "Uploading..." : "📸 Insert Image"}
+          </button>
+        </div>
+      </div>
+      <textarea
+        ref={textareaRef}
+        className="form-input"
+        style={{ borderRadius: "0 0 8px 8px", borderTop: "none", marginTop: -8 }}
+        rows={rows}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
 /* ═══════════ Profile Panel ═══════════ */
 function ProfilePanel({ showToast }: { showToast: (m: string, t?: "success"|"error") => void }) {
   const [data, setData] = useState<any>(null);
@@ -226,8 +308,8 @@ function ProfilePanel({ showToast }: { showToast: (m: string, t?: "success"|"err
           <textarea className="form-input" value={data.bio || ""} onChange={(e) => set("bio", e.target.value)} />
         </div>
         <div className="form-group">
-          <label>About Me (full)</label>
-          <textarea className="form-input" rows={6} value={data.aboutMe || ""} onChange={(e) => set("aboutMe", e.target.value)} />
+          <label>About Me (full - Markdown)</label>
+          <MarkdownTextarea value={data.aboutMe || ""} onChange={(val) => set("aboutMe", val)} rows={6} />
         </div>
         <div className="form-row">
           <div className="form-group">
@@ -540,7 +622,11 @@ function CrudPanel({ entity, showToast, fields, columns }: { entity: string; sho
                   <div className="form-group" key={f.key}>
                     <label>{f.label}</label>
                     {f.type === "textarea" ? (
-                      <textarea className="form-input" rows={4} value={current[f.key] || ""} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value })} />
+                      f.label.includes("Markdown") ? (
+                        <MarkdownTextarea value={current[f.key] || ""} onChange={(val) => setCurrent({ ...current, [f.key]: val })} rows={8} />
+                      ) : (
+                        <textarea className="form-input" rows={4} value={current[f.key] || ""} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value })} />
+                      )
                     ) : f.type === "number" ? (
                       <input className="form-input" type="number" value={current[f.key] ?? ""} onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value === "" ? "" : Number(e.target.value) })} />
                     ) : (
