@@ -12,6 +12,7 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TranslationModule } from './modules/translation/translation.module';
+import { OrganizationModule } from './modules/organization/organization.module';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -48,6 +49,7 @@ import { APP_GUARD } from '@nestjs/core';
     UploadModule,
     AuthModule,
     TranslationModule,
+    OrganizationModule,
   ],
   providers: [
     {

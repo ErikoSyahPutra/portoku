@@ -77,6 +77,7 @@ export default function Navbar() {
     ...(profile?.showProjects !== false ? [{ href: getLinkHref("#projects"), label: t.projects || "Projects" }] : []),
     ...(profile?.showExperiences !== false ? [{ href: getLinkHref("#experience"), label: t.career || "Experience" }] : []),
     ...(profile?.showAcademics !== false ? [{ href: getLinkHref("#education"), label: t.education || "Education" }] : []),
+    ...(profile?.showOrganizations !== false ? [{ href: getLinkHref("#organizations"), label: t.organizations || "Organizations" }] : []),
     ...(profile?.showBlog !== false ? [{ href: getLinkHref("#blog"), label: t.blog || "Blog" }] : []),
     ...(profile?.showAwards !== false ? [{ href: getLinkHref("#awards"), label: t.awards || "Awards" }] : []),
   ];

@@ -21,6 +21,7 @@ import {
   HiOutlineDocumentText,
   HiOutlineComputerDesktop,
   HiOutlineSparkles,
+  HiOutlineUserGroup,
 } from "react-icons/hi2";
 
 const BACKEND = "http://localhost:3001";
@@ -49,11 +50,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
   const { lang = "id" } = await searchParams;
   const t = translations[lang] || translations.id;
 
-  let profile, projects, academics, experiences, blogs, awards;
+  let profile, projects, academics, experiences, blogs, awards, organizations;
   try {
-    [profile, projects, academics, experiences, blogs, awards] = await Promise.all([
+    [profile, projects, academics, experiences, blogs, awards, organizations] = await Promise.all([
       api.getProfile(lang), api.getProjects(lang), api.getAcademics(lang),
       api.getExperiences(lang), api.getBlogs(lang), api.getAwards(lang),
+      api.getOrganizations(lang),
     ]);
   } catch {
     return <FallbackPage />;
@@ -162,11 +164,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
             </div>
           </div>
           {/* Stats */}
-          {[profile.showProjects, profile.showExperiences, profile.showAwards, profile.showBlog].some((x) => x !== false) && (
+          {[profile.showProjects, profile.showExperiences, profile.showAwards, profile.showBlog, profile.showOrganizations].some((x) => x !== false) && (
             <div
               className="stats-grid"
               style={{
-                gridTemplateColumns: `repeat(${[profile.showProjects, profile.showExperiences, profile.showAwards, profile.showBlog].filter((x) => x !== false).length}, 1fr)`,
+                gridTemplateColumns: `repeat(${[profile.showProjects, profile.showExperiences, profile.showAwards, profile.showBlog, profile.showOrganizations].filter((x) => x !== false).length}, 1fr)`,
               }}
             >
               {profile.showProjects !== false && (
@@ -191,6 +193,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                 <div className="stat-card">
                   <div className="stat-number">{blogs.length}+</div>
                   <div className="stat-label">{t.articles}</div>
+                </div>
+              )}
+              {profile.showOrganizations !== false && (
+                <div className="stat-card">
+                  <div className="stat-number">{organizations.length}+</div>
+                  <div className="stat-label">{t.organizations}</div>
                 </div>
               )}
             </div>
@@ -313,6 +321,49 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                       <div className="edu-degree">{a.degree} {lang === 'en' ? 'in' : 'bidang'} {a.field}{a.gpa && <span className="edu-gpa">{lang === 'en' ? 'GPA' : 'IPK'}: {a.gpa}</span>}</div>
                       <div className="edu-year">{a.startYear} — {a.endYear || t.present}</div>
                       {a.description && <p>{a.description}</p>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Leadership & Organization */}
+      {profile.showOrganizations !== false && (
+        <section className="section" id="organizations">
+          <div className="container">
+            <div className="section-header">
+              <p className="section-label">{lang === "en" ? "Leadership & Activities" : "Kepemimpinan & Organisasi"}</p>
+              <h2 className="section-title">{lang === "en" ? "Organization Experience" : "Pengalaman Organisasi"}</h2>
+              <p className="section-desc">{lang === "en" ? "Active involvement in leadership roles and communities." : "Peran aktif dalam kepemimpinan dan organisasi kemasyarakatan."}</p>
+            </div>
+            <div className="timeline">
+              {organizations.map((org) => {
+                const orgLogo = img(org.logoUrl);
+                return (
+                  <div className={`timeline-item ${org.current ? "current" : ""}`} key={org.id}>
+                    <div className="timeline-dot" />
+                    <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{org.startDate} — {org.current ? t.present : org.endDate}</div>
+                    <div className="timeline-card">
+                      <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
+                        {orgLogo && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={orgLogo} alt={org.organization} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
+                        )}
+                        <div>
+                          <h3>{org.role}</h3>
+                          <div className="subtitle">{org.organization}{org.location ? ` · ${org.location}` : ""}</div>
+                        </div>
+                      </div>
+                      {org.description && (
+                        <div className="org-description" style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.6" }}>
+                          {org.description.split("\n").map((line, idx) => (
+                            <p key={idx} style={{ marginBottom: 8 }}>{line}</p>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

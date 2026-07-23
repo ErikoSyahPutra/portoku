@@ -52,6 +52,12 @@ export const createAward = (data: any) => client.post("/awards", data).then((r) 
 export const updateAward = (id: number, data: any) => client.put(`/awards/${id}`, data).then((r) => r.data);
 export const deleteAward = (id: number) => client.delete(`/awards/${id}`).then((r) => r.data);
 
+// Organizations
+export const getOrganizations = () => client.get("/organizations").then((r) => r.data);
+export const createOrganization = (data: any) => client.post("/organizations", data).then((r) => r.data);
+export const updateOrganization = (id: number, data: any) => client.put(`/organizations/${id}`, data).then((r) => r.data);
+export const deleteOrganization = (id: number) => client.delete(`/organizations/${id}`).then((r) => r.data);
+
 // Upload
 export const uploadFile = async (file: File): Promise<{ url: string }> => {
   const formData = new FormData();

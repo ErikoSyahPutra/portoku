@@ -21,6 +21,7 @@ import {
   HiOutlineCloudArrowUp,
   HiOutlineCheckCircle,
   HiOutlineArrowRightOnRectangle,
+  HiOutlineUserGroup,
 } from "react-icons/hi2";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
@@ -30,6 +31,7 @@ const TABS = [
   { key: "projects", label: "Projects", icon: HiOutlineComputerDesktop },
   { key: "experiences", label: "Experience", icon: HiOutlineBriefcase },
   { key: "academics", label: "Education", icon: HiOutlineAcademicCap },
+  { key: "organizations", label: "Organizations", icon: HiOutlineUserGroup },
   { key: "blogs", label: "Blog", icon: HiOutlineDocumentText },
   { key: "awards", label: "Awards", icon: HiOutlineTrophy },
   { key: "media", label: "Media Helper", icon: HiOutlinePhoto },
@@ -120,6 +122,7 @@ export default function AdminPage() {
         {tab === "academics" && <CrudPanel entity="academics" showToast={showToast} fields={academicFields} columns={["institution","degree","field","startYear"]} />}
         {tab === "blogs" && <CrudPanel entity="blogs" showToast={showToast} fields={blogFields} columns={["title","slug","published","readTime"]} />}
         {tab === "awards" && <CrudPanel entity="awards" showToast={showToast} fields={awardFields} columns={["title","issuer","year"]} />}
+        {tab === "organizations" && <CrudPanel entity="organizations" showToast={showToast} fields={organizationFields} columns={["organization","role","startDate","current"]} />}
         {tab === "media" && <MediaHelperPanel showToast={showToast} />}
       </div>
 
@@ -484,6 +487,10 @@ function ProfilePanel({ showToast }: { showToast: (m: string, t?: "success"|"err
               <input type="checkbox" id="showAwards" checked={data.showAwards !== false} onChange={(e) => set("showAwards", e.target.checked)} />
               <label htmlFor="showAwards">Show Awards Section</label>
             </div>
+            <div className="form-check">
+              <input type="checkbox" id="showOrganizations" checked={data.showOrganizations !== false} onChange={(e) => set("showOrganizations", e.target.checked)} />
+              <label htmlFor="showOrganizations">Show Organizations Section</label>
+            </div>
           </div>
         </div>
       </div>
@@ -591,6 +598,7 @@ const apiMap: Record<string, { getAll: () => Promise<any>; create: (d: any) => P
   academics: { getAll: api.getAcademics, create: api.createAcademic, update: api.updateAcademic, remove: api.deleteAcademic },
   blogs: { getAll: api.getBlogs, create: api.createBlog, update: api.updateBlog, remove: api.deleteBlog },
   awards: { getAll: api.getAwards, create: api.createAward, update: api.updateAward, remove: api.deleteAward },
+  organizations: { getAll: api.getOrganizations, create: api.createOrganization, update: api.updateOrganization, remove: api.deleteOrganization },
 };
 
 function CrudPanel({ entity, showToast, fields, columns }: { entity: string; showToast: (m: string, t?: "success"|"error") => void; fields: FieldDef[]; columns: string[] }) {
@@ -784,6 +792,18 @@ const experienceFields: FieldDef[] = [
   { key: "current", label: "Currently Working Here", type: "checkbox" },
   { key: "description", label: "Description", type: "textarea" },
   { key: "skills", label: "Skills", type: "tags" },
+  { key: "order", label: "Sort Order", type: "number" },
+];
+
+const organizationFields: FieldDef[] = [
+  { key: "organization", label: "Organization", type: "text" },
+  { key: "role", label: "Role/Position", type: "text" },
+  { key: "logoUrl", label: "Organization Logo", type: "image" },
+  { key: "location", label: "Location", type: "text" },
+  { key: "startDate", label: "Start Date (YYYY-MM)", type: "text" },
+  { key: "endDate", label: "End Date (YYYY-MM)", type: "text" },
+  { key: "current", label: "Currently Active", type: "checkbox" },
+  { key: "description", label: "Description (Markdown)", type: "textarea" },
   { key: "order", label: "Sort Order", type: "number" },
 ];
 

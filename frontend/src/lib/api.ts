@@ -11,7 +11,7 @@ export interface Profile {
   id: number; name: string; title: string; bio: string; aboutMe: string;
   avatarUrl?: string; email?: string; phone?: string; location?: string;
   githubUrl?: string; linkedinUrl?: string; twitterUrl?: string; websiteUrl?: string; resumeUrl?: string;
-  showProjects?: boolean; showExperiences?: boolean; showAcademics?: boolean; showBlog?: boolean; showAwards?: boolean;
+  showProjects?: boolean; showExperiences?: boolean; showAcademics?: boolean; showBlog?: boolean; showAwards?: boolean; showOrganizations?: boolean;
 }
 export interface Project {
   id: number; title: string; description: string; content?: string; imageUrl?: string;
@@ -33,6 +33,10 @@ export interface Award {
   id: number; title: string; issuer: string; year: number;
   description?: string; imageUrl?: string; credentialUrl?: string;
 }
+export interface Organization {
+  id: number; organization: string; role: string; location?: string;
+  startDate: string; endDate?: string; current: boolean; description?: string; logoUrl?: string; order: number;
+}
 
 export const api = {
   getProfile: (lang?: string) => fetcher<Profile>("/profile", lang),
@@ -43,4 +47,5 @@ export const api = {
   getBlogs: (lang?: string) => fetcher<Blog[]>("/blogs", lang),
   getBlog: (slug: string, lang?: string) => fetcher<Blog>(`/blogs/slug/${slug}`, lang),
   getAwards: (lang?: string) => fetcher<Award[]>("/awards", lang),
+  getOrganizations: (lang?: string) => fetcher<Organization[]>("/organizations", lang),
 };
