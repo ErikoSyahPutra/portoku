@@ -151,47 +151,49 @@ export default async function ProjectDetail({
   };
 
   return (
-    <div className="project-detail" style={{ padding: "4rem 0" }}>
+    <div className="project-detail">
       <div className="container">
-        <Link href={`/?lang=${lang}#projects`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 8 }}>
-          {lang === "en" ? "← Back to Projects" : "← Kembali ke Proyek"}
-        </Link>
-        
-        <div className="project-detail-header" style={{ marginBottom: 40 }}>
-          <h1 className="gradient-text" style={{ fontSize: "2.5rem", marginBottom: 16 }}>{project.title}</h1>
-          <div className="project-techs" style={{ marginBottom: 24, display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {project.technologies?.map((t) => (
-              <span className="tech-tag" key={t} style={{ fontSize: "0.85rem" }}>{t}</span>
-            ))}
+        <div className="project-detail-content">
+          <Link href={`/?lang=${lang}#projects`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 8 }}>
+            {lang === "en" ? "← Back to Projects" : "← Kembali ke Proyek"}
+          </Link>
+          
+          <div className="project-detail-header" style={{ marginBottom: 40 }}>
+            <h1 className="gradient-text" style={{ fontSize: "2.5rem", marginBottom: 16 }}>{project.title}</h1>
+            <div className="project-techs" style={{ marginBottom: 24, display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {project.technologies?.map((t) => (
+                <span className="tech-tag" key={t} style={{ fontSize: "0.85rem" }}>{t}</span>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              {project.liveUrl && (
+                <a href={formatUrl(project.liveUrl)} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <HiOutlineGlobeAlt size={16} /> {lang === "en" ? "Live Demo" : "Demo Langsung"}
+                </a>
+              )}
+              {project.githubUrl && (
+                <a href={formatUrl(project.githubUrl)} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <HiOutlineCodeBracket size={16} /> {lang === "en" ? "Source Code" : "Kode Sumber"}
+                </a>
+              )}
+            </div>
           </div>
 
-          <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            {project.liveUrl && (
-              <a href={formatUrl(project.liveUrl)} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <HiOutlineGlobeAlt size={16} /> {lang === "en" ? "Live Demo" : "Demo Langsung"}
-              </a>
-            )}
-            {project.githubUrl && (
-              <a href={formatUrl(project.githubUrl)} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <HiOutlineCodeBracket size={16} /> {lang === "en" ? "Source Code" : "Kode Sumber"}
-              </a>
-            )}
-          </div>
-        </div>
-
-        {pImg && (
-          <div style={{ width: "100%", maxHeight: "500px", borderRadius: 16, overflow: "hidden", border: "1px solid var(--border-color)", marginBottom: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={pImg} alt={project.title} style={{ width: "100%", height: "100%", maxHeight: "500px", objectFit: "cover", display: "block" }} />
-          </div>
-        )}
-
-        <div className="project-detail-content" style={{ fontSize: "1.1rem", lineHeight: "1.75", color: "var(--text-secondary)" }}>
-          {project.content ? (
-            renderContent(project.content)
-          ) : (
-            <p>{project.description}</p>
+          {pImg && (
+            <div style={{ width: "100%", maxHeight: "500px", borderRadius: 16, overflow: "hidden", border: "1px solid var(--border-color)", marginBottom: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={pImg} alt={project.title} style={{ width: "100%", height: "100%", maxHeight: "500px", objectFit: "cover", display: "block" }} />
+            </div>
           )}
+
+          <div style={{ fontSize: "1.1rem", lineHeight: "1.75", color: "var(--text-secondary)" }}>
+            {project.content ? (
+              renderContent(project.content)
+            ) : (
+              <p>{project.description}</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

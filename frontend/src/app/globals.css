@@ -700,6 +700,16 @@ a { color: inherit; text-decoration: none; }
   font-weight: 600;
 }
 
+/* ─── Project Detail ─── */
+.project-detail {
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+.project-detail-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 /* ─── Education cards ─── */
 .education-grid {
   display: grid;
