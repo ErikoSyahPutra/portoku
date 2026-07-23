@@ -59,6 +59,9 @@ export class Profile {
   @Column({ type: 'boolean', default: true })
   showAwards: boolean;
 
+  @Column({ type: 'boolean', default: true })
+  showOrganizations: boolean;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }
