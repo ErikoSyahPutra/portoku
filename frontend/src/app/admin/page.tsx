@@ -32,6 +32,7 @@ const TABS = [
   { key: "academics", label: "Education", icon: HiOutlineAcademicCap },
   { key: "blogs", label: "Blog", icon: HiOutlineDocumentText },
   { key: "awards", label: "Awards", icon: HiOutlineTrophy },
+  { key: "media", label: "Media Helper", icon: HiOutlinePhoto },
 ];
 
 type Toast = { message: string; type: "success" | "error" } | null;
@@ -119,6 +120,7 @@ export default function AdminPage() {
         {tab === "academics" && <CrudPanel entity="academics" showToast={showToast} fields={academicFields} columns={["institution","degree","field","startYear"]} />}
         {tab === "blogs" && <CrudPanel entity="blogs" showToast={showToast} fields={blogFields} columns={["title","slug","published","readTime"]} />}
         {tab === "awards" && <CrudPanel entity="awards" showToast={showToast} fields={awardFields} columns={["title","issuer","year"]} />}
+        {tab === "media" && <MediaHelperPanel showToast={showToast} />}
       </div>
 
       {toast && (
@@ -290,6 +292,97 @@ function ProfilePanel({ showToast }: { showToast: (m: string, t?: "success"|"err
             </div>
           </div>
         </div>
+      </div>
+    </>
+  );
+}
+
+/* ═══════════ Media Helper Panel ═══════════ */
+function MediaHelperPanel({ showToast }: { showToast: (m: string, t?: "success"|"error") => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const res = await api.uploadFile(file);
+      const fullUrl = res.url.startsWith("http") ? res.url : `${BACKEND}${res.url}`;
+      setImageUrl(fullUrl);
+      showToast("Uploaded successfully!");
+    } catch {
+      showToast("Upload failed", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const copyToClipboard = (text: string, message: string) => {
+    navigator.clipboard.writeText(text);
+    showToast(message);
+  };
+
+  return (
+    <>
+      <div className="admin-topbar">
+        <h1>Media Helper</h1>
+      </div>
+      <div className="admin-table-wrap" style={{ padding: 24, maxWidth: 600 }}>
+        <p style={{ color: "var(--text-secondary)", marginBottom: 20 }}>
+          Upload your images here to get public URLs and formatted Markdown codes that you can paste directly into your Project or Blog articles.
+        </p>
+
+        <div className="form-group" style={{ marginBottom: 24 }}>
+          <label>Select Image File</label>
+          <input
+            type="file"
+            ref={fileRef}
+            onChange={handleUpload}
+            style={{ display: "none" }}
+            accept="image/*"
+          />
+          <button
+            type="button"
+            className={`btn btn-primary ${uploading ? "uploading" : ""}`}
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? "Uploading..." : "Upload Image"}
+          </button>
+        </div>
+
+        {imageUrl && (
+          <div style={{ marginTop: 24, padding: 16, background: "var(--bg-secondary)", borderRadius: 12, border: "1px solid var(--border-color)" }}>
+            <h3 style={{ fontSize: "1.05rem", marginBottom: 16, color: "var(--text-primary)" }}>Uploaded Image Details</h3>
+            
+            {/* Preview */}
+            <div style={{ width: "100%", maxHeight: 200, borderRadius: 8, overflow: "hidden", marginBottom: 16, border: "1px solid var(--border-color)" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={imageUrl} alt="Uploaded preview" style={{ width: "100%", height: "100%", maxHeight: 200, objectFit: "contain", background: "#050508", display: "block", margin: "0 auto" }} />
+            </div>
+
+            {/* URL Input */}
+            <div className="form-group" style={{ marginBottom: 16 }}>
+              <label>Direct Image URL</label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input className="form-input" readOnly value={imageUrl} />
+                <button className="btn btn-secondary" onClick={() => copyToClipboard(imageUrl, "URL copied!")}>Copy</button>
+              </div>
+            </div>
+
+            {/* Markdown Input */}
+            <div className="form-group">
+              <label>Markdown Code (for Projects / Blog)</label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input className="form-input" readOnly value={`![Project Image](${imageUrl})`} />
+                <button className="btn btn-secondary" onClick={() => copyToClipboard(`![Project Image](${imageUrl})`, "Markdown code copied!")}>Copy Code</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
