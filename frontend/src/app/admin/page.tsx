@@ -193,6 +193,27 @@ function MarkdownTextarea({
   const fileRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const insertMarkdownImage = (url: string) => {
+    const markdownImage = `\n![Image](${url})\n`;
+    const textarea = textareaRef.current;
+    if (textarea) {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const before = text.substring(0, start);
+      const after = text.substring(end, text.length);
+      
+      onChange(before + markdownImage + after);
+      
+      setTimeout(() => {
+        textarea.focus();
+        textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length;
+      }, 50);
+    } else {
+      onChange(value + markdownImage);
+    }
+  };
+
   const handleInsertImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -201,31 +222,53 @@ function MarkdownTextarea({
     try {
       const res = await api.uploadFile(file);
       const fullUrl = res.url.startsWith("http") ? res.url : `${BACKEND}${res.url}`;
-      
-      const markdownImage = `\n![Image](${fullUrl})\n`;
-      
-      const textarea = textareaRef.current;
-      if (textarea) {
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const text = textarea.value;
-        const before = text.substring(0, start);
-        const after = text.substring(end, text.length);
-        
-        onChange(before + markdownImage + after);
-        
-        setTimeout(() => {
-          textarea.focus();
-          textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length;
-        }, 50);
-      } else {
-        onChange(value + markdownImage);
-      }
+      insertMarkdownImage(fullUrl);
     } catch {
       alert("Image upload failed");
     } finally {
       setUploading(false);
       if (e.target) e.target.value = "";
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+
+    setUploading(true);
+    try {
+      const res = await api.uploadFile(file);
+      const fullUrl = res.url.startsWith("http") ? res.url : `${BACKEND}${res.url}`;
+      insertMarkdownImage(fullUrl);
+    } catch {
+      alert("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const file = e.clipboardData.items?.[0]?.getAsFile();
+    if (!file || !file.type.startsWith("image/")) return; // Let default text paste happen if not an image
+
+    e.preventDefault();
+    setUploading(true);
+    try {
+      const res = await api.uploadFile(file);
+      const fullUrl = res.url.startsWith("http") ? res.url : `${BACKEND}${res.url}`;
+      insertMarkdownImage(fullUrl);
+    } catch {
+      alert("Image upload failed");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -254,6 +297,9 @@ function MarkdownTextarea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onPaste={handlePaste}
       />
     </div>
   );
