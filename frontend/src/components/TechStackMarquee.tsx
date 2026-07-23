@@ -51,8 +51,8 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
   const row1 = TECH_ITEMS.slice(0, half);
   const row2 = TECH_ITEMS.slice(half);
 
-  const displayRow1 = [...row1, ...row1];
-  const displayRow2 = [...row2, ...row2];
+  const displayRow1 = [...row1, ...row1, ...row1];
+  const displayRow2 = [...row2, ...row2, ...row2];
 
   return (
     <section className="section tech-stack-section" id="tech-stack">
