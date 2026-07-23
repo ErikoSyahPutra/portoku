@@ -213,26 +213,28 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               {projects.map((p) => {
                 const pImg = img(p.imageUrl);
                 return (
-                  <div className="project-card" key={p.id}>
-                    {pImg && (
-                      <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={pImg} alt={p.title} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                  <div className="project-card" key={p.id} style={{ display: "flex", flexDirection: "column" }}>
+                    <Link href={`/projects/${p.id}?lang=${lang}`} className="project-card-link" style={{ flex: 1, display: "block", color: "inherit", textDecoration: "none" }}>
+                      {pImg && (
+                        <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={pImg} alt={p.title} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                        </div>
+                      )}
+                      <h3>{p.title}</h3>
+                      <p>{p.description}</p>
+                      <div className="project-techs" style={{ marginBottom: 16 }}>
+                        {p.technologies?.map((t) => <span className="tech-tag" key={t}>{t}</span>)}
                       </div>
-                    )}
-                    <h3>{p.title}</h3>
-                    <p>{p.description}</p>
-                    <div className="project-techs">
-                      {p.technologies?.map((t) => <span className="tech-tag" key={t}>{t}</span>)}
-                    </div>
-                    <div className="project-links">
+                    </Link>
+                    <div className="project-links" style={{ marginTop: "auto" }}>
                       {p.liveUrl && (
-                        <a href={formatUrl(p.liveUrl)} target="_blank" rel="noreferrer" className="stretched-link">
+                        <a href={formatUrl(p.liveUrl)} target="_blank" rel="noreferrer">
                           <HiOutlineArrowTopRightOnSquare size={14} /> {t.liveDemo}
                         </a>
                       )}
                       {p.githubUrl && (
-                        <a href={formatUrl(p.githubUrl)} target="_blank" rel="noreferrer" className={!p.liveUrl ? "stretched-link" : ""}>
+                        <a href={formatUrl(p.githubUrl)} target="_blank" rel="noreferrer">
                           <HiOutlineCodeBracket size={14} /> {t.sourceCode}
                         </a>
                       )}

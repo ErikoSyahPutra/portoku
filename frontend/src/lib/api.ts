@@ -14,7 +14,7 @@ export interface Profile {
   showProjects?: boolean; showExperiences?: boolean; showAcademics?: boolean; showBlog?: boolean; showAwards?: boolean;
 }
 export interface Project {
-  id: number; title: string; description: string; imageUrl?: string;
+  id: number; title: string; description: string; content?: string; imageUrl?: string;
   liveUrl?: string; githubUrl?: string; technologies: string[]; featured: boolean; order: number;
 }
 export interface Academic {
@@ -37,6 +37,7 @@ export interface Award {
 export const api = {
   getProfile: (lang?: string) => fetcher<Profile>("/profile", lang),
   getProjects: (lang?: string) => fetcher<Project[]>("/projects", lang),
+  getProject: (id: number, lang?: string) => fetcher<Project>(`/projects/${id}`, lang),
   getAcademics: (lang?: string) => fetcher<Academic[]>("/academics", lang),
   getExperiences: (lang?: string) => fetcher<Experience[]>("/experiences", lang),
   getBlogs: (lang?: string) => fetcher<Blog[]>("/blogs", lang),

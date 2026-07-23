@@ -474,6 +474,7 @@ function CrudPanel({ entity, showToast, fields, columns }: { entity: string; sho
 const projectFields: FieldDef[] = [
   { key: "title", label: "Title", type: "text" },
   { key: "description", label: "Description", type: "textarea" },
+  { key: "content", label: "Detailed Content (Markdown)", type: "textarea" },
   { key: "imageUrl", label: "Project Image", type: "image" },
   { key: "liveUrl", label: "Live URL", type: "text" },
   { key: "githubUrl", label: "GitHub URL", type: "text" },

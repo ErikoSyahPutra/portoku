@@ -11,6 +11,9 @@ export class Project {
   @Column({ type: 'text' })
   description: string;
 
+  @Column({ type: 'text', nullable: true })
+  content: string;
+
   @Column({ nullable: true })
   imageUrl: string;
 
