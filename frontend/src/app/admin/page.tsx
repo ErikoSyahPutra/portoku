@@ -117,7 +117,7 @@ export default function AdminPage() {
 
       <div className="admin-main">
         {tab === "profile" && <ProfilePanel showToast={showToast} />}
-        {tab === "projects" && <CrudPanel entity="projects" showToast={showToast} fields={projectFields} columns={["title","technologies","featured"]} />}
+        {tab === "projects" && <CrudPanel entity="projects" showToast={showToast} fields={projectFields} columns={["title","order","featured","technologies"]} />}
         {tab === "experiences" && <CrudPanel entity="experiences" showToast={showToast} fields={experienceFields} columns={["position","company","startDate","current"]} />}
         {tab === "academics" && <CrudPanel entity="academics" showToast={showToast} fields={academicFields} columns={["institution","degree","field","startYear"]} />}
         {tab === "blogs" && <CrudPanel entity="blogs" showToast={showToast} fields={blogFields} columns={["title","slug","published","readTime"]} />}
@@ -779,7 +779,7 @@ const projectFields: FieldDef[] = [
   { key: "githubUrl", label: "GitHub URL", type: "text" },
   { key: "technologies", label: "Technologies", type: "tags" },
   { key: "featured", label: "Featured", type: "checkbox" },
-  { key: "order", label: "Sort Order", type: "number" },
+  { key: "order", label: "Urutan / Sort Order (Urutan 1 = Proyek Utama / Hero Spotlight)", type: "number" },
 ];
 
 const experienceFields: FieldDef[] = [
