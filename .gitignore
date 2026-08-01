@@ -33,3 +33,6 @@ backend/uploads/*
 !backend/uploads/ecommerce.png
 !backend/uploads/healthcare.png
 !backend/uploads/project_management.png
+
+# Brainstorm Companion
+.superpowers/
