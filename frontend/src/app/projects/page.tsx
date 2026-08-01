@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { api } from "@/lib/api";
+import { Project, api } from "@/lib/api";
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
@@ -35,7 +35,7 @@ export default async function ProjectsPage({
   const lang = typeof resolvedSearchParams.lang === "string" ? resolvedSearchParams.lang : "id";
   const t = translations[lang] || translations.id;
 
-  let projects = [];
+  let projects: Project[] = [];
   try {
     projects = await api.getProjects(lang);
   } catch {
