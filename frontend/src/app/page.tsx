@@ -209,7 +209,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
       <TechStackMarquee lang={lang} />
 
       {/* Projects */}
-      {profile.showProjects !== false && (
+      {profile.showProjects !== false && projects.length > 0 && (
         <section className="section" id="projects">
           <div className="container">
             <div className="section-header">
@@ -217,44 +217,90 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               <h2 className="section-title">{t.featuredProjects}</h2>
               <p className="section-desc">{t.projectsSubtitle}</p>
             </div>
-            <div className="projects-grid">
-              {projects.map((p) => {
-                const pImg = img(p.imageUrl);
-                return (
-                  <div className="project-card" key={p.id} style={{ display: "flex", flexDirection: "column" }}>
-                    <Link href={`/projects/${p.id}?lang=${lang}`} className="project-card-link" style={{ flex: 1, display: "block", color: "inherit", textDecoration: "none" }}>
-                      {pImg ? (
-                        <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
+
+            {(() => {
+              const heroProject = projects[0];
+              const miniProjects = projects.slice(1, 4);
+              const totalProjects = projects.length;
+
+              const heroImg = img(heroProject.imageUrl);
+
+              return (
+                <div className="projects-spotlight-grid">
+                  {/* Hero Spotlight Card */}
+                  <div className="project-card-spotlight">
+                    <span className="flagship-badge">{t.flagshipBadge}</span>
+                    <Link href={`/projects/${heroProject.id}?lang=${lang}`} style={{ color: "inherit", textDecoration: "none", display: "flex", flexDirection: "column", flex: 1 }}>
+                      {heroImg ? (
+                        <div style={{ marginBottom: 18, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={pImg} alt={p.title} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+                          <img src={heroImg} alt={heroProject.title} style={{ width: "100%", height: 230, objectFit: "cover", display: "block" }} />
                         </div>
                       ) : (
-                        <div style={{ marginBottom: 16, borderRadius: 8, height: 180, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", border: "1px solid var(--border-color)", color: "var(--accent-secondary)" }}>
-                          <HiOutlineComputerDesktop size={40} />
+                        <div style={{ marginBottom: 18, borderRadius: 8, height: 230, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", border: "1px solid var(--border-color)", color: "var(--accent-secondary)" }}>
+                          <HiOutlineComputerDesktop size={48} />
                         </div>
                       )}
-                      <h3>{p.title}</h3>
-                      <p>{p.description}</p>
-                      <div className="project-techs" style={{ marginBottom: 16 }}>
-                        {p.technologies?.map((t) => <span className="tech-tag" key={t}>{t}</span>)}
+                      <h3 style={{ fontSize: "1.35rem", fontWeight: 600, marginBottom: 10 }}>{heroProject.title}</h3>
+                      <p style={{ color: "var(--text-secondary)", fontSize: "0.925rem", marginBottom: 16, lineHeight: 1.6 }}>{heroProject.description}</p>
+                      <div className="project-techs" style={{ marginBottom: 20 }}>
+                        {heroProject.technologies?.map((tech) => (
+                          <span className="tech-tag" key={tech}>{tech}</span>
+                        ))}
                       </div>
                     </Link>
-                    <div className="project-links" style={{ marginTop: "auto" }}>
-                      {p.liveUrl && (
-                        <a href={formatUrl(p.liveUrl)} target="_blank" rel="noreferrer">
+
+                    <div className="project-links" style={{ marginTop: "auto", paddingTop: 12 }}>
+                      {heroProject.liveUrl && (
+                        <a href={formatUrl(heroProject.liveUrl)} target="_blank" rel="noreferrer">
                           <HiOutlineArrowTopRightOnSquare size={14} /> {t.liveDemo}
                         </a>
                       )}
-                      {p.githubUrl && (
-                        <a href={formatUrl(p.githubUrl)} target="_blank" rel="noreferrer">
+                      {heroProject.githubUrl && (
+                        <a href={formatUrl(heroProject.githubUrl)} target="_blank" rel="noreferrer">
                           <HiOutlineCodeBracket size={14} /> {t.sourceCode}
                         </a>
                       )}
                     </div>
                   </div>
-                );
-              })}
-            </div>
+
+                  {/* Mini Projects Side Column */}
+                  <div className="projects-mini-list">
+                    {miniProjects.map((p) => {
+                      const pImg = img(p.imageUrl);
+                      return (
+                        <Link href={`/projects/${p.id}?lang=${lang}`} className="project-mini-card" key={p.id}>
+                          {pImg ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={pImg} alt={p.title} className="mini-card-thumb" />
+                          ) : (
+                            <div className="mini-card-thumb-fallback">
+                              <HiOutlineComputerDesktop size={24} />
+                            </div>
+                          )}
+                          <div className="mini-card-content">
+                            <h4>{p.title}</h4>
+                            <p>{p.description}</p>
+                            <div className="project-techs" style={{ marginBottom: 0 }}>
+                              {p.technologies?.slice(0, 3).map((tech) => (
+                                <span className="tech-tag" key={tech} style={{ fontSize: "0.7rem", padding: "2px 8px" }}>{tech}</span>
+                              ))}
+                            </div>
+                          </div>
+                          <HiOutlineArrowTopRightOnSquare size={18} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+                        </Link>
+                      );
+                    })}
+
+                    {totalProjects > 1 && (
+                      <Link href={`/projects?lang=${lang}`} className="projects-view-all-btn">
+                        {t.viewAllProjects.replace("{count}", String(totalProjects))}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </section>
       )}
