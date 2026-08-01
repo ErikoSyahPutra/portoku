@@ -34,6 +34,9 @@ export const translations: Record<string, Record<string, string>> = {
     techStackLabel: "Tech Stack",
     techStackTitle: "Technologies & Tools",
     techStackSubtitle: "Teknologi dan tools modern yang saya gunakan untuk membangun produk digital.",
+    flagshipBadge: "⭐ Proyek Utama",
+    viewAllProjects: "Lihat Semua Proyek ({count}) →",
+    viewDetail: "Detail Proyek",
   },
   en: {
     availableForWork: "Available for work",
@@ -70,5 +73,8 @@ export const translations: Record<string, Record<string, string>> = {
     techStackLabel: "Tech Stack",
     techStackTitle: "Technologies & Tools",
     techStackSubtitle: "Modern technologies and tools I use to build high-performance digital products.",
+    flagshipBadge: "⭐ Featured Project",
+    viewAllProjects: "View All Projects ({count}) →",
+    viewDetail: "View Detail",
   }
 };
