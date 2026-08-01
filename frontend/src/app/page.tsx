@@ -121,9 +121,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
           <div className="about-grid">
             <div className="about-text">
               {avatarSrc && (
-                <div style={{ marginBottom: 24 }}>
+                <div className="about-avatar-container">
+                  <div className="about-avatar-backdrop" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={avatarSrc} alt={profile.name} style={{ width: 240, height: 240, borderRadius: "16px", objectFit: "contain", border: "3px solid var(--accent-primary)", background: "var(--bg-secondary)" }} />
+                  <img src={avatarSrc} alt={profile.name} className="about-avatar-img" />
+                  <div className="about-avatar-badge">
+                    <span className="about-avatar-badge-dot" />
+                    {t.availableBadge}
+                  </div>
                 </div>
               )}
               {profile.aboutMe?.split("\n").filter(Boolean).map((p: string, i: number) => (
