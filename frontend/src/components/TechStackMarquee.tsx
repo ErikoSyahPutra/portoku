@@ -71,7 +71,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r1-1-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -84,7 +84,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r1-2-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -97,7 +97,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r1-3-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -110,7 +110,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r1-4-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -127,7 +127,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r2-1-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -140,7 +140,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r2-2-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -153,7 +153,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r2-3-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
@@ -166,7 +166,7 @@ export default function TechStackMarquee({ lang }: { lang: string }) {
                 return (
                   <div className="tech-card" key={`r2-4-${item.name}-${idx}`}>
                     <div className="tech-icon-wrapper" style={{ color: item.color }}>
-                      <Icon size={24} />
+                      <Icon size={24} aria-hidden="true" />
                     </div>
                     <span className="tech-name">{item.name}</span>
                   </div>
