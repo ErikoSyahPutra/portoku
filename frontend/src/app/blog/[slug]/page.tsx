@@ -100,7 +100,7 @@ export default async function BlogDetail({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            mainEntityOfPage": {
+            "mainEntityOfPage": {
               "@type": "WebPage",
               "@id": `https://erikosyah.my.id/blog/${slug}`,
             },

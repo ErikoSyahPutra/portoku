@@ -27,7 +27,7 @@ export interface Experience {
 }
 export interface Blog {
   id: number; title: string; slug: string; excerpt: string; content: string;
-  coverImageUrl?: string; tags: string[]; published: boolean; readTime: number; createdAt: string;
+  coverImageUrl?: string; tags: string[]; published: boolean; readTime: number; createdAt: string; updatedAt?: string;
 }
 export interface Award {
   id: number; title: string; issuer: string; year: number;
