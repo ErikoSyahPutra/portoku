@@ -124,7 +124,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                 <div className="about-avatar-container">
                   <div className="about-avatar-backdrop" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={avatarSrc} alt={profile.name} className="about-avatar-img" />
+                  <img src={avatarSrc} alt={profile.name || "Foto profil"} className="about-avatar-img" />
                   <div className="about-avatar-badge">
                     <span className="about-avatar-badge-dot" />
                     {t.availableBadge}
@@ -239,7 +239,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                       {heroImg ? (
                         <div style={{ marginBottom: 18, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border-color)" }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={heroImg} alt={heroProject.title} style={{ width: "100%", height: 230, objectFit: "cover", display: "block" }} />
+                          <img src={heroImg} alt={heroProject.title || "Gambar proyek utama"} style={{ width: "100%", height: 230, objectFit: "cover", display: "block" }} />
                         </div>
                       ) : (
                         <div style={{ marginBottom: 18, borderRadius: 8, height: 230, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", border: "1px solid var(--border-color)", color: "var(--accent-secondary)" }}>
@@ -277,7 +277,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                         <Link href={`/projects/${p.id}?lang=${lang}`} className="project-mini-card" key={p.id}>
                           {pImg ? (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={pImg} alt={p.title} className="mini-card-thumb" />
+                            <img src={pImg} alt={p.title || "Gambar proyek"} className="mini-card-thumb" />
                           ) : (
                             <div className="mini-card-thumb-fallback">
                               <HiOutlineComputerDesktop size={24} />
@@ -330,7 +330,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
                         {eLogo ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={eLogo} alt={e.company} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
+                          <img src={eLogo} alt={e.company || "Logo perusahaan"} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
                         ) : (
                           <div className="timeline-icon-fallback" style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", color: "var(--accent-secondary)", border: "1px solid var(--border-color)", flexShrink: 0 }}>
                             <HiOutlineBriefcase size={20} />
@@ -370,7 +370,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                     <div className="edu-icon">
                       {aLogo ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={aLogo} alt={a.institution} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
+                        <img src={aLogo} alt={a.institution || "Logo institusi"} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
                       ) : (
                         <HiOutlineAcademicCap size={24} />
                       )}
@@ -409,7 +409,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
                         {orgLogo ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={orgLogo} alt={org.organization} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
+                          <img src={orgLogo} alt={org.organization || "Logo organisasi"} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
                         ) : (
                           <div className="timeline-icon-fallback" style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", color: "var(--accent-secondary)", border: "1px solid var(--border-color)", flexShrink: 0 }}>
                             <HiOutlineUserGroup size={20} />
@@ -453,7 +453,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                     {bImg && (
                       <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", marginTop: -4 }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={bImg} alt={b.title} style={{ width: "100%", height: 160, objectFit: "cover", display: "block" }} />
+                        <img src={bImg} alt={b.title || "Gambar sampul artikel"} style={{ width: "100%", height: 160, objectFit: "cover", display: "block" }} />
                       </div>
                     )}
                     <div className="blog-meta">
@@ -490,7 +490,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                     {aImg && (
                       <div style={{ marginBottom: 12, borderRadius: 8, overflow: "hidden" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={aImg} alt={a.title} style={{ width: "100%", height: 140, objectFit: "cover", display: "block" }} />
+                        <img src={aImg} alt={a.title || "Gambar sertifikat / penghargaan"} style={{ width: "100%", height: 140, objectFit: "cover", display: "block" }} />
                       </div>
                     )}
                     <span className="award-year"><HiOutlineTrophy size={12} style={{ display: "inline", verticalAlign: "-1px", marginRight: 4 }} />{a.year}</span>
