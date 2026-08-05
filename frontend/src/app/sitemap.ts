@@ -6,49 +6,47 @@ export const dynamic = 'force-dynamic'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://erikosyah.my.id'
 
-  // Main pages
-  const mainPages = [
+  // Main pages (clean URLs without fragment hashes)
+  const mainPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/#projects`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/#experience`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/#education`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
+      changeFrequency: 'daily',
+      priority: 1.0,
     },
   ]
 
-  // Blog posts
+  // Dynamic Blog Posts
   let blogUrls: MetadataRoute.Sitemap = []
   try {
     const blogs = await api.getBlogs('en')
     if (Array.isArray(blogs)) {
       blogUrls = blogs.map((blog) => ({
         url: `${baseUrl}/blog/${blog.slug}`,
-        lastModified: new Date(blog.createdAt),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
+        lastModified: blog.createdAt ? new Date(blog.createdAt) : new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
       }))
     }
   } catch {
     console.error('Failed to fetch blogs for sitemap')
   }
 
-  return [...mainPages, ...blogUrls]
+  // Dynamic Projects
+  let projectUrls: MetadataRoute.Sitemap = []
+  try {
+    const projects = await api.getProjects('en')
+    if (Array.isArray(projects)) {
+      projectUrls = projects.map((project) => ({
+        url: `${baseUrl}/projects/${project.id}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+      }))
+    }
+  } catch {
+    console.error('Failed to fetch projects for sitemap')
+  }
+
+  return [...mainPages, ...blogUrls, ...projectUrls]
 }
