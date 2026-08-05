@@ -26,9 +26,14 @@ import {
 
 const BACKEND = "http://localhost:3001";
 
-function img(url?: string) {
+function img(url?: string, width: number = 600) {
   if (!url) return null;
-  return url.startsWith("http") ? url : `${BACKEND}${url}`;
+  const fullUrl = url.startsWith("http") ? url : `${BACKEND}${url}`;
+  if (fullUrl.includes("ik.imagekit.io") && !fullUrl.includes("tr=")) {
+    const separator = fullUrl.includes("?") ? "&" : "?";
+    return `${fullUrl}${separator}tr=w-${width},q-80,f-auto`;
+  }
+  return fullUrl;
 }
 
 function formatUrl(url?: string): string {
@@ -272,7 +277,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
                   {/* Mini Projects Side Column */}
                   <div className="projects-mini-list">
                     {miniProjects.map((p) => {
-                      const pImg = img(p.imageUrl);
+                      const pImg = img(p.imageUrl, 400);
                       return (
                         <Link href={`/projects/${p.id}?lang=${lang}`} className="project-mini-card" key={p.id}>
                           {pImg ? (
