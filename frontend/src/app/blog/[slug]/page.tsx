@@ -5,6 +5,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
+function getAbsoluteImageUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `https://erikosyah.my.id${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
 export async function generateMetadata(
   { params, searchParams }: {
     params: Promise<{ slug: string }>;
@@ -19,6 +25,8 @@ export async function generateMetadata(
     const blog = await api.getBlog(slug, lang);
     if (!blog) return {};
 
+    const ogImage = getAbsoluteImageUrl(blog.coverImageUrl);
+
     return {
       title: `${blog.title} | Eriko's Blog`,
       description: blog.excerpt || blog.content.substring(0, 160),
@@ -28,21 +36,22 @@ export async function generateMetadata(
         description: blog.excerpt || blog.content.substring(0, 160),
         type: "article",
         url: `https://erikosyah.my.id/blog/${slug}`,
-        images: blog.coverImageUrl ? [{
-          url: blog.coverImageUrl.startsWith("http") ? blog.coverImageUrl : `http://localhost:3001${blog.coverImageUrl}`,
-          alt: blog.title,
-        }] : [],
+        images: ogImage ? [{ url: ogImage, alt: blog.title }] : [],
         publishedTime: new Date(blog.createdAt).toISOString(),
-        authors: ["Eriko Syah Putra"],
+        authors: ["Eriko Syah Putra Friyadi"],
       },
       twitter: {
         card: "summary_large_image",
         title: blog.title,
         description: blog.excerpt || blog.content.substring(0, 160),
-        images: blog.coverImageUrl ? [blog.coverImageUrl.startsWith("http") ? blog.coverImageUrl : `http://localhost:3001${blog.coverImageUrl}`] : [],
+        images: ogImage ? [ogImage] : [],
       },
       alternates: {
         canonical: `https://erikosyah.my.id/blog/${slug}`,
+        languages: {
+          "id-ID": `https://erikosyah.my.id/blog/${slug}?lang=id`,
+          "en-US": `https://erikosyah.my.id/blog/${slug}?lang=en`,
+        },
       },
     };
   } catch {
@@ -91,13 +100,24 @@ export default async function BlogDetail({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
+            mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `https://erikosyah.my.id/blog/${slug}`,
+            },
             headline: blog.title,
             description: blog.excerpt || blog.content.substring(0, 160),
-            image: blog.coverImageUrl?.startsWith("http") ? blog.coverImageUrl : blog.coverImageUrl ? `http://localhost:3001${blog.coverImageUrl}` : undefined,
+            image: getAbsoluteImageUrl(blog.coverImageUrl),
             datePublished: new Date(blog.createdAt).toISOString(),
+            dateModified: blog.updatedAt ? new Date(blog.updatedAt).toISOString() : new Date(blog.createdAt).toISOString(),
             author: {
               "@type": "Person",
-              name: "Eriko Syah Putra",
+              name: "Eriko Syah Putra Friyadi",
+              url: "https://erikosyah.my.id",
+            },
+            publisher: {
+              "@type": "Person",
+              name: "Eriko Syah Putra Friyadi",
+              url: "https://erikosyah.my.id",
             },
             keywords: blog.tags?.join(", "),
           }),
