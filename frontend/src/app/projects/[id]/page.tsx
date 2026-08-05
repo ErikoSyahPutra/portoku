@@ -10,6 +10,12 @@ import {
   HiOutlineComputerDesktop,
 } from "react-icons/hi2";
 
+function getAbsoluteImageUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `https://erikosyah.my.id${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
 export async function generateMetadata(
   { params, searchParams }: {
     params: Promise<{ id: string }>;
@@ -24,8 +30,10 @@ export async function generateMetadata(
     const project = await api.getProject(Number(id), lang);
     if (!project) return {};
 
+    const ogImage = getAbsoluteImageUrl(project.imageUrl);
+
     return {
-      title: `${project.title} | Eriko's Projects`,
+      title: `${project.title} | Projects`,
       description: project.description,
       keywords: project.technologies?.join(", "),
       openGraph: {
@@ -33,10 +41,20 @@ export async function generateMetadata(
         description: project.description,
         type: "website",
         url: `https://erikosyah.my.id/projects/${id}`,
-        images: project.imageUrl ? [{
-          url: project.imageUrl.startsWith("http") ? project.imageUrl : `http://localhost:3001${project.imageUrl}`,
-          alt: project.title,
-        }] : [],
+        images: ogImage ? [{ url: ogImage, alt: project.title }] : [],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: project.title,
+        description: project.description,
+        images: ogImage ? [ogImage] : [],
+      },
+      alternates: {
+        canonical: `https://erikosyah.my.id/projects/${id}`,
+        languages: {
+          "id-ID": `https://erikosyah.my.id/projects/${id}?lang=id`,
+          "en-US": `https://erikosyah.my.id/projects/${id}?lang=en`,
+        },
       },
     };
   } catch {
@@ -153,6 +171,26 @@ export default async function ProjectDetail({
 
   return (
     <div className="project-detail">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: project.title,
+            description: project.description,
+            applicationCategory: "DeveloperApplication",
+            operatingSystem: "Web",
+            image: getAbsoluteImageUrl(project.imageUrl),
+            url: `https://erikosyah.my.id/projects/${id}`,
+            author: {
+              "@type": "Person",
+              name: "Eriko Syah Putra Friyadi",
+              url: "https://erikosyah.my.id",
+            },
+          }),
+        }}
+      />
       <div className="container">
         <div className="project-detail-content">
           <Link href={`/?lang=${lang}#projects`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 8 }}>
