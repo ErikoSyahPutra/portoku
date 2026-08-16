@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { translations } from "@/lib/translations";
 import { Profile, Experience, Academic } from "@/lib/api";
 import {
@@ -46,7 +47,12 @@ export default function CvModal({
   academics = [],
   lang,
 }: CvModalProps) {
+  const [mounted, setMounted] = useState(false);
   const t = translations[lang] || translations.id;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -63,7 +69,7 @@ export default function CvModal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const pdfSrc = profile.resumeUrl ? formatUrl(profile.resumeUrl) : null;
 
@@ -71,7 +77,7 @@ export default function CvModal({
     window.print();
   };
 
-  return (
+  const modalContent = (
     <div className="cv-modal-backdrop" onClick={onClose}>
       <div className="cv-modal-container" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
@@ -226,4 +232,6 @@ export default function CvModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
