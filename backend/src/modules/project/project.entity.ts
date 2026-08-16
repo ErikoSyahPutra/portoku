@@ -17,6 +17,15 @@ export class Project {
   @Column({ nullable: true })
   imageUrl: string;
 
+  @Column({ default: 'web' })
+  category: string;
+
+  @Column({ nullable: true })
+  figmaUrl: string;
+
+  @Column({ nullable: true })
+  behanceUrl: string;
+
   @Column({ nullable: true })
   liveUrl: string;
 

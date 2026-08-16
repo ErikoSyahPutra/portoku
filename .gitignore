@@ -34,5 +34,8 @@ backend/uploads/*
 !backend/uploads/healthcare.png
 !backend/uploads/project_management.png
 
+# Build Info
+*.tsbuildinfo
+
 # Brainstorm Companion
 .superpowers/

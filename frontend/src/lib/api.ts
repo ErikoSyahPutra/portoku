@@ -15,7 +15,8 @@ export interface Profile {
 }
 export interface Project {
   id: number; title: string; description: string; content?: string; imageUrl?: string;
-  liveUrl?: string; githubUrl?: string; technologies: string[]; featured: boolean; order: number;
+  category?: string; liveUrl?: string; githubUrl?: string; figmaUrl?: string; behanceUrl?: string;
+  technologies: string[]; featured: boolean; order: number;
 }
 export interface Academic {
   id: number; institution: string; degree: string; field: string;

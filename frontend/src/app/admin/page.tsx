@@ -117,7 +117,7 @@ export default function AdminPage() {
 
       <div className="admin-main">
         {tab === "profile" && <ProfilePanel showToast={showToast} />}
-        {tab === "projects" && <CrudPanel entity="projects" showToast={showToast} fields={projectFields} columns={["title","order","featured","technologies"]} />}
+        {tab === "projects" && <CrudPanel entity="projects" showToast={showToast} fields={projectFields} columns={["title","category","order","featured","technologies"]} />}
         {tab === "experiences" && <CrudPanel entity="experiences" showToast={showToast} fields={experienceFields} columns={["position","company","startDate","current"]} />}
         {tab === "academics" && <CrudPanel entity="academics" showToast={showToast} fields={academicFields} columns={["institution","degree","field","startYear"]} />}
         {tab === "blogs" && <CrudPanel entity="blogs" showToast={showToast} fields={blogFields} columns={["title","slug","published","readTime"]} />}
@@ -590,7 +590,7 @@ function MediaHelperPanel({ showToast }: { showToast: (m: string, t?: "success"|
 }
 
 /* ═══════════ Generic CRUD Panel ═══════════ */
-type FieldDef = { key: string; label: string; type: "text" | "textarea" | "number" | "checkbox" | "tags" | "image" };
+type FieldDef = { key: string; label: string; type: "text" | "textarea" | "number" | "checkbox" | "tags" | "image" | "select"; options?: { label: string; value: string }[] };
 
 const apiMap: Record<string, { getAll: () => Promise<any>; create: (d: any) => Promise<any>; update: (id: number, d: any) => Promise<any>; remove: (id: number) => Promise<any> }> = {
   projects: { getAll: api.getProjects, create: api.createProject, update: api.updateProject, remove: api.deleteProject },
@@ -738,6 +738,24 @@ function CrudPanel({ entity, showToast, fields, columns }: { entity: string; sho
                     </div>
                   );
                 }
+                if (f.type === "select") {
+                  return (
+                    <div className="form-group" key={f.key}>
+                      <label>{f.label}</label>
+                      <select
+                        className="form-input"
+                        value={current[f.key] || (f.options && f.options[0]?.value) || ""}
+                        onChange={(e) => setCurrent({ ...current, [f.key]: e.target.value })}
+                      >
+                        {f.options?.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  );
+                }
                 return (
                   <div className="form-group" key={f.key}>
                     <label>{f.label}</label>
@@ -772,11 +790,24 @@ function CrudPanel({ entity, showToast, fields, columns }: { entity: string; sho
 /* ═══════════ Field Definitions ═══════════ */
 const projectFields: FieldDef[] = [
   { key: "title", label: "Title", type: "text" },
+  {
+    key: "category",
+    label: "Kategori Proyek",
+    type: "select",
+    options: [
+      { label: "Web Development", value: "web" },
+      { label: "UI/UX Design", value: "ui_ux" },
+      { label: "Mobile App", value: "mobile" },
+      { label: "Lainnya (Other)", value: "other" },
+    ],
+  },
   { key: "description", label: "Description", type: "textarea" },
   { key: "content", label: "Detailed Content (Markdown)", type: "textarea" },
   { key: "imageUrl", label: "Project Image", type: "image" },
-  { key: "liveUrl", label: "Live URL", type: "text" },
-  { key: "githubUrl", label: "GitHub URL", type: "text" },
+  { key: "liveUrl", label: "Live URL (Web)", type: "text" },
+  { key: "githubUrl", label: "GitHub URL (Source Code)", type: "text" },
+  { key: "figmaUrl", label: "Figma Prototype URL (UI/UX)", type: "text" },
+  { key: "behanceUrl", label: "Behance / Case Study URL (UI/UX)", type: "text" },
   { key: "technologies", label: "Technologies", type: "tags" },
   { key: "featured", label: "Featured", type: "checkbox" },
   { key: "order", label: "Urutan / Sort Order (Urutan 1 = Proyek Utama / Hero Spotlight)", type: "number" },
