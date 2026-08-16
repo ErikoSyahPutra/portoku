@@ -58,6 +58,11 @@ export const createOrganization = (data: any) => client.post("/organizations", d
 export const updateOrganization = (id: number, data: any) => client.put(`/organizations/${id}`, data).then((r) => r.data);
 export const deleteOrganization = (id: number) => client.delete(`/organizations/${id}`).then((r) => r.data);
 
+// Contacts / Messages
+export const getContacts = () => client.get("/contacts").then((r) => r.data);
+export const deleteContact = (id: number) => client.delete(`/contacts/${id}`).then((r) => r.data);
+export const sendContact = (data: any) => client.post("/contacts", data).then((r) => r.data);
+
 // Image Compression Helper
 const compressImage = (file: File): Promise<File> => {
   return new Promise((resolve) => {

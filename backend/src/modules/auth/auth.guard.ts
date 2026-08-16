@@ -12,8 +12,8 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    // Allow the login endpoint
-    if (path.includes('/api/auth/login')) {
+    // Allow login and public contact form submission
+    if (path.includes('/api/auth/login') || (method === 'POST' && path.includes('/api/contacts'))) {
       return true;
     }
 

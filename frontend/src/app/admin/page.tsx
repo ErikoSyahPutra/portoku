@@ -22,6 +22,7 @@ import {
   HiOutlineCheckCircle,
   HiOutlineArrowRightOnRectangle,
   HiOutlineUserGroup,
+  HiOutlineEnvelope,
 } from "react-icons/hi2";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
@@ -34,6 +35,7 @@ const TABS = [
   { key: "organizations", label: "Organizations", icon: HiOutlineUserGroup },
   { key: "blogs", label: "Blog", icon: HiOutlineDocumentText },
   { key: "awards", label: "Awards", icon: HiOutlineTrophy },
+  { key: "contacts", label: "Inbox Messages", icon: HiOutlineEnvelope },
   { key: "media", label: "Media Helper", icon: HiOutlinePhoto },
 ];
 
@@ -123,6 +125,7 @@ export default function AdminPage() {
         {tab === "blogs" && <CrudPanel entity="blogs" showToast={showToast} fields={blogFields} columns={["title","slug","published","readTime"]} />}
         {tab === "awards" && <CrudPanel entity="awards" showToast={showToast} fields={awardFields} columns={["title","issuer","year"]} />}
         {tab === "organizations" && <CrudPanel entity="organizations" showToast={showToast} fields={organizationFields} columns={["organization","role","startDate","current"]} />}
+        {tab === "contacts" && <ContactsPanel showToast={showToast} />}
         {tab === "media" && <MediaHelperPanel showToast={showToast} />}
       </div>
 
@@ -585,6 +588,92 @@ function MediaHelperPanel({ showToast }: { showToast: (m: string, t?: "success"|
           </div>
         )}
       </div>
+    </>
+  );
+}
+
+/* ═══════════ Contacts / Inbox Messages Panel ═══════════ */
+function ContactsPanel({ showToast }: { showToast: (m: string, t?: "success" | "error") => void }) {
+  const [messages, setMessages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadMessages = useCallback(() => {
+    setLoading(true);
+    api
+      .getContacts()
+      .then(setMessages)
+      .catch(() => showToast("Failed to load messages", "error"))
+      .finally(() => setLoading(false));
+  }, [showToast]);
+
+  useEffect(() => {
+    loadMessages();
+  }, [loadMessages]);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this message?")) return;
+    try {
+      await api.deleteContact(id);
+      showToast("Message deleted successfully!");
+      loadMessages();
+    } catch {
+      showToast("Delete failed", "error");
+    }
+  };
+
+  return (
+    <>
+      <div className="panel-header">
+        <div>
+          <h2>Inbox Messages</h2>
+          <p className="subtitle">Pesan masuk dari pengunjung melalui Direct Contact Form.</p>
+        </div>
+      </div>
+
+      {loading ? (
+        <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>Loading messages...</div>
+      ) : messages.length === 0 ? (
+        <div className="empty-state">
+          <HiOutlineEnvelope size={48} style={{ opacity: 0.5, marginBottom: 12 }} />
+          <h3>Belum ada pesan masuk</h3>
+          <p>Pesan yang dikirim pengunjung via contact form akan tampil di sini.</p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {messages.map((m) => (
+            <div
+              key={m.id}
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border-color)",
+                borderRadius: "var(--radius-md)",
+                padding: 20,
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+                <div>
+                  <h3 style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: 4 }}>{m.name}</h3>
+                  <div style={{ fontSize: "0.85rem", color: "var(--accent-secondary)", fontWeight: 500 }}>
+                    <a href={`mailto:${m.email}`} style={{ color: "inherit" }}>
+                      {m.email}
+                    </a>
+                    {m.subject && <span style={{ color: "var(--text-muted)", marginLeft: 8 }}>· Subjek: {m.subject}</span>}
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                    {new Date(m.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
+                  </span>
+                  <button className="btn btn-secondary btn-icon danger" onClick={() => handleDelete(m.id)} title="Delete message">
+                    <HiOutlineTrash size={16} />
+                  </button>
+                </div>
+              </div>
+              <p style={{ fontSize: "0.925rem", color: "var(--text-secondary)", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{m.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }

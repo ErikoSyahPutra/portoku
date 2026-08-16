@@ -5,6 +5,7 @@ import Link from "next/link";
 import { translations } from "@/lib/translations";
 import TechStackMarquee from "@/components/TechStackMarquee";
 import ProjectGridWithFilter from "@/components/ProjectGridWithFilter";
+import ContactFormSection from "@/components/ContactFormSection";
 import {
   HiOutlineMapPin,
   HiOutlineEnvelope,
@@ -433,6 +434,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
           </div>
         </section>
       )}
+
+      {/* Contact Form Section */}
+      <ContactFormSection lang={lang} profileEmail={profile.email} profileLocation={profile.location} />
     </>
   );
 }

@@ -80,6 +80,7 @@ export default function Navbar() {
     ...(profile?.showOrganizations !== false ? [{ href: getLinkHref("#organizations"), label: t.organizations || "Organizations" }] : []),
     ...(profile?.showBlog !== false ? [{ href: getLinkHref("#blog"), label: t.blog || "Blog" }] : []),
     ...(profile?.showAwards !== false ? [{ href: getLinkHref("#awards"), label: t.awards || "Awards" }] : []),
+    { href: getLinkHref("#contact"), label: t.contactTitle || "Contact" },
   ];
 
   return (
