@@ -664,7 +664,7 @@ function ContactsPanel({ showToast }: { showToast: (m: string, t?: "success" | "
                   <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
                     {new Date(m.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
                   </span>
-                  <button className="btn btn-secondary btn-icon danger" onClick={() => handleDelete(m.id)} title="Delete message">
+                  <button className="btn-icon danger" onClick={() => handleDelete(m.id)} title="Hapus pesan">
                     <HiOutlineTrash size={16} />
                   </button>
                 </div>
