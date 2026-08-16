@@ -59,6 +59,10 @@ export const translations: Record<string, Record<string, string>> = {
     sendingButton: "Sending...",
     successMessage: "Pesan Anda berhasil terkirim! Terima kasih telah menghubungi saya.",
     errorMessage: "Gagal mengirim pesan. Silakan coba lagi.",
+    downloadCv: "Unduh CV (PDF)",
+    viewCv: "Lihat CV",
+    cvTitle: "Curriculum Vitae",
+    closeCv: "Tutup",
   },
   en: {
     availableForWork: "Available for work",
@@ -120,5 +124,9 @@ export const translations: Record<string, Record<string, string>> = {
     sendingButton: "Sending...",
     successMessage: "Your message has been sent successfully! Thank you for getting in touch.",
     errorMessage: "Failed to send message. Please try again.",
+    downloadCv: "Download CV (PDF)",
+    viewCv: "View CV",
+    cvTitle: "Curriculum Vitae",
+    closeCv: "Close",
   }
 };

@@ -6,6 +6,7 @@ import { translations } from "@/lib/translations";
 import TechStackMarquee from "@/components/TechStackMarquee";
 import ProjectGridWithFilter from "@/components/ProjectGridWithFilter";
 import ContactFormSection from "@/components/ContactFormSection";
+import HeroActions from "@/components/HeroActions";
 import {
   HiOutlineMapPin,
   HiOutlineEnvelope,
@@ -110,10 +111,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
               <br />{profile.title}
             </h1>
             <p className="hero-desc">{profile.bio}</p>
-            <div className="hero-actions">
-              <a href="#projects" className="btn btn-primary"><HiOutlineRocketLaunch size={18} /> {t.viewWork}</a>
-              <a href="#about" className="btn btn-secondary">{t.aboutMe}</a>
-            </div>
+            <HeroActions lang={lang} profile={profile} experiences={experiences} academics={academics} />
           </div>
         </div>
       </section>
