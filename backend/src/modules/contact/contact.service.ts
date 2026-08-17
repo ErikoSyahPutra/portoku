@@ -39,10 +39,12 @@ export class ContactService {
     const entity = this.repo.create(data);
     const saved = await this.repo.save(entity);
 
-    // Asynchronously trigger email notification
-    this.sendNotificationEmail(saved).catch((err) => {
-      console.error('Failed to send contact notification email:', err.message);
-    });
+    // Await email notification dispatch (essential for Serverless environments like Vercel)
+    try {
+      await this.sendNotificationEmail(saved);
+    } catch (err: any) {
+      console.error('Failed to send contact notification email:', err?.message || err);
+    }
 
     return saved;
   }
