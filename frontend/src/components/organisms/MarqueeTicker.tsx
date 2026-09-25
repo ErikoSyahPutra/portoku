@@ -31,7 +31,7 @@ export const MarqueeTicker: React.FC<MarqueeTickerProps> = ({
 
       <div className="flex w-max">
         <motion.div
-          className="flex shrink-0 items-center gap-6 sm:gap-10 pr-6 sm:pr-10"
+          className="flex shrink-0 items-center gap-6 sm:gap-10 pr-6 sm:pr-10 will-change-transform"
           animate={{
             x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
           }}
@@ -43,11 +43,11 @@ export const MarqueeTicker: React.FC<MarqueeTickerProps> = ({
         >
           {loopedItems.map((item, index) => (
             <div key={`${item}-${index}`} className="flex items-center gap-6 sm:gap-10">
-              <span className="font-bold text-sm sm:text-base md:text-lg tracking-wider uppercase text-neutral-200 hover:text-white transition-colors">
+              <span className="font-extrabold text-xs sm:text-sm md:text-base tracking-[0.2em] uppercase text-neutral-200 hover:text-white transition-colors">
                 {item}
               </span>
               <span
-                className="text-[#FF462E] text-base sm:text-lg font-bold select-none"
+                className="text-[#FF462E] text-sm sm:text-base font-bold select-none drop-shadow-[0_0_8px_rgba(255,70,46,0.6)]"
                 aria-hidden="true"
               >
                 ✦

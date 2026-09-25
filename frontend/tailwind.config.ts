@@ -26,6 +26,11 @@ const config: Config = {
           muted: "#71717A",
         },
       },
+      fontFamily: {
+        sans: ["var(--font-inter)", "sans-serif"],
+        mono: ["var(--font-jetbrains)", "monospace"],
+        signature: ["var(--font-caveat)", "cursive"],
+      },
     },
   },
   plugins: [],

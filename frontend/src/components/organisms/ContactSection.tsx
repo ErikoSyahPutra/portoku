@@ -310,7 +310,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         </div>
 
         {/* Quick Nav Footer Links */}
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-6">
           <a
             href="#hero"
             className="hover:text-[#0F0F11] transition-colors font-medium text-xs sm:text-sm"

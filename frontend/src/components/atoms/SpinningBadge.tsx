@@ -60,8 +60,14 @@ export const SpinningBadge: React.FC<SpinningBadgeProps> = ({
               d="M 80, 80 m -54, 0 a 54, 54 0 1, 1 108, 0 a 54, 54 0 1, 1 -108, 0"
             />
           </defs>
-          <text className="text-[10.5px] uppercase font-bold tracking-[0.24em] fill-[#1A1A1E]">
-            <textPath href={`#${pathId}`} xlinkHref={`#${pathId}`} startOffset="0%">
+          <text className="text-[10px] uppercase font-bold tracking-[0.18em] fill-[#0F0F11]">
+            <textPath
+              href={`#${pathId}`}
+              xlinkHref={`#${pathId}`}
+              startOffset="0%"
+              textLength="336"
+              lengthAdjust="spacing"
+            >
               {text}
             </textPath>
           </text>

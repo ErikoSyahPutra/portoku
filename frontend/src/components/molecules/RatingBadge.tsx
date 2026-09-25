@@ -35,13 +35,13 @@ export const RatingBadge: React.FC<RatingBadgeProps> = ({
   const content = (
     <>
       {/* Overlapping Client Avatars */}
-      <div className="flex -space-x-2 shrink-0">
+      <div className="flex -space-x-2 shrink-0 items-center">
         {avatars.slice(0, 4).map((avatarUrl, index) => (
           <img
             key={index}
             src={avatarUrl}
             alt={`Client ${index + 1}`}
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white shadow-xs"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white border border-black/5 shadow-xs"
             loading="lazy"
           />
         ))}
@@ -50,8 +50,16 @@ export const RatingBadge: React.FC<RatingBadgeProps> = ({
       {/* Review Metrics */}
       <div className="flex flex-col text-left">
         <div className="flex items-center gap-1.5 leading-none">
-          <Star className="w-3.5 h-3.5 fill-[#FFB800] text-[#FFB800] shrink-0" />
-          <span className="font-bold text-xs sm:text-sm text-[#0F0F11] tracking-tight">
+          {/* 5-Star Graphic */}
+          <div className="flex items-center gap-0.5 text-[#FFB800]" aria-hidden="true">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#FFB800] text-[#FFB800]"
+              />
+            ))}
+          </div>
+          <span className="font-bold text-xs sm:text-sm text-[#0F0F11] tracking-tight ml-0.5">
             {reviewsCount}
           </span>
           <span className="text-[11px] sm:text-xs text-neutral-500 font-normal">

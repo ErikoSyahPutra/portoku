@@ -34,7 +34,7 @@ export const ServiceAccordionItem: React.FC<ServiceAccordionItemProps> = ({
     <div
       className={`group relative w-full rounded-2xl md:rounded-3xl transition-all duration-300 overflow-hidden ${
         isOpen
-          ? "bg-[#0F0F11] text-white border border-white/10 shadow-2xl"
+          ? "bg-[#0F0F11] text-white border border-white/15 shadow-2xl before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-[#FF462E] before:via-[#FF7A68] before:to-transparent"
           : "bg-[#FDFBF7] text-[#0F0F11] border border-black/10 hover:border-black/20 hover:bg-[#F9F7F1]"
       } ${className}`}
     >

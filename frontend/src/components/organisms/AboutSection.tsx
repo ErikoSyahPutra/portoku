@@ -166,10 +166,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 
               {/* Editorial Handwritten/Script Signature Display */}
               <div className="flex flex-col items-start sm:items-end">
-                <span className="font-serif italic text-2xl sm:text-3xl text-[#FF462E] tracking-wider select-none">
+                <span className="font-signature text-3xl sm:text-4xl text-[#FF462E] font-medium leading-none select-none tracking-normal drop-shadow-sm">
                   {profile.name}
                 </span>
-                <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-400 mt-0.5">
+                <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-400 mt-1">
                   Full-Stack Engineer &amp; Designer
                 </span>
               </div>

@@ -27,10 +27,28 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState<string>(activeSection || "hero");
+
+  useEffect(() => {
+    if (activeSection) {
+      setCurrentSection(activeSection);
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      const sectionIds = ["hero", "services", "about", "projects", "contact"];
+      const scrollPosition = window.scrollY + 140;
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el && el.offsetTop <= scrollPosition) {
+          setCurrentSection(sectionIds[i]);
+          break;
+        }
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -84,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="hidden md:flex items-center justify-center">
             <NavLinks
               items={navItems}
-              activeSection={activeSection}
+              activeSection={currentSection}
               onNavigate={onNavigate}
               className="bg-black/[0.03] border border-black/5 px-3 py-1.5 rounded-full"
             />
@@ -133,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Navigation Items */}
               <NavLinks
                 items={navItems}
-                activeSection={activeSection}
+                activeSection={currentSection}
                 orientation="vertical"
                 onNavigate={handleMobileNavClick}
                 itemClassName="text-base py-2.5 px-4 font-medium"

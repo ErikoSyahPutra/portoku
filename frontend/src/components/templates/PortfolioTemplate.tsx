@@ -40,6 +40,14 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
   lang = "en",
   className = "",
 }) => {
+  // Ensure native overscroll / rubber-banding matches warm cream canvas
+  React.useEffect(() => {
+    const origBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#FDFBF7";
+    return () => {
+      document.body.style.backgroundColor = origBg;
+    };
+  }, []);
   return (
     <div
       className={`min-h-screen bg-[#FDFBF7] bg-grid-canvas text-[#121214] font-sans antialiased relative selection:bg-[#FF462E] selection:text-white overflow-x-hidden ${className}`}

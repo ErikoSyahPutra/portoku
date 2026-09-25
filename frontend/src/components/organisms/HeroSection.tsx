@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span className="text-[#0F0F11] font-semibold">{profile.location}</span>
           </motion.p>
 
-          {/* Top-Right Floating Spinning Badge (Visible on desktop/tablet) */}
+          {/* Top-Right Floating Spinning Badge (Desktop / Tablet) */}
           <div className="hidden md:block absolute right-4 lg:right-12 top-0 z-30">
             <SpinningBadge
               text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
@@ -77,37 +77,56 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               size={136}
             />
           </div>
+
+          {/* Top-Right Compact Spinning Badge (Mobile) */}
+          <div className="block md:hidden absolute right-1 sm:right-3 top-0 z-30">
+            <SpinningBadge
+              text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
+              href="#contact"
+              size={84}
+            />
+          </div>
         </div>
 
         {/* Centerpiece Visual & Overlaid Floating Cards */}
-        <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center pt-2 pb-6">
+        <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center pt-2 pb-4">
           {/* Subtle Ambient Glow Behind Arch */}
           <div
             aria-hidden="true"
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[500px] h-[400px] sm:h-[550px] bg-[#FF462E]/15 rounded-full blur-3xl pointer-events-none -z-10"
           />
 
-          {/* Center Coral Arch Portrait Frame */}
+          {/* Concentric Geometric Rings Behind Arch */}
+          <div
+            aria-hidden="true"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10 flex items-center justify-center"
+          >
+            <div className="w-[360px] sm:w-[480px] md:w-[600px] lg:w-[680px] h-[360px] sm:h-[480px] md:h-[600px] lg:h-[680px] rounded-full border border-black/[0.04]" />
+            <div className="absolute w-[280px] sm:w-[380px] md:w-[480px] lg:w-[540px] h-[280px] sm:h-[380px] md:h-[480px] lg:h-[540px] rounded-full border border-dashed border-black/[0.06]" />
+            <div className="absolute w-[200px] sm:w-[280px] md:w-[360px] lg:w-[400px] h-[200px] sm:h-[280px] md:h-[360px] lg:h-[400px] rounded-full border border-[#FF462E]/15" />
+          </div>
+
+          {/* Center Coral Arch Portrait Frame with Pure Geometric Curve */}
           <motion.div
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="relative w-64 sm:w-80 md:w-96 aspect-[4/5] rounded-t-[140px] sm:rounded-t-[190px] bg-gradient-to-b from-[#FF462E] via-[#FF5742] to-[#E63B24] p-2.5 pb-0 shadow-2xl shadow-[#FF462E]/20 overflow-hidden"
+            className="relative w-64 sm:w-72 md:w-80 lg:w-96 aspect-[4/5] rounded-t-full bg-gradient-to-b from-[#FF462E] via-[#FF543D] to-[#E63B24] p-2.5 sm:p-3 pb-0 shadow-2xl shadow-[#FF462E]/25 overflow-hidden"
           >
-            {/* Soft inner highlight */}
+            {/* Soft inner highlight overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/20 pointer-events-none z-10" />
 
-            {/* Profile Cutout Image */}
+            {/* Profile Cutout Image with matching smooth arch */}
             <img
               src={profile.avatarUrl}
               alt={profile.name}
-              className="w-full h-full object-cover object-top rounded-t-[130px] sm:rounded-t-[178px] filter contrast-[1.05]"
+              className="w-full h-full object-cover object-top rounded-t-full filter contrast-[1.05]"
               loading="eager"
             />
           </motion.div>
 
-          {/* Left Floating Element: Rating Badge */}
-          <div className="static mt-6 md:mt-0 md:absolute md:left-4 lg:left-8 md:top-1/3 z-30">
+          {/* Left Floating Element: Rating Badge (Desktop lg+) */}
+          <div className="hidden lg:block absolute left-2 xl:left-6 top-[36%] z-30">
             <RatingBadge
               ratingScore={profile.ratingScore}
               reviewsCount={profile.reviewsCount}
@@ -117,8 +136,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             />
           </div>
 
-          {/* Right Floating Element: Quote Card */}
-          <div className="static mt-4 md:mt-0 md:absolute md:right-4 lg:right-6 md:top-1/4 z-30">
+          {/* Right Floating Element: Quote Card (Desktop lg+) */}
+          <div className="hidden lg:block absolute right-2 xl:right-6 top-[24%] z-30">
             <QuoteCard
               quote={profile.quote}
               author="Valued Client Review"
@@ -129,16 +148,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             />
           </div>
 
-          {/* Dynamic Floating Skill Pills (Pillows around arch) */}
+          {/* Dynamic Floating Skill Pills (Desktop lg+) */}
           <div className="hidden lg:block">
             {heroSkills.map((skill, index) => {
-              // Custom positioning for skills
+              // Precise coordinates to prevent any card or arch collision
               const positions = [
-                { top: "60%", left: "12%", delay: 0.3 },
-                { top: "68%", right: "10%", delay: 0.8 },
-                { bottom: "14%", left: "22%", delay: 0.5 },
-                { top: "18%", left: "18%", delay: 1.0 },
-                { bottom: "10%", right: "18%", delay: 0.7 },
+                { top: "16%", left: "14%", delay: 0.3 },
+                { top: "66%", left: "10%", delay: 0.8 },
+                { top: "14%", right: "16%", delay: 0.5 },
+                { top: "68%", right: "8%", delay: 1.0 },
+                { bottom: "10%", left: "22%", delay: 0.7 },
               ];
               const pos = positions[index % positions.length];
 
@@ -168,12 +187,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
+        {/* Mobile / Tablet Social Proof Cards (Clean responsive arrangement under arch) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 w-full max-w-xl mx-auto px-4 lg:hidden z-20">
+          <RatingBadge
+            ratingScore={profile.ratingScore}
+            reviewsCount={profile.reviewsCount}
+            reviewsLabel={profile.reviewsLabel}
+            floating={false}
+            className="w-full sm:w-auto justify-center"
+          />
+          <QuoteCard
+            quote={profile.quote}
+            author="Valued Client Review"
+            role="Tech Lead & Founder"
+            floating={false}
+            className="w-full sm:max-w-xs"
+          />
+        </div>
+
         {/* Bottom Actions Row: Dual CTAs + Social Media Icons */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8"
+          className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8"
         >
           {/* Dual Pill CTA Buttons */}
           <div className="flex items-center gap-3">
@@ -189,9 +226,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </Button>
             <Button
               href="#contact"
-              variant="outline"
+              variant="white"
               size="lg"
-              className="px-7 py-3.5"
+              className="px-7 py-3.5 border border-black/10 hover:border-black/20 shadow-xs hover:shadow-md"
             >
               Hire Me
             </Button>
