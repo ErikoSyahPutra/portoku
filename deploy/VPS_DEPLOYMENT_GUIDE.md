@@ -142,27 +142,49 @@ cd /var/www/portfolio
 
 ---
 
-## Tahap 3: Migrasi Database & File Env via Termius SFTP
+## Tahap 3: Migrasi Database & File Env
 
-File `backend/database.sqlite` (berisi konten portofolio Anda) dan `backend/.env` (berisi secret API key ImageKit dan SMTP email) tidak disimpan di repositori publik Git demi alasan keamanan. Kita akan memindahkannya dari komputer lokal ke VPS via Termius SFTP.
+File `backend/database.sqlite` (berisi konten portofolio Anda) dan `backend/.env` (berisi secret API key ImageKit dan SMTP email) tidak disimpan di repositori publik Git demi alasan keamanan. Kita akan memindahkannya dari komputer lokal ke VPS.
 
-### 3.1 Membuka SFTP di Termius
-1. Di Termius, klik tab menu **SFTP** di sisi kiri.
-2. Di panel **kiri** (Local Machine):
-   - Navigasikan ke folder lokal proyek Anda:
-     `D:\MAHESA\Proyek Web\web-porto\backend\`
-3. Di panel **kanan** (Remote VPS):
-   - Pilih koneksi VPS Anda.
-   - Navigasikan ke direktori remote:
-     `/var/www/portfolio/backend/`
+Anda bisa memilih **Opsi A (Lewat Terminal / SCP - Sangat Cepat ⚡)** atau **Opsi B (Lewat Termius SFTP GUI)**.
 
 ---
 
-### 3.2 Drag & Drop File
-Pindahkan file-file berikut dari panel kiri ke panel kanan:
-1. **`database.sqlite`** ➔ Copy ke `/var/www/portfolio/backend/database.sqlite`
-2. **`.env`** ➔ Copy ke `/var/www/portfolio/backend/.env`
-3. *(Opsional)* Jika Anda memiliki file di folder `backend/uploads/` lokal, upload seluruh isi folder tersebut ke `/var/www/portfolio/backend/uploads/`.
+### Opsi A: Lewat Terminal Lokal via `scp` (Rekomendasi ⚡)
+
+Buka terminal di **laptop Anda** (PowerShell / Command Prompt / Git Bash) di dalam folder proyek `D:\MAHESA\Proyek Web\web-porto`, lalu jalankan **satu perintah** ini:
+
+```bash
+scp backend/database.sqlite backend/.env ubuntu@IP_VPS:/var/www/portfolio/backend/
+```
+*(Ganti `IP_VPS` dengan alamat IP publik VPS Anda).*
+
+> 💡 **Tips jika muncul Permission Denied**:
+> Jika muncul pesan permission denied di VPS, jalankan dulu ini di terminal VPS:
+> ```bash
+> sudo chown -R ubuntu:ubuntu /var/www/portfolio
+> ```
+> Atau upload ke folder home `ubuntu` terlebih dahulu:
+> ```bash
+> # Di terminal laptop:
+> scp backend/database.sqlite backend/.env ubuntu@IP_VPS:~/
+> 
+> # Di terminal VPS:
+> mv ~/database.sqlite ~/ .env /var/www/portfolio/backend/
+> ```
+
+---
+
+### Opsi B: Lewat Termius SFTP (GUI Drag & Drop)
+
+Jika lebih menyukai tampilan visual di Termius:
+1. Di Termius, klik tab menu **SFTP** di sisi kiri.
+2. Di panel **kiri** (Local Machine):
+   - Buka: `D:\MAHESA\Proyek Web\web-porto\backend\`
+3. Di panel **kanan** (Remote VPS):
+   - Buka: `/var/www/portfolio/backend/`
+4. Drag & drop file `database.sqlite` dan `.env` dari panel kiri ke panel kanan.
+5. *(Opsional)* Jika Anda memiliki file di folder `backend/uploads/` lokal, upload juga folder tersebut.
 
 ---
 
