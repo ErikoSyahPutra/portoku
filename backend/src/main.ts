@@ -14,7 +14,7 @@ export const createHandler = async () => {
 
   app.enableCors({
     origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
@@ -46,9 +46,26 @@ module.exports = handler;
 if (!process.env.VERCEL) {
   async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'https://erikosyah.my.id',
+      'https://www.erikosyah.my.id',
+      ...(process.env.FRONTEND_URL
+        ? process.env.FRONTEND_URL.split(',').map((url) => url.trim().replace(/\/$/, ''))
+        : []),
+    ].filter(Boolean);
+
     app.enableCors({
-      origin: ['http://localhost:3000'],
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, Postman, server-to-server)
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(null, false);
+        }
+      },
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
     app.useGlobalPipes(
