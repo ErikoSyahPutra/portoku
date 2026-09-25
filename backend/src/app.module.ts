@@ -29,6 +29,11 @@ import { APP_GUARD } from '@nestjs/core';
             ssl: {
               rejectUnauthorized: false,
             },
+            extra: {
+              ssl: {
+                rejectUnauthorized: false,
+              },
+            },
           }
         : {
             type: 'sqlite',
