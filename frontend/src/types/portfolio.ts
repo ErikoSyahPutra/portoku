@@ -50,10 +50,20 @@ export interface PortfolioSkillTag {
   color?: string;
 }
 
+export interface PortfolioReview {
+  id?: string | number;
+  clientName: string;
+  role: string;
+  rating: number;
+  quote: string;
+  avatar?: string;
+}
+
 export interface PortfolioData {
   profile: PortfolioProfile;
   services: PortfolioService[];
   heroSkills: PortfolioSkillTag[];
   marqueeItems: string[];
   projects: PortfolioProject[];
+  reviews?: PortfolioReview[];
 }

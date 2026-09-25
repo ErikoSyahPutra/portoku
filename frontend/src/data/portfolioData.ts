@@ -175,4 +175,24 @@ export const defaultPortfolioData: PortfolioData = {
       featured: false,
     },
   ],
+  reviews: [
+    {
+      id: "rev-1",
+      clientName: "Alex Rivera",
+      role: "VP of Product, FinTech Asia",
+      rating: 5,
+      quote:
+        "Eriko's remarkable full-stack engineering and UI craftsmanship transformed our product — Highly Recommended!",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+    },
+    {
+      id: "rev-2",
+      clientName: "Sarah Chen",
+      role: "CTO, SaaSFlow Global",
+      rating: 5,
+      quote:
+        "Delivered pixel-perfect components and high-throughput APIs ahead of schedule. Truly exceptional attention to detail.",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
+    },
+  ],
 };

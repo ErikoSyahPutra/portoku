@@ -7,8 +7,9 @@ import { Suspense } from "react";
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
+  const isHome = pathname === "/";
 
-  if (isAdmin) {
+  if (isAdmin || isHome) {
     return <>{children}</>;
   }
 

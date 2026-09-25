@@ -1,455 +1,196 @@
 export const dynamic = "force-dynamic";
 
-import { api } from "@/lib/api";
-import Link from "next/link";
-import { translations } from "@/lib/translations";
-import TechStackMarquee from "@/components/TechStackMarquee";
-import ProjectGridWithFilter from "@/components/ProjectGridWithFilter";
-import ContactFormSection from "@/components/ContactFormSection";
-import HeroActions from "@/components/HeroActions";
+import React from "react";
 import {
-  HiOutlineMapPin,
-  HiOutlineEnvelope,
-  HiOutlineGlobeAlt,
-  HiOutlineBriefcase,
-  HiOutlineAcademicCap,
-  HiOutlineArrowTopRightOnSquare,
-  HiOutlineCodeBracket,
-  HiOutlineCalendar,
-  HiOutlineClock,
-  HiOutlineArrowRight,
-  HiOutlineTrophy,
-  HiOutlineCheckBadge,
-  HiOutlineRocketLaunch,
-  HiOutlineDocumentText,
-  HiOutlineComputerDesktop,
-  HiOutlineSparkles,
-  HiOutlineUserGroup,
-} from "react-icons/hi2";
+  api,
+  Profile,
+  Project,
+  Experience,
+  Academic,
+  Blog,
+  Award,
+  Organization,
+} from "@/lib/api";
+import { PortfolioTemplate } from "@/components/templates";
+import { defaultPortfolioData } from "@/data/portfolioData";
+import { PortfolioProfile, PortfolioProject } from "@/types/portfolio";
 
-const BACKEND = "http://localhost:3001";
+const BACKEND =
+  process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
 
-function img(url?: string, width: number = 600) {
-  if (!url) return null;
-  const fullUrl = url.startsWith("http") ? url : `${BACKEND}${url}`;
+function resolveImgUrl(url?: string | null): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  const fullUrl =
+    trimmed.startsWith("http://") || trimmed.startsWith("https://")
+      ? trimmed
+      : `${BACKEND}${trimmed.startsWith("/") ? "" : "/"}${trimmed}`;
+
   if (fullUrl.includes("ik.imagekit.io") && !fullUrl.includes("tr=")) {
     const separator = fullUrl.includes("?") ? "&" : "?";
-    return `${fullUrl}${separator}tr=w-${width},q-80,f-auto`;
+    return `${fullUrl}${separator}tr=w-800,q-80,f-auto`;
   }
   return fullUrl;
 }
 
-function formatUrl(url?: string): string {
-  if (!url) return "";
-  const trimmed = url.trim();
-  if (
-    trimmed.startsWith("http://") ||
-    trimmed.startsWith("https://") ||
-    trimmed.startsWith("mailto:") ||
-    trimmed.startsWith("tel:") ||
-    trimmed.startsWith("/")
-  ) {
-    return trimmed;
-  }
-  return `https://${trimmed}`;
-}
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ lang?: string }>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const lang = resolvedSearchParams?.lang || "id";
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
-  const { lang = "id" } = await searchParams;
-  const t = translations[lang] || translations.id;
+  let profileData: Profile | null = null;
+  let projectsData: Project[] = [];
+  let experiencesData: Experience[] = [];
+  let academicsData: Academic[] = [];
+  let blogsData: Blog[] = [];
+  let awardsData: Award[] = [];
+  let organizationsData: Organization[] = [];
 
-  let profile, projects, academics, experiences, blogs, awards, organizations;
   try {
-    [profile, projects, academics, experiences, blogs, awards, organizations] = await Promise.all([
-      api.getProfile(lang), api.getProjects(lang), api.getAcademics(lang),
-      api.getExperiences(lang), api.getBlogs(lang), api.getAwards(lang),
+    const [
+      profileRes,
+      projectsRes,
+      experiencesRes,
+      academicsRes,
+      blogsRes,
+      awardsRes,
+      organizationsRes,
+    ] = await Promise.allSettled([
+      api.getProfile(lang),
+      api.getProjects(lang),
+      api.getExperiences(lang),
+      api.getAcademics(lang),
+      api.getBlogs(lang),
+      api.getAwards(lang),
       api.getOrganizations(lang),
     ]);
-  } catch {
-    return <FallbackPage />;
+
+    if (profileRes.status === "fulfilled") profileData = profileRes.value;
+    if (projectsRes.status === "fulfilled") projectsData = projectsRes.value;
+    if (experiencesRes.status === "fulfilled") experiencesData = experiencesRes.value;
+    if (academicsRes.status === "fulfilled") academicsData = academicsRes.value;
+    if (blogsRes.status === "fulfilled") blogsData = blogsRes.value;
+    if (awardsRes.status === "fulfilled") awardsData = awardsRes.value;
+    if (organizationsRes.status === "fulfilled") organizationsData = organizationsRes.value;
+  } catch (err) {
+    console.warn(
+      "Backend API unavailable or error fetching data, using default portfolio data:",
+      err
+    );
   }
 
-  const avatarSrc = img(profile.avatarUrl);
+  // Map profile with live API data from NestJS / Admin, falling back gracefully to rich defaults
+  const mappedProfile: PortfolioProfile = {
+    name: profileData?.name?.trim() || defaultPortfolioData.profile.name,
+    title: profileData?.title?.trim() || defaultPortfolioData.profile.title,
+    bio: profileData?.bio?.trim() || defaultPortfolioData.profile.bio,
+    aboutMe: profileData?.aboutMe?.trim() || defaultPortfolioData.profile.aboutMe,
+    avatarUrl:
+      resolveImgUrl(profileData?.avatarUrl) || defaultPortfolioData.profile.avatarUrl,
+    location: profileData?.location?.trim() || defaultPortfolioData.profile.location,
+    email: profileData?.email?.trim() || defaultPortfolioData.profile.email,
+    githubUrl:
+      profileData?.githubUrl?.trim() || defaultPortfolioData.profile.githubUrl,
+    linkedinUrl:
+      profileData?.linkedinUrl?.trim() || defaultPortfolioData.profile.linkedinUrl,
+    websiteUrl:
+      profileData?.websiteUrl?.trim() || defaultPortfolioData.profile.websiteUrl,
+    availableBadge: defaultPortfolioData.profile.availableBadge,
+    ratingScore: defaultPortfolioData.profile.ratingScore,
+    reviewsCount: defaultPortfolioData.profile.reviewsCount,
+    reviewsLabel: defaultPortfolioData.profile.reviewsLabel,
+    quote: defaultPortfolioData.profile.quote,
+    stats: {
+      projects:
+        projectsData.length > 0
+          ? projectsData.length
+          : defaultPortfolioData.profile.stats.projects,
+      yearsExp:
+        experiencesData.length > 0
+          ? experiencesData.length
+          : defaultPortfolioData.profile.stats.yearsExp,
+      awards:
+        awardsData.length > 0
+          ? awardsData.length
+          : defaultPortfolioData.profile.stats.awards,
+      articles:
+        blogsData.length > 0
+          ? blogsData.length
+          : defaultPortfolioData.profile.stats.articles,
+      organizations:
+        organizationsData.length > 0
+          ? organizationsData.length
+          : defaultPortfolioData.profile.stats.organizations,
+    },
+  };
+
+  // Map projects from NestJS / Admin, falling back gracefully to rich defaults
+  const mappedProjects: PortfolioProject[] =
+    projectsData && projectsData.length > 0
+      ? projectsData.map((p, idx) => ({
+          id: p.id,
+          title: p.title,
+          description: p.description,
+          category: p.category?.trim() ? p.category.trim() : "Full-Stack Development",
+          tags:
+            Array.isArray(p.technologies) && p.technologies.length > 0
+              ? p.technologies
+              : ["Web"],
+          imageUrl:
+            resolveImgUrl(p.imageUrl) ||
+            defaultPortfolioData.projects[idx % defaultPortfolioData.projects.length]
+              ?.imageUrl ||
+            defaultPortfolioData.projects[0].imageUrl,
+          liveUrl: p.liveUrl || undefined,
+          githubUrl: p.githubUrl || undefined,
+          featured: Boolean(p.featured),
+        }))
+      : defaultPortfolioData.projects;
+
+  // JSON-LD structured data for SEO and search crawlers
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: mappedProfile.name,
+    url: mappedProfile.websiteUrl || "https://erikosyah.my.id",
+    jobTitle: mappedProfile.title,
+    description: mappedProfile.bio,
+    image: mappedProfile.avatarUrl,
+    sameAs: [
+      mappedProfile.githubUrl,
+      mappedProfile.linkedinUrl,
+      mappedProfile.websiteUrl,
+    ].filter(Boolean),
+    worksFor:
+      experiencesData && experiencesData.length > 0
+        ? experiencesData.map((e) => ({
+            "@type": "Organization",
+            name: e.company,
+            jobTitle: e.position,
+          }))
+        : undefined,
+  };
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Person",
-            name: profile.name,
-            url: "https://erikosyah.my.id",
-            jobTitle: profile.title,
-            description: profile.bio,
-            image: img(profile.avatarUrl),
-            sameAs: [
-              profile.githubUrl,
-              profile.linkedinUrl,
-              profile.websiteUrl,
-            ].filter(Boolean),
-            worksFor: experiences.map((e) => ({
-              "@type": "Organization",
-              name: e.company,
-              jobTitle: e.position,
-            })),
-          }),
+          __html: JSON.stringify(jsonLd),
         }}
       />
-      {/* Hero */}
-      <section className="hero" id="hero">
-        <div className="hero-orb hero-orb-1" />
-        <div className="hero-orb hero-orb-2" />
-        <div className="container">
-          <div className="hero-content">
-            <div className="hero-badge">
-              <span className="dot" /> {t.availableBadge}
-            </div>
-            <h1>
-              Hi, I&apos;m <span className="gradient-text">{profile.name}</span>
-              <br />{profile.title}
-            </h1>
-            <p className="hero-desc">{profile.bio}</p>
-            <HeroActions lang={lang} profile={profile} experiences={experiences} academics={academics} />
-          </div>
-        </div>
-      </section>
-
-      {/* About */}
-      <section className="section" id="about">
-        <div className="container">
-          <div className="section-header">
-            <p className="section-label">{t.about}</p>
-            <h2 className="section-title">{t.littleAboutMe}</h2>
-          </div>
-          <div className="about-grid">
-            <div className="about-text">
-              {avatarSrc && (
-                <div className="about-avatar-container">
-                  <div className="about-avatar-backdrop" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={avatarSrc} alt={profile.name || "Foto profil"} className="about-avatar-img" />
-                  <div className="about-avatar-badge">
-                    <span className="about-avatar-badge-dot" />
-                    {t.availableBadge}
-                  </div>
-                </div>
-              )}
-              {profile.aboutMe?.split("\n").filter(Boolean).map((p: string, i: number) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-            <div className="about-info">
-              {profile.location && (
-                <div className="about-info-item">
-                  <div className="icon"><HiOutlineMapPin size={18} /></div>
-                  <div><div className="label">{t.location}</div><div className="value">{profile.location}</div></div>
-                </div>
-              )}
-              {profile.email && (
-                <div className="about-info-item">
-                  <div className="icon"><HiOutlineEnvelope size={18} /></div>
-                  <div><div className="label">{t.email}</div><div className="value"><a href={`mailto:${profile.email}`}>{profile.email}</a></div></div>
-                </div>
-              )}
-              {profile.githubUrl && (
-                <div className="about-info-item">
-                  <div className="icon"><HiOutlineCodeBracket size={18} /></div>
-                  <div><div className="label">GitHub</div><div className="value"><a href={formatUrl(profile.githubUrl)} target="_blank" rel="noreferrer">{profile.githubUrl.replace("https://", "")}</a></div></div>
-                </div>
-              )}
-              {profile.linkedinUrl && (
-                <div className="about-info-item">
-                  <div className="icon"><HiOutlineBriefcase size={18} /></div>
-                  <div><div className="label">LinkedIn</div><div className="value"><a href={formatUrl(profile.linkedinUrl)} target="_blank" rel="noreferrer">{profile.linkedinUrl.replace("https://", "")}</a></div></div>
-                </div>
-              )}
-              {profile.websiteUrl && (
-                <div className="about-info-item">
-                  <div className="icon"><HiOutlineGlobeAlt size={18} /></div>
-                  <div><div className="label">Website</div><div className="value"><a href={formatUrl(profile.websiteUrl)} target="_blank" rel="noreferrer">{profile.websiteUrl.replace("https://", "")}</a></div></div>
-                </div>
-              )}
-            </div>
-          </div>
-          {/* Stats */}
-          {[profile.showProjects, profile.showExperiences, profile.showAwards, profile.showBlog, profile.showOrganizations].some((x) => x !== false) && (
-            <div
-              className="stats-grid"
-              style={{
-                gridTemplateColumns: `repeat(${[profile.showProjects, profile.showExperiences, profile.showAwards, profile.showBlog, profile.showOrganizations].filter((x) => x !== false).length}, 1fr)`,
-              }}
-            >
-              {profile.showProjects !== false && (
-                <div className="stat-card">
-                  <div className="stat-number">{projects.length}+</div>
-                  <div className="stat-label">{t.projects}</div>
-                </div>
-              )}
-              {profile.showExperiences !== false && (
-                <div className="stat-card">
-                  <div className="stat-number">{experiences.length}+</div>
-                  <div className="stat-label">{t.yearsExp}</div>
-                </div>
-              )}
-              {profile.showAwards !== false && (
-                <div className="stat-card">
-                  <div className="stat-number">{awards.length}+</div>
-                  <div className="stat-label">{t.awards}</div>
-                </div>
-              )}
-              {profile.showBlog !== false && (
-                <div className="stat-card">
-                  <div className="stat-number">{blogs.length}+</div>
-                  <div className="stat-label">{t.articles}</div>
-                </div>
-              )}
-              {profile.showOrganizations !== false && (
-                <div className="stat-card">
-                  <div className="stat-number">{organizations.length}+</div>
-                  <div className="stat-label">{t.organizations}</div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <TechStackMarquee lang={lang} />
-
-      {/* Projects */}
-      {profile.showProjects !== false && projects.length > 0 && (
-        <section className="section" id="projects">
-          <div className="container">
-            <div className="section-header">
-              <p className="section-label">{t.portfolio}</p>
-              <h2 className="section-title">{t.featuredProjects}</h2>
-              <p className="section-desc">{t.projectsSubtitle}</p>
-            </div>
-
-            <ProjectGridWithFilter projects={projects} lang={lang} isSpotlight showAllLink />
-          </div>
-        </section>
-      )}
-
-      {/* Experience */}
-      {profile.showExperiences !== false && (
-        <section className="section" id="experience">
-          <div className="container">
-            <div className="section-header">
-              <p className="section-label">{t.career}</p>
-              <h2 className="section-title">{t.workExperience}</h2>
-              <p className="section-desc">{t.experienceSubtitle}</p>
-            </div>
-            <div className="timeline">
-              {experiences.map((e) => {
-                const eLogo = img(e.logoUrl);
-                return (
-                  <div className={`timeline-item ${e.current ? "current" : ""}`} key={e.id}>
-                    <div className="timeline-dot" />
-                    <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{e.startDate} — {e.current ? t.present : e.endDate}</div>
-                    <div className="timeline-card">
-                      <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
-                        {eLogo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={eLogo} alt={e.company || "Logo perusahaan"} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
-                        ) : (
-                          <div className="timeline-icon-fallback" style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", color: "var(--accent-secondary)", border: "1px solid var(--border-color)", flexShrink: 0 }}>
-                            <HiOutlineBriefcase size={20} />
-                          </div>
-                        )}
-                        <div>
-                          <h3>{e.position}</h3>
-                          <div className="subtitle">{e.company}{e.location ? ` · ${e.location}` : ""}</div>
-                        </div>
-                      </div>
-                      {e.description && <p>{e.description}</p>}
-                      <div className="skills">
-                        {e.skills?.map((s) => <span className="tech-tag" key={s}>{s}</span>)}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Education */}
-      {profile.showAcademics !== false && (
-        <section className="section" id="education">
-          <div className="container">
-            <div className="section-header">
-              <p className="section-label">{t.education}</p>
-              <h2 className="section-title">{t.academicBackground}</h2>
-            </div>
-            <div className="education-grid">
-              {academics.map((a) => {
-                const aLogo = img(a.logoUrl);
-                return (
-                  <div className="edu-card" key={a.id}>
-                    <div className="edu-icon">
-                      {aLogo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={aLogo} alt={a.institution || "Logo institusi"} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
-                      ) : (
-                        <HiOutlineAcademicCap size={24} />
-                      )}
-                    </div>
-                    <div>
-                      <h3>{a.institution}</h3>
-                      <div className="edu-degree">{a.degree} {lang === 'en' ? 'in' : 'bidang'} {a.field}{a.gpa && <span className="edu-gpa">{lang === 'en' ? 'GPA' : 'IPK'}: {a.gpa}</span>}</div>
-                      <div className="edu-year">{a.startYear} — {a.endYear || t.present}</div>
-                      {a.description && <p>{a.description}</p>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Leadership & Organization */}
-      {profile.showOrganizations !== false && (
-        <section className="section" id="organizations">
-          <div className="container">
-            <div className="section-header">
-              <p className="section-label">{lang === "en" ? "Leadership & Activities" : "Kepemimpinan & Organisasi"}</p>
-              <h2 className="section-title">{lang === "en" ? "Organization Experience" : "Pengalaman Organisasi"}</h2>
-              <p className="section-desc">{lang === "en" ? "Active involvement in leadership roles and communities." : "Peran aktif dalam kepemimpinan dan organisasi kemasyarakatan."}</p>
-            </div>
-            <div className="timeline">
-              {organizations.map((org) => {
-                const orgLogo = img(org.logoUrl);
-                return (
-                  <div className={`timeline-item ${org.current ? "current" : ""}`} key={org.id}>
-                    <div className="timeline-dot" />
-                    <div className="timeline-date"><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />{org.startDate} — {org.current ? t.present : org.endDate}</div>
-                    <div className="timeline-card">
-                      <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
-                        {orgLogo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={orgLogo} alt={org.organization || "Logo organisasi"} style={{ width: 40, height: 40, borderRadius: 8, objectFit: "cover", border: "1px solid var(--border-color)" }} />
-                        ) : (
-                          <div className="timeline-icon-fallback" style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", color: "var(--accent-secondary)", border: "1px solid var(--border-color)", flexShrink: 0 }}>
-                            <HiOutlineUserGroup size={20} />
-                          </div>
-                        )}
-                        <div>
-                          <h3>{org.role}</h3>
-                          <div className="subtitle">{org.organization}{org.location ? ` · ${org.location}` : ""}</div>
-                        </div>
-                      </div>
-                      {org.description && (
-                        <div className="org-description" style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.6" }}>
-                          {org.description.split("\n").map((line, idx) => (
-                            <p key={idx} style={{ marginBottom: 8 }}>{line}</p>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Blog */}
-      {profile.showBlog !== false && (
-        <section className="section" id="blog">
-          <div className="container">
-            <div className="section-header">
-              <p className="section-label">{t.blog}</p>
-              <h2 className="section-title">{t.latestArticles}</h2>
-              <p className="section-desc">{t.blogSubtitle}</p>
-            </div>
-            <div className="blog-grid">
-              {blogs.map((b) => {
-                const bImg = img(b.coverImageUrl);
-                return (
-                  <Link href={`/blog/${b.slug}?lang=${lang}`} key={b.id} className="blog-card">
-                    {bImg && (
-                      <div style={{ marginBottom: 16, borderRadius: 8, overflow: "hidden", marginTop: -4 }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={bImg} alt={b.title || "Gambar sampul artikel"} style={{ width: "100%", height: 160, objectFit: "cover", display: "block" }} />
-                      </div>
-                    )}
-                    <div className="blog-meta">
-                      <span><HiOutlineCalendar size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 3 }} />{new Date(b.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
-                      <span>·</span>
-                      <span><HiOutlineClock size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 3 }} />{b.readTime} {t.readTime}</span>
-                    </div>
-                    <h3>{b.title}</h3>
-                    <p>{b.excerpt}</p>
-                    <div className="blog-tags">
-                      {b.tags?.map((t) => <span className="tech-tag" key={t}>{t}</span>)}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Awards */}
-      {profile.showAwards !== false && (
-        <section className="section" id="awards">
-          <div className="container">
-            <div className="section-header">
-              <p className="section-label">{t.recognition}</p>
-              <h2 className="section-title">{t.awardsAchievements}</h2>
-            </div>
-            <div className="awards-grid">
-              {awards.map((a) => {
-                const aImg = img(a.imageUrl);
-                return (
-                  <div className="award-card" key={a.id}>
-                    {aImg && (
-                      <div style={{ marginBottom: 12, borderRadius: 8, overflow: "hidden" }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={aImg} alt={a.title || "Gambar sertifikat / penghargaan"} style={{ width: "100%", height: 140, objectFit: "cover", display: "block" }} />
-                      </div>
-                    )}
-                    <span className="award-year"><HiOutlineTrophy size={12} style={{ display: "inline", verticalAlign: "-1px", marginRight: 4 }} />{a.year}</span>
-                    <h3>{a.title}</h3>
-                    <div className="issuer">{a.issuer}</div>
-                    {a.description && <p>{a.description}</p>}
-                    {a.credentialUrl && (
-                      <a href={formatUrl(a.credentialUrl)} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ marginTop: 16, padding: "8px 16px", fontSize: "0.8rem" }}>
-                        <HiOutlineCheckBadge size={14} /> {t.viewCredential}
-                      </a>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Contact Form Section */}
-      <ContactFormSection lang={lang} profileEmail={profile.email} profileLocation={profile.location} />
+      <PortfolioTemplate
+        profile={mappedProfile}
+        projects={mappedProjects}
+        services={defaultPortfolioData.services}
+        reviews={defaultPortfolioData.reviews}
+        heroSkills={defaultPortfolioData.heroSkills}
+        marqueeItems={defaultPortfolioData.marqueeItems}
+        lang={lang}
+      />
     </>
-  );
-}
-
-function FallbackPage() {
-  return (
-    <section className="hero">
-      <div className="container">
-        <div className="hero-content">
-          <h1>Portfolio</h1>
-          <p className="hero-desc">
-            Backend is not running. Start the backend server with <code>npm run dev</code> in the <code>backend</code> folder, then run <code>npm run seed</code> to populate data.
-          </p>
-        </div>
-      </div>
-    </section>
   );
 }
