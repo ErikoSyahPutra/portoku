@@ -79,11 +79,11 @@ export default function ExperienceEducationSection({
           />
 
           {/* Tab Switcher Pills */}
-          <div className="inline-flex p-1.5 bg-[#F0EDE4] border border-[#ECE8DF] rounded-full self-start md:self-auto shadow-inner">
+          <div className="inline-flex max-w-full overflow-x-auto p-1 sm:p-1.5 bg-[#F0EDE4] border border-[#ECE8DF] rounded-full self-start md:self-auto shadow-inner">
             <button
               type="button"
               onClick={() => setActiveTab("experience")}
-              className={`relative px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 flex items-center gap-2 z-10 ${
+              className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 flex items-center gap-1.5 sm:gap-2 z-10 shrink-0 ${
                 activeTab === "experience"
                   ? "text-white"
                   : "text-[#666672] hover:text-[#121214]"
@@ -96,10 +96,10 @@ export default function ExperienceEducationSection({
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <Briefcase className="w-4 h-4" />
+              <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>Work Experience</span>
               <span
-                className={`text-[11px] px-1.5 py-0.5 rounded-full ${
+                className={`text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-full ${
                   activeTab === "experience"
                     ? "bg-white/20 text-white"
                     : "bg-black/5 text-[#666672]"
@@ -112,7 +112,7 @@ export default function ExperienceEducationSection({
             <button
               type="button"
               onClick={() => setActiveTab("education")}
-              className={`relative px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 flex items-center gap-2 z-10 ${
+              className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 flex items-center gap-1.5 sm:gap-2 z-10 shrink-0 ${
                 activeTab === "education"
                   ? "text-white"
                   : "text-[#666672] hover:text-[#121214]"
@@ -125,10 +125,10 @@ export default function ExperienceEducationSection({
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <GraduationCap className="w-4 h-4" />
+              <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>Education</span>
               <span
-                className={`text-[11px] px-1.5 py-0.5 rounded-full ${
+                className={`text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-full ${
                   activeTab === "education"
                     ? "bg-white/20 text-white"
                     : "bg-black/5 text-[#666672]"
@@ -156,7 +156,7 @@ export default function ExperienceEducationSection({
                 return (
                   <div
                     key={exp.id || index}
-                    className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+                    className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-5 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
                   >
                     {/* Left Meta: Date & Location */}
                     <div className="lg:col-span-4 flex flex-col gap-2.5">
@@ -234,7 +234,7 @@ export default function ExperienceEducationSection({
                 return (
                   <div
                     key={acad.id || index}
-                    className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+                    className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-5 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
                   >
                     {/* Left Meta: Years & GPA */}
                     <div className="lg:col-span-4 flex flex-col gap-2.5">

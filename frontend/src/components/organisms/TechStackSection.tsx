@@ -115,18 +115,18 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
 
       {/* Marquee Wrapper Full Width - Pause on Hover with Smooth Fade Masks */}
       <div className="marquee-wrapper relative w-full overflow-hidden [&:hover_.marquee-group]:[animation-play-state:paused] py-2">
-        {/* Left & Right Canvas Edge Fades (Menutupi tepi secara halus) */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent z-10 pointer-events-none" />
+        {/* Left & Right Canvas Edge Fades (Mobile-friendly: narrower on mobile so cards are clear) */}
+        <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-20 md:w-36 lg:w-48 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-20 md:w-36 lg:w-48 bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent z-10 pointer-events-none" />
 
-        <div className="flex flex-col gap-4 sm:gap-6">
+        <div className="flex flex-col gap-3.5 sm:gap-6">
           {/* Track 1: Gerak Kiri (Row 1) */}
           {row1.length > 0 && (
             <div className="marquee-track flex w-max">
               {[0, 1, 2, 3].map((groupIndex) => (
                 <div
                   key={`row1-group-${groupIndex}`}
-                  className="marquee-group flex gap-3 sm:gap-4 pr-3 sm:pr-4"
+                  className="marquee-group flex gap-2.5 sm:gap-4 pr-2.5 sm:pr-4"
                   aria-hidden={groupIndex > 0 ? "true" : undefined}
                 >
                   {row1.map((tech, idx) => {
@@ -134,12 +134,12 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                     return (
                       <div
                         key={`r1-${tech.name}-${groupIndex}-${idx}`}
-                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
                       >
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
                           <Icon
-                            size={18}
-                            className="transition-transform duration-300 group-hover:scale-110"
+                            size={16}
+                            className="transition-transform duration-300 group-hover:scale-110 sm:w-[18px] sm:h-[18px]"
                             style={{ color: tech.color || "#FF462E" }}
                           />
                         </div>
@@ -147,7 +147,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                           <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
                             {tech.name}
                           </span>
-                          <span className="text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
+                          <span className="text-[9px] sm:text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
                             {tech.category}
                           </span>
                         </div>
@@ -165,7 +165,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
               {[0, 1, 2, 3].map((groupIndex) => (
                 <div
                   key={`row2-group-${groupIndex}`}
-                  className="marquee-group group-right flex gap-3 sm:gap-4 pr-3 sm:pr-4"
+                  className="marquee-group group-right flex gap-2.5 sm:gap-4 pr-2.5 sm:pr-4"
                   aria-hidden={groupIndex > 0 ? "true" : undefined}
                 >
                   {row2.map((tech, idx) => {
@@ -173,12 +173,12 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                     return (
                       <div
                         key={`r2-${tech.name}-${groupIndex}-${idx}`}
-                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
                       >
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
                           <Icon
-                            size={18}
-                            className="transition-transform duration-300 group-hover:scale-110"
+                            size={16}
+                            className="transition-transform duration-300 group-hover:scale-110 sm:w-[18px] sm:h-[18px]"
                             style={{ color: tech.color || "#FF462E" }}
                           />
                         </div>
@@ -186,7 +186,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                           <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
                             {tech.name}
                           </span>
-                          <span className="text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
+                          <span className="text-[9px] sm:text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
                             {tech.category}
                           </span>
                         </div>

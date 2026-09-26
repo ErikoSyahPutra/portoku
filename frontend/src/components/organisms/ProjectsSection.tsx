@@ -135,7 +135,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               {/* ======================================================== */}
               {/* STAGE 1: FLAGSHIP SPOTLIGHT (OPTION C STYLE) */}
               {/* ======================================================== */}
-              <article className="bg-[#0F0F11] text-white rounded-3xl p-6 sm:p-10 lg:p-12 border border-white/10 shadow-2xl relative overflow-hidden group">
+              <article className="bg-[#0F0F11] text-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-12 border border-white/10 shadow-2xl relative overflow-hidden group">
                 {/* Ambient Coral Glow */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -185,7 +185,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                         interactive preview
                       </span>
                     </div>
-                    <div className="max-h-[460px] overflow-hidden bg-[#0A0A0C]">
+                    <div className="max-h-[240px] sm:max-h-[360px] lg:max-h-[460px] overflow-hidden bg-[#0A0A0C]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={featuredProject.imageUrl}
@@ -274,9 +274,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className={`bg-white/85 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/30 rounded-3xl p-6 sm:p-10 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col ${
+                  className={`bg-white/85 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/30 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col ${
                     isEven ? "lg:flex-row-reverse" : "lg:flex-row"
-                  } items-center gap-8 lg:gap-12 group`}
+                  } items-center gap-6 sm:gap-8 lg:gap-12 group`}
                 >
                   {/* Browser Mockup Frame */}
                   <Link
@@ -296,7 +296,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                         case-study
                       </span>
                     </div>
-                    <div className="max-h-[340px] overflow-hidden bg-[#0F0F11]">
+                    <div className="max-h-[220px] sm:max-h-[320px] lg:max-h-[360px] overflow-hidden bg-[#0F0F11]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={project.imageUrl}

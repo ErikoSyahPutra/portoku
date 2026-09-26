@@ -377,7 +377,7 @@ export default async function BlogDetail({
 
           {/* Hero Cover Image (Full Width Cinematic) */}
           {coverImg ? (
-            <div className="w-full h-80 sm:h-[460px] lg:h-[540px] rounded-3xl overflow-hidden mb-12 border border-[#ECE8DF] shadow-xl bg-[#0F0F11]">
+            <div className="w-full h-60 sm:h-[420px] lg:h-[540px] rounded-3xl overflow-hidden mb-12 border border-[#ECE8DF] shadow-xl bg-[#0F0F11]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={coverImg}
@@ -386,11 +386,11 @@ export default async function BlogDetail({
               />
             </div>
           ) : (
-            <div className="w-full h-64 sm:h-80 rounded-3xl bg-gradient-to-br from-[#1A1A1E] to-[#0F0F11] border border-white/10 flex flex-col items-center justify-center text-center p-6 mb-12 relative overflow-hidden shadow-xl">
-              <div className="w-16 h-16 rounded-2xl bg-[#FF462E]/20 border border-[#FF462E]/40 flex items-center justify-center text-[#FF462E] mb-3">
-                <BookOpen className="w-8 h-8" />
+            <div className="w-full h-56 sm:h-80 rounded-3xl bg-gradient-to-br from-[#1A1A1E] to-[#0F0F11] border border-white/10 flex flex-col items-center justify-center text-center p-5 sm:p-6 mb-12 relative overflow-hidden shadow-xl">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#FF462E]/20 border border-[#FF462E]/40 flex items-center justify-center text-[#FF462E] mb-3">
+                <BookOpen className="w-7 h-7 sm:w-8 sm:h-8" />
               </div>
-              <span className="text-base font-bold text-white/90 uppercase tracking-widest">
+              <span className="text-sm sm:text-base font-bold text-white/90 uppercase tracking-widest">
                 Technical Insight & Case Study
               </span>
             </div>
@@ -399,7 +399,7 @@ export default async function BlogDetail({
           {/* Article Layout Grid (8 Cols Article + 4 Cols Sticky Sidebar) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-14">
             {/* Main Article Body (8 Cols) */}
-            <div className="lg:col-span-8 bg-white/95 backdrop-blur-sm border border-[#ECE8DF] rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm">
+            <div className="lg:col-span-8 bg-white/95 backdrop-blur-sm border border-[#ECE8DF] rounded-3xl p-5 sm:p-10 lg:p-12 shadow-sm">
               {renderContent(blog.content)}
             </div>
 
