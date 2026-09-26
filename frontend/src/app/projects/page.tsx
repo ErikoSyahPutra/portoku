@@ -106,7 +106,7 @@ export default async function ProjectsPage({
       <Navbar profile={mappedProfile} />
 
       <main className="pt-8 pb-20 md:pb-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back to Home Button */}
           <div className="mb-8 flex items-center justify-between">
             <BackButton

@@ -65,7 +65,7 @@ export default function ExperienceEducationSection({
 
   return (
     <section className="py-20 md:py-28 relative" id="experience">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <SectionHeader
