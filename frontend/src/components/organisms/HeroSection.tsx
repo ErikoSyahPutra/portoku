@@ -6,8 +6,6 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { SpinningBadge } from "@/components/atoms/SpinningBadge";
 import { Badge } from "@/components/atoms/Badge";
-import { RatingBadge } from "@/components/molecules/RatingBadge";
-import { QuoteCard } from "@/components/molecules/QuoteCard";
 import { SocialMediaGroup } from "@/components/molecules/SocialMediaGroup";
 import { PortfolioProfile, PortfolioSkillTag } from "@/types/portfolio";
 import { defaultPortfolioData } from "@/data/portfolioData";
@@ -125,39 +123,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             />
           </motion.div>
 
-          {/* Left Floating Element: Rating Badge (Desktop lg+) */}
-          <div className="hidden lg:block absolute left-2 xl:left-6 top-[36%] z-30">
-            <RatingBadge
-              ratingScore={profile.ratingScore}
-              reviewsCount={profile.reviewsCount}
-              reviewsLabel={profile.reviewsLabel}
-              floating={true}
-              delay={0.2}
-            />
-          </div>
-
-          {/* Right Floating Element: Quote Card (Desktop lg+) */}
-          <div className="hidden lg:block absolute right-2 xl:right-6 top-[24%] z-30">
-            <QuoteCard
-              quote={profile.quote}
-              author="Valued Client Review"
-              role="Tech Lead & Founder"
-              floating={true}
-              delay={0.6}
-              className="max-w-xs"
-            />
-          </div>
-
           {/* Dynamic Floating Skill Pills (Desktop lg+) */}
           <div className="hidden lg:block">
             {heroSkills.map((skill, index) => {
-              // Precise coordinates to prevent any card or arch collision
+              // Well-spaced coordinates around the central arch
               const positions = [
-                { top: "16%", left: "14%", delay: 0.3 },
-                { top: "66%", left: "10%", delay: 0.8 },
-                { top: "14%", right: "16%", delay: 0.5 },
-                { top: "68%", right: "8%", delay: 1.0 },
-                { bottom: "10%", left: "22%", delay: 0.7 },
+                { top: "18%", left: "14%", delay: 0.3 },
+                { top: "60%", left: "10%", delay: 0.8 },
+                { top: "18%", right: "14%", delay: 0.5 },
+                { top: "60%", right: "10%", delay: 1.0 },
+                { bottom: "8%", left: "22%", delay: 0.7 },
               ];
               const pos = positions[index % positions.length];
 
@@ -187,22 +162,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Mobile / Tablet Social Proof Cards (Clean responsive arrangement under arch) */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 w-full max-w-xl mx-auto px-4 lg:hidden z-20">
-          <RatingBadge
-            ratingScore={profile.ratingScore}
-            reviewsCount={profile.reviewsCount}
-            reviewsLabel={profile.reviewsLabel}
-            floating={false}
-            className="w-full sm:w-auto justify-center"
-          />
-          <QuoteCard
-            quote={profile.quote}
-            author="Valued Client Review"
-            role="Tech Lead & Founder"
-            floating={false}
-            className="w-full sm:max-w-xs"
-          />
+        {/* Mobile / Tablet Skill Pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-5 sm:mt-6 w-full max-w-md mx-auto px-4 lg:hidden z-20">
+          {heroSkills.map((skill) => (
+            <Badge
+              key={skill.label}
+              variant="default"
+              icon={<Sparkles size={11} className="text-[#FF462E]" />}
+              className="bg-white/95 text-[#0F0F11] font-semibold text-[11px] sm:text-xs shadow-xs border-black/10 py-1 px-3"
+            >
+              {skill.label}
+            </Badge>
+          ))}
         </div>
 
         {/* Bottom Actions Row: Dual CTAs + Social Media Icons */}
