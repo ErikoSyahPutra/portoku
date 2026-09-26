@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Navbar, ContactSection } from "@/components/organisms";
-import { Badge, Button } from "@/components/atoms";
+import { Badge, Button, BackButton } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
 
 function getAbsoluteImageUrl(url?: string): string | undefined {
@@ -328,17 +328,17 @@ export default async function ProjectDetail({
 
       <main className="pt-8 pb-20 md:pb-28">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
-          <div className="mb-8">
-            <Button
+          {/* Back Navigation Button */}
+          <div className="mb-8 flex items-center justify-between">
+            <BackButton
               href="/#projects"
-              variant="outline"
-              icon={<ArrowLeft className="w-4 h-4" />}
-              iconPosition="left"
-              size="sm"
-            >
-              {lang === "en" ? "Back to Projects" : "Kembali ke Proyek"}
-            </Button>
+              label={lang === "en" ? "Back to Projects" : "Kembali ke Proyek"}
+              sublabel={lang === "en" ? "Portfolio" : "Koleksi Proyek"}
+            />
+            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-pulse" />
+              <span>{lang === "en" ? "Featured Case Study" : "Studi Kasus Proyek"}</span>
+            </div>
           </div>
 
           {/* Project Header */}
@@ -461,6 +461,32 @@ export default async function ProjectDetail({
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Bottom Navigation & Call to Action */}
+          <div className="pt-4 border-t border-[#ECE8DF] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <BackButton
+              href="/#projects"
+              label={lang === "en" ? "Back to All Projects" : "Kembali ke Semua Proyek"}
+              sublabel={lang === "en" ? "Explore More" : "Eksplorasi Lainnya"}
+            />
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                href="/projects"
+                variant="outline"
+                size="sm"
+                icon={<ArrowUpRight className="w-4 h-4" />}
+              >
+                {lang === "en" ? "Browse Directory" : "Katalog Semua Proyek"}
+              </Button>
+              <Button
+                href="/#contact"
+                variant="primary"
+                size="sm"
+              >
+                {lang === "en" ? "Discuss a Project" : "Konsultasi Proyek"}
+              </Button>
+            </div>
           </div>
         </div>
       </main>

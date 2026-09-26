@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ArrowLeft } from "lucide-react";
 import { api, Project, Profile } from "@/lib/api";
 import { Navbar, ProjectsSection, ContactSection } from "@/components/organisms";
-import { Button, SectionHeader } from "@/components/atoms";
+import { Button, BackButton, SectionHeader } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
 import { PortfolioProject, PortfolioProfile } from "@/types/portfolio";
 
@@ -108,16 +108,12 @@ export default async function ProjectsPage({
       <main className="pt-8 pb-20 md:pb-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back to Home Button */}
-          <div className="mb-8">
-            <Button
+          <div className="mb-8 flex items-center justify-between">
+            <BackButton
               href="/"
-              variant="outline"
-              icon={<ArrowLeft className="w-4 h-4" />}
-              iconPosition="left"
-              size="sm"
-            >
-              {lang === "en" ? "Back to Home" : "Kembali ke Beranda"}
-            </Button>
+              label={lang === "en" ? "Back to Home" : "Kembali ke Beranda"}
+              sublabel={lang === "en" ? "Navigation" : "Navigasi"}
+            />
           </div>
 
           <div className="mb-12">

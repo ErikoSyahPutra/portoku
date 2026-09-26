@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Navbar, ContactSection } from "@/components/organisms";
-import { Badge, Button } from "@/components/atoms";
+import { Badge, Button, BackButton } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
 
 function getAbsoluteImageUrl(url?: string): string | undefined {
@@ -306,17 +306,17 @@ export default async function BlogDetail({
 
       <main className="pt-8 pb-20 md:pb-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
-          <div className="mb-8">
-            <Button
+          {/* Back Navigation Button */}
+          <div className="mb-8 flex items-center justify-between">
+            <BackButton
               href="/#blog"
-              variant="outline"
-              icon={<ArrowLeft className="w-4 h-4" />}
-              iconPosition="left"
-              size="sm"
-            >
-              {lang === "en" ? "Back to Articles" : "Kembali ke Artikel"}
-            </Button>
+              label={lang === "en" ? "Back to Articles" : "Kembali ke Artikel"}
+              sublabel={lang === "en" ? "Articles" : "Wawasan & Tulisan"}
+            />
+            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-pulse" />
+              <span>{lang === "en" ? "Editorial Article" : "Artikel Editorial"}</span>
+            </div>
           </div>
 
           {/* Article Header */}
@@ -434,6 +434,22 @@ export default async function BlogDetail({
                 </Link>
               </div>
             </div>
+          </div>
+
+          {/* Bottom Navigation & Call to Action */}
+          <div className="pt-4 border-t border-[#ECE8DF] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <BackButton
+              href="/#blog"
+              label={lang === "en" ? "Back to All Articles" : "Kembali ke Semua Artikel"}
+              sublabel={lang === "en" ? "Explore More" : "Eksplorasi Lainnya"}
+            />
+            <Button
+              href="/#projects"
+              variant="outline"
+              size="sm"
+            >
+              {lang === "en" ? "Explore Case Studies" : "Eksplorasi Studi Kasus"}
+            </Button>
           </div>
         </div>
       </main>

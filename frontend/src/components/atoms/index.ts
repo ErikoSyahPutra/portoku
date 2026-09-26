@@ -12,3 +12,7 @@ export type { SectionHeaderProps } from "./SectionHeader";
 
 export { IconWrapper } from "./IconWrapper";
 export type { IconWrapperProps, IconShape } from "./IconWrapper";
+
+export { BackButton } from "./BackButton";
+export type { BackButtonProps } from "./BackButton";
+
