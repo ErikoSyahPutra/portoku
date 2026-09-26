@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, Github } from "lucide-react";
+import { ArrowUpRight, Github, ExternalLink, Sparkles, Layers } from "lucide-react";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { Button } from "@/components/atoms/Button";
 import { Badge } from "@/components/atoms/Badge";
@@ -32,6 +32,17 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     return projects.filter((p) => p.category === selectedCategory);
   }, [projects, selectedCategory]);
 
+  // Featured flagship project is either the first featured item or index 0
+  const featuredProject = useMemo(() => {
+    return filteredProjects.find((p) => p.featured) || filteredProjects[0];
+  }, [filteredProjects]);
+
+  // Remaining projects for alternating magazine spread
+  const alternatingProjects = useMemo(() => {
+    if (!featuredProject) return [];
+    return filteredProjects.filter((p) => p.id !== featuredProject.id);
+  }, [filteredProjects, featuredProject]);
+
   return (
     <section
       id="projects"
@@ -41,31 +52,40 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
         <SectionHeader
-          eyebrow="— Featured Work"
+          eyebrow="— Featured Work & Case Studies"
           title="Recent Projects"
           highlightWord="Projects"
-          description="A curated selection of full-stack platforms, design systems, and web applications engineered for performance and real-world scale."
+          description="Karya rekayasa sistem web full-stack, perancangan arsitektur modern, dan platform digital berkinerja tinggi."
           hasSparkle={true}
         />
 
         {/* View GitHub CTA */}
-        <div className="shrink-0">
+        <div className="shrink-0 flex items-center gap-3">
+          <Button
+            href="/projects"
+            variant="outline"
+            size="md"
+            icon={<ArrowUpRight size={16} />}
+            iconPosition="right"
+          >
+            Semua Proyek
+          </Button>
           <Button
             href="https://github.com/ErikoSyahPutra"
-            variant="outline"
+            variant="dark"
             size="md"
             icon={<Github size={16} />}
             iconPosition="left"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Explore GitHub
+            GitHub
           </Button>
         </div>
       </div>
 
       {/* Category Filter Pills */}
-      <div className="flex flex-wrap items-center gap-2 mb-10">
+      <div className="flex flex-wrap items-center gap-2 mb-12">
         {categories.map((category) => {
           const isActive = selectedCategory === category;
           return (
@@ -85,120 +105,269 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         })}
       </div>
 
-      {/* Projects Grid */}
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <AnimatePresence>
-          {filteredProjects.map((project) => {
-            const detailUrl = `/projects/${project.id}`;
+      {/* Hybrid Showcase Container */}
+      <div className="space-y-12 sm:space-y-16">
+        <AnimatePresence mode="wait">
+          {featuredProject && (
+            <motion.div
+              key={`featured-${featuredProject.id}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              {/* ======================================================== */}
+              {/* STAGE 1: FLAGSHIP SPOTLIGHT (OPTION C STYLE) */}
+              {/* ======================================================== */}
+              <article className="bg-[#0F0F11] text-white rounded-3xl p-6 sm:p-10 lg:p-12 border border-white/10 shadow-2xl relative overflow-hidden group">
+                {/* Ambient Coral Glow */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-3xl pointer-events-none" />
 
-            return (
-              <motion.article
-                key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="group flex flex-col justify-between rounded-3xl bg-white border border-black/10 hover:border-black/20 shadow-xs hover:shadow-xl transition-all duration-300 p-5 sm:p-6 overflow-hidden"
-              >
-                <div>
-                  {/* Project Image Container -> Navigate to Detail Page */}
-                  <Link
-                    href={detailUrl}
-                    className="block relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-neutral-100 mb-5 group/thumb"
-                  >
-                    <img
-                      src={project.imageUrl}
-                      alt={project.title}
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                    {/* Category Pill Tag */}
-                    <div className="absolute top-3 left-3">
-                      <span className="inline-block px-3 py-1 rounded-full bg-black/75 backdrop-blur-xs text-[11px] font-semibold text-white tracking-wide shadow-sm">
-                        {project.category}
+                <div className="relative z-10">
+                  {/* Eyebrow & Badges */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    <div className="inline-flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-[#FF462E] text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+                        Featured Case Study
+                      </span>
+                      <span className="px-3 py-1 rounded-full bg-white/10 text-neutral-300 text-xs font-semibold">
+                        {featuredProject.category}
                       </span>
                     </div>
+                    <span className="text-xs text-neutral-400 font-mono tracking-wider">
+                      Flagship Project
+                    </span>
+                  </div>
 
-                    {/* Featured Badge */}
-                    {project.featured && (
-                      <div className="absolute top-3 right-3">
-                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FF462E] text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-                          Featured
+                  {/* Title & Narrative */}
+                  <div className="max-w-3xl mb-8">
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-4 group-hover:text-[#FF462E] transition-colors">
+                      <Link href={`/projects/${featuredProject.id}`}>
+                        {featuredProject.title}
+                      </Link>
+                    </h3>
+                    <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
+                      {featuredProject.description}
+                    </p>
+                  </div>
+
+                  {/* High-Fidelity Browser Frame Mockup */}
+                  <Link
+                    href={`/projects/${featuredProject.id}`}
+                    className="block w-full rounded-2xl overflow-hidden border border-white/15 bg-neutral-900 shadow-2xl mb-8 group/frame cursor-pointer"
+                  >
+                    <div className="h-9 bg-[#1A1A1E] px-4 flex items-center justify-between border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                        <span className="ml-3 text-xs text-neutral-400 font-mono hidden sm:inline">
+                          https://erikosyah.my.id/projects/{featuredProject.id}
                         </span>
                       </div>
-                    )}
+                      <span className="text-[11px] font-mono text-neutral-400">
+                        interactive preview
+                      </span>
+                    </div>
+                    <div className="max-h-[460px] overflow-hidden bg-[#0A0A0C]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={featuredProject.imageUrl}
+                        alt={featuredProject.title}
+                        className="w-full h-auto object-cover object-top group-hover/frame:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    </div>
                   </Link>
 
-                  {/* Project Title -> Navigate to Detail Page */}
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F0F11] group-hover:text-[#FF462E] transition-colors">
-                    <Link href={detailUrl}>
-                      {project.title}
-                    </Link>
-                  </h3>
-
-                  {/* Project Description */}
-                  <p className="mt-2.5 text-sm sm:text-base text-neutral-600 line-clamp-2 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  {/* Tech Tags */}
-                  {project.tags && project.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-4">
-                      {project.tags.slice(0, 4).map((tag) => (
-                        <Badge
+                  {/* Metrics Bar & Action Row */}
+                  <div className="pt-6 border-t border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    {/* Tech Badges */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      {featuredProject.tags.map((tag) => (
+                        <span
                           key={tag}
-                          variant="subtle"
-                          className="text-[11px] font-medium py-0.5 px-2.5"
+                          className="px-3 py-1 rounded-full bg-white/10 text-neutral-200 text-xs font-medium"
                         >
                           {tag}
-                        </Badge>
+                        </span>
                       ))}
-                      {project.tags.length > 4 && (
-                        <span className="text-[11px] text-neutral-400 self-center font-mono">
-                          +{project.tags.length - 4}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Button
+                        href={`/projects/${featuredProject.id}`}
+                        variant="primary"
+                        size="md"
+                        icon={<ArrowUpRight size={16} />}
+                        iconPosition="right"
+                      >
+                        Lihat Studi Kasus
+                      </Button>
+
+                      {featuredProject.liveUrl && (
+                        <Button
+                          href={featuredProject.liveUrl}
+                          variant="dark"
+                          size="md"
+                          icon={<ExternalLink size={14} />}
+                          iconPosition="right"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Live Demo
+                        </Button>
+                      )}
+
+                      {featuredProject.githubUrl && (
+                        <Button
+                          href={featuredProject.githubUrl}
+                          variant="dark"
+                          size="md"
+                          icon={<Github size={14} />}
+                          iconPosition="left"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Repository
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ======================================================== */}
+        {/* STAGE 2: ALTERNATING MAGAZINE SPREAD (OPTION B STYLE) */}
+        {/* ======================================================== */}
+        <div className="space-y-10 sm:space-y-14">
+          <AnimatePresence>
+            {alternatingProjects.map((project, idx) => {
+              const isEven = idx % 2 === 1;
+              const detailUrl = `/projects/${project.id}`;
+
+              return (
+                <motion.article
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className={`bg-white/85 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/30 rounded-3xl p-6 sm:p-10 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col ${
+                    isEven ? "lg:flex-row-reverse" : "lg:flex-row"
+                  } items-center gap-8 lg:gap-12 group`}
+                >
+                  {/* Browser Mockup Frame */}
+                  <Link
+                    href={detailUrl}
+                    className="w-full lg:w-3/5 rounded-2xl overflow-hidden border border-[#ECE8DF] bg-[#0F0F11] shadow-md group-hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  >
+                    <div className="h-8 bg-[#F5F2EB] border-b border-[#ECE8DF] px-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                        <span className="ml-2 text-[10px] text-[#888899] font-mono truncate max-w-[200px]">
+                          {project.title.toLowerCase().replace(/\s+/g, "-")}.dev
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-[#888899] font-mono">
+                        case-study
+                      </span>
+                    </div>
+                    <div className="max-h-[340px] overflow-hidden bg-[#0F0F11]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.imageUrl}
+                        alt={project.title}
+                        className="w-full h-auto object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    </div>
+                  </Link>
+
+                  {/* Story & Specifications */}
+                  <div className="w-full lg:w-2/5 flex flex-col items-start">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF1EE] text-[#FF462E] text-xs font-bold uppercase tracking-wider">
+                        0{idx + 2} / {project.category}
+                      </span>
+                      {project.featured && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#FF462E] text-white text-[10px] font-bold uppercase tracking-wider">
+                          Featured
                         </span>
                       )}
                     </div>
-                  )}
-                </div>
 
-                {/* Action Row -> Navigate to Detail Page where Live Demo & Github are available */}
-                <div className="mt-6 pt-5 border-t border-black/5 flex items-center justify-between gap-3">
-                  <Button
-                    href={detailUrl}
-                    variant="primary"
-                    size="sm"
-                    icon={<ArrowUpRight size={14} />}
-                    iconPosition="right"
-                    ariaLabel={`View project details for ${project.title}`}
-                  >
-                    View Details
-                  </Button>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#121214] tracking-tight mb-3 group-hover:text-[#FF462E] transition-colors">
+                      <Link href={detailUrl}>
+                        {project.title}
+                      </Link>
+                    </h3>
 
-                  <div className="flex items-center gap-2 text-xs font-semibold text-neutral-500">
-                    {project.liveUrl && (
-                      <span className="inline-flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        Demo
-                      </span>
+                    <p className="text-sm sm:text-base text-[#4A4A57] leading-relaxed mb-6">
+                      {project.description}
+                    </p>
+
+                    {/* Tech Badges */}
+                    {project.tags && project.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-3 py-1 rounded-full bg-[#F5F2EB] text-xs font-medium text-[#4A4A57]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     )}
-                    {project.githubUrl && (
-                      <span className="inline-flex items-center gap-1 text-neutral-600 bg-neutral-100 px-2.5 py-1 rounded-full font-medium">
-                        Code
-                      </span>
-                    )}
+
+                    {/* Call to Action Button */}
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={detailUrl}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0F0F11] hover:bg-[#FF462E] text-white text-xs sm:text-sm font-semibold transition-all duration-300 shadow-sm"
+                      >
+                        <span>Lihat Studi Kasus</span>
+                        <ArrowUpRight className="w-4 h-4" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </motion.article>
-            );
-          })}
-        </AnimatePresence>
-      </motion.div>
+                </motion.article>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* Bottom Catalog Discovery Card */}
+        <div className="pt-8 text-center">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-4 sm:px-8 sm:py-5 rounded-3xl bg-white border border-[#ECE8DF] shadow-xs">
+            <div className="text-left">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#FF462E] block">
+                Arsip Proyek Lengkap
+              </span>
+              <span className="text-sm font-semibold text-[#121214]">
+                Tertarik melihat seluruh eksperimen dan arsitektur kode lainnya?
+              </span>
+            </div>
+            <Button
+              href="/projects"
+              variant="primary"
+              size="md"
+              icon={<ArrowUpRight size={15} />}
+              iconPosition="right"
+            >
+              Buka Katalog Direktori
+            </Button>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
