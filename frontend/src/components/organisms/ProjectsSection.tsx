@@ -7,7 +7,7 @@ import { ArrowUpRight, Github, ExternalLink, Sparkles, Layers } from "lucide-rea
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { Button } from "@/components/atoms/Button";
 import { Badge } from "@/components/atoms/Badge";
-import { PortfolioProject } from "@/types/portfolio";
+import { PortfolioProject, formatProjectCategory } from "@/types/portfolio";
 import { defaultPortfolioData } from "@/data/portfolioData";
 
 export interface ProjectsSectionProps {
@@ -27,15 +27,15 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  // Derive unique categories dynamically
+  // Derive unique categories dynamically using formatted labels
   const categories = useMemo(() => {
-    const unique = Array.from(new Set(projects.map((p) => p.category)));
+    const unique = Array.from(new Set(projects.map((p) => formatProjectCategory(p.category))));
     return ["All", ...unique];
   }, [projects]);
 
   const filteredProjects = useMemo(() => {
     if (selectedCategory === "All") return projects;
-    return projects.filter((p) => p.category === selectedCategory);
+    return projects.filter((p) => formatProjectCategory(p.category) === selectedCategory);
   }, [projects, selectedCategory]);
 
   // Featured flagship project is either the first featured item or index 0
@@ -147,7 +147,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                         Featured Case Study
                       </span>
                       <span className="px-3 py-1 rounded-full bg-white/10 text-neutral-300 text-xs font-semibold">
-                        {featuredProject.category}
+                        {formatProjectCategory(featuredProject.category)}
                       </span>
                     </div>
                     <span className="text-xs text-neutral-400 font-mono tracking-wider">
@@ -311,7 +311,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   <div className="w-full lg:w-2/5 flex flex-col items-start">
                     <div className="flex items-center gap-2 mb-4">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF1EE] text-[#FF462E] text-xs font-bold uppercase tracking-wider">
-                        0{idx + 2} / {project.category}
+                        0{idx + 2} / {formatProjectCategory(project.category)}
                       </span>
                       {project.featured && (
                         <span className="px-2.5 py-0.5 rounded-full bg-[#FF462E] text-white text-[10px] font-bold uppercase tracking-wider">

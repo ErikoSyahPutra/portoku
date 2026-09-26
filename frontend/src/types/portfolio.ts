@@ -121,3 +121,41 @@ export interface PortfolioData {
   techStack?: PortfolioTechStack;
 }
 
+/**
+ * Format raw backend project categories (e.g. 'web', 'ui_ux', 'mobile')
+ * into user-friendly, professional display names.
+ */
+export function formatProjectCategory(category?: string | null): string {
+  if (!category || !category.trim()) return "Web Development";
+  const normalized = category.toLowerCase().trim();
+  switch (normalized) {
+    case "web":
+    case "web development":
+    case "web app":
+    case "web application":
+      return "Web Development";
+    case "ui_ux":
+    case "ui/ux":
+    case "ui-ux":
+    case "ui/ux design":
+    case "uiux":
+      return "UI/UX Design";
+    case "mobile":
+    case "mobile app":
+    case "mobile application":
+    case "mobile development":
+      return "Mobile App";
+    case "full-stack":
+    case "fullstack":
+    case "full stack":
+    case "full_stack":
+      return "Full-Stack System";
+    default:
+      return category
+        .replace(/_/g, " ")
+        .split(" ")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(" ");
+  }
+}
+

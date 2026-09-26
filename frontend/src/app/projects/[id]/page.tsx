@@ -17,6 +17,7 @@ import { api } from "@/lib/api";
 import { Navbar, ContactSection } from "@/components/organisms";
 import { Badge, Button, BackButton } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
+import { formatProjectCategory } from "@/types/portfolio";
 
 function getAbsoluteImageUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -346,7 +347,7 @@ export default async function ProjectDetail({
             {/* Category Eyebrow */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF1EE] text-[#FF462E] text-xs font-bold uppercase tracking-wider mb-4">
               <Layers className="w-3.5 h-3.5" />
-              <span>{project.category || "Featured Case Study"}</span>
+              <span>{formatProjectCategory(project.category)}</span>
             </div>
 
             {/* Title */}

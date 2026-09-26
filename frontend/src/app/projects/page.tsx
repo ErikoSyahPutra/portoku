@@ -7,7 +7,7 @@ import { api, Project, Profile } from "@/lib/api";
 import { Navbar, ProjectsSection, ContactSection } from "@/components/organisms";
 import { Button, BackButton, SectionHeader } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
-import { PortfolioProject, PortfolioProfile } from "@/types/portfolio";
+import { PortfolioProject, PortfolioProfile, formatProjectCategory } from "@/types/portfolio";
 
 export async function generateMetadata({
   searchParams,
@@ -85,7 +85,7 @@ export default async function ProjectsPage({
           id: p.id,
           title: p.title,
           description: p.description,
-          category: p.category?.trim() ? p.category.trim() : "Full-Stack Development",
+          category: formatProjectCategory(p.category),
           tags:
             Array.isArray(p.technologies) && p.technologies.length > 0
               ? p.technologies

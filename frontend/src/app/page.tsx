@@ -19,6 +19,7 @@ import {
   PortfolioExperience,
   PortfolioAcademic,
   PortfolioBlog,
+  formatProjectCategory,
 } from "@/types/portfolio";
 
 const BACKEND =
@@ -141,7 +142,7 @@ export default async function Home({
           id: p.id,
           title: p.title,
           description: p.description,
-          category: p.category?.trim() ? p.category.trim() : "Full-Stack Development",
+          category: formatProjectCategory(p.category),
           tags:
             Array.isArray(p.technologies) && p.technologies.length > 0
               ? p.technologies
