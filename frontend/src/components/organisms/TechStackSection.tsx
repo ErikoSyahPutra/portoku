@@ -97,9 +97,9 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
       aria-label="Technologies and Tools"
       className={`py-16 md:py-24 relative overflow-hidden ${className}`}
     >
-      {/* Section Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
-        <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
+      {/* Section Header (Left-aligned matching other sections) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <SectionHeader
             eyebrow="— Tech Stack"
             title={
