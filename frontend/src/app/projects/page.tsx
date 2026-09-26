@@ -133,6 +133,8 @@ export default async function ProjectsPage({
             projects={mappedProjects}
             limit={0}
             showDiscoveryCard={false}
+            showHeader={false}
+            className="!py-0 !px-0 !max-w-none"
           />
         </div>
       </main>

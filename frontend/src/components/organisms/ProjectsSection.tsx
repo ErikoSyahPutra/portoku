@@ -15,6 +15,7 @@ export interface ProjectsSectionProps {
   className?: string;
   limit?: number;
   showDiscoveryCard?: boolean;
+  showHeader?: boolean;
 }
 
 export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
@@ -22,6 +23,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   className = "",
   limit = 3,
   showDiscoveryCard = true,
+  showHeader = true,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
@@ -62,39 +64,41 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       className={`py-20 md:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto ${className}`}
     >
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
-        <SectionHeader
-          eyebrow="— Featured Work & Case Studies"
-          title="Recent Projects"
-          highlightWord="Projects"
-          description="Karya rekayasa sistem web full-stack, perancangan arsitektur modern, dan platform digital berkinerja tinggi."
-          hasSparkle={true}
-        />
+      {showHeader && (
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
+          <SectionHeader
+            eyebrow="— Featured Work & Case Studies"
+            title="Recent Projects"
+            highlightWord="Projects"
+            description="Karya rekayasa sistem web full-stack, perancangan arsitektur modern, dan platform digital berkinerja tinggi."
+            hasSparkle={true}
+          />
 
-        {/* View GitHub CTA */}
-        <div className="shrink-0 flex items-center gap-3">
-          <Button
-            href="/projects"
-            variant="outline"
-            size="md"
-            icon={<ArrowUpRight size={16} />}
-            iconPosition="right"
-          >
-            Semua Proyek
-          </Button>
-          <Button
-            href="https://github.com/ErikoSyahPutra"
-            variant="dark"
-            size="md"
-            icon={<Github size={16} />}
-            iconPosition="left"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </Button>
+          {/* View GitHub CTA */}
+          <div className="shrink-0 flex items-center gap-3">
+            <Button
+              href="/projects"
+              variant="outline"
+              size="md"
+              icon={<ArrowUpRight size={16} />}
+              iconPosition="right"
+            >
+              Semua Proyek
+            </Button>
+            <Button
+              href="https://github.com/ErikoSyahPutra"
+              variant="dark"
+              size="md"
+              icon={<Github size={16} />}
+              iconPosition="left"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Category Filter Pills */}
       <div className="flex flex-wrap items-center gap-2 mb-12">
