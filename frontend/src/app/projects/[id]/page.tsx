@@ -17,7 +17,7 @@ import { api } from "@/lib/api";
 import { Navbar, ContactSection } from "@/components/organisms";
 import { Badge, Button, BackButton } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
-import { formatProjectCategory } from "@/types/portfolio";
+import { formatProjectCategory, ensureExternalUrl } from "@/types/portfolio";
 
 function getAbsoluteImageUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -141,9 +141,9 @@ export default async function ProjectDetail({
           defaultPortfolioData.profile.avatarUrl,
         email: profileRes.value.email || defaultPortfolioData.profile.email,
         githubUrl:
-          profileRes.value.githubUrl || defaultPortfolioData.profile.githubUrl,
+          ensureExternalUrl(profileRes.value.githubUrl) || defaultPortfolioData.profile.githubUrl,
         linkedinUrl:
-          profileRes.value.linkedinUrl ||
+          ensureExternalUrl(profileRes.value.linkedinUrl) ||
           defaultPortfolioData.profile.linkedinUrl,
       };
     }

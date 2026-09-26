@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Github, Linkedin, Globe, Mail } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 
+import { ensureExternalUrl } from "@/types/portfolio";
+
 export interface SocialLinkItem {
   name: string;
   url: string;
@@ -95,7 +97,8 @@ export const SocialMediaGroup: React.FC<SocialMediaGroupProps> = ({
   return (
     <div className={`flex items-center gap-2 sm:gap-2.5 ${className}`}>
       {links.map((link) => {
-        const isMailto = link.url.startsWith("mailto:");
+        const safeUrl = ensureExternalUrl(link.url);
+        const isMailto = safeUrl.startsWith("mailto:");
         return (
           <motion.div
             key={link.name}
@@ -104,7 +107,7 @@ export const SocialMediaGroup: React.FC<SocialMediaGroupProps> = ({
             transition={{ duration: 0.15 }}
           >
             <a
-              href={link.url}
+              href={safeUrl}
               target={isMailto ? undefined : "_blank"}
               rel={isMailto ? undefined : "noreferrer noopener"}
               aria-label={link.ariaLabel || link.name}

@@ -7,7 +7,7 @@ import { api, Project, Profile } from "@/lib/api";
 import { Navbar, ProjectsSection, ContactSection } from "@/components/organisms";
 import { Button, BackButton, SectionHeader } from "@/components/atoms";
 import { defaultPortfolioData } from "@/data/portfolioData";
-import { PortfolioProject, PortfolioProfile, formatProjectCategory } from "@/types/portfolio";
+import { PortfolioProject, PortfolioProfile, formatProjectCategory, ensureExternalUrl } from "@/types/portfolio";
 
 export async function generateMetadata({
   searchParams,
@@ -75,8 +75,8 @@ export default async function ProjectsPage({
     title: profileData?.title || defaultPortfolioData.profile.title,
     avatarUrl: resolveImg(profileData?.avatarUrl) || defaultPortfolioData.profile.avatarUrl,
     email: profileData?.email || defaultPortfolioData.profile.email,
-    githubUrl: profileData?.githubUrl || defaultPortfolioData.profile.githubUrl,
-    linkedinUrl: profileData?.linkedinUrl || defaultPortfolioData.profile.linkedinUrl,
+    githubUrl: ensureExternalUrl(profileData?.githubUrl) || defaultPortfolioData.profile.githubUrl,
+    linkedinUrl: ensureExternalUrl(profileData?.linkedinUrl) || defaultPortfolioData.profile.linkedinUrl,
   };
 
   const mappedProjects: PortfolioProject[] =

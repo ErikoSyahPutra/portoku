@@ -159,3 +159,23 @@ export function formatProjectCategory(category?: string | null): string {
   }
 }
 
+/**
+ * Ensure an external link always has a protocol (https:// or http://)
+ * so browsers do not treat domain strings like 'www.linkedin.com' as relative paths.
+ */
+export function ensureExternalUrl(url?: string | null): string {
+  if (!url || !url.trim()) return "";
+  const trimmed = url.trim();
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("mailto:") ||
+    trimmed.startsWith("tel:") ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("/")
+  ) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+

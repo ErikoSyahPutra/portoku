@@ -20,6 +20,7 @@ import {
   PortfolioAcademic,
   PortfolioBlog,
   formatProjectCategory,
+  ensureExternalUrl,
 } from "@/types/portfolio";
 
 const BACKEND =
@@ -100,11 +101,11 @@ export default async function Home({
     location: profileData?.location?.trim() || defaultPortfolioData.profile.location,
     email: profileData?.email?.trim() || defaultPortfolioData.profile.email,
     githubUrl:
-      profileData?.githubUrl?.trim() || defaultPortfolioData.profile.githubUrl,
+      ensureExternalUrl(profileData?.githubUrl?.trim()) || defaultPortfolioData.profile.githubUrl,
     linkedinUrl:
-      profileData?.linkedinUrl?.trim() || defaultPortfolioData.profile.linkedinUrl,
+      ensureExternalUrl(profileData?.linkedinUrl?.trim()) || defaultPortfolioData.profile.linkedinUrl,
     websiteUrl:
-      profileData?.websiteUrl?.trim() || defaultPortfolioData.profile.websiteUrl,
+      ensureExternalUrl(profileData?.websiteUrl?.trim()) || defaultPortfolioData.profile.websiteUrl,
     availableBadge: defaultPortfolioData.profile.availableBadge,
     ratingScore: defaultPortfolioData.profile.ratingScore,
     reviewsCount: defaultPortfolioData.profile.reviewsCount,
