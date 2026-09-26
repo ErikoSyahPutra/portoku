@@ -195,4 +195,71 @@ export const defaultPortfolioData: PortfolioData = {
       avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
     },
   ],
+  experiences: [
+    {
+      id: 1,
+      position: "UI/UX Designer",
+      company: "Eduwork",
+      location: "Kota Yogyakarta, D.I. Yogyakarta",
+      startDate: "2025-05",
+      endDate: "2025-08",
+      current: false,
+      description:
+        "Membantu memimpin tim riset UI/UX dengan 10–15 anggota. Memimpin daily scrum untuk memantau progres dan memastikan kolaborasi tim berjalan efektif. Mengatur pembagian tugas dan alur kerja riset untuk mendukung proses desain digital.",
+      skills: ["UI/UX Design", "User Research", "Daily Scrum", "Team Leadership"],
+      logoUrl: "/uploads/eduwork.png",
+    },
+    {
+      id: 2,
+      position: "Web Developer",
+      company: "CV Serpihan Tech Solution",
+      location: "Kab. Kendal, Jawa Tengah",
+      startDate: "2025-02",
+      endDate: "2025-07",
+      current: false,
+      description:
+        "Mengembangkan dan memelihara 2+ aplikasi SaaS, termasuk platform Sekolahin dan sistem ILUNI FHUI. Menyelesaikan 20+ fitur baru dan perbaikan bug. Menangani operation & maintenance (OPHAR) untuk memastikan sistem tetap andal dan optimal.",
+      skills: ["Web Development", "SaaS", "Feature Development", "OPHAR", "Troubleshooting"],
+      logoUrl: "/uploads/serpihan_tech.png",
+    },
+    {
+      id: 3,
+      position: "UI/UX Designer",
+      company: "PT Renjana Sinergi Indonesia",
+      location: "Kab. Sleman, D.I. Yogyakarta",
+      startDate: "2025-03",
+      endDate: "2025-06",
+      current: false,
+      description:
+        "Merancang dan mengembangkan landing page responsif menggunakan WordPress dengan pendekatan UI/UX yang optimal. Membuat wireframe, prototype interaktif, hingga implementasi langsung ke situs produksi.",
+      skills: ["UI/UX Design", "WordPress", "Wireframing", "Prototyping"],
+      logoUrl: "/uploads/renjana_sinergi.png",
+    },
+  ],
+  academics: [
+    {
+      id: 1,
+      institution: "Universitas Negeri Semarang",
+      degree: "S1",
+      field: "Teknik Informatika",
+      startYear: 2022,
+      endYear: 2026,
+      gpa: "3.9 / 4.0",
+      description:
+        "Fokus studi pada rekayasa perangkat lunak, arsitektur basis data, algoritma, dan interaksi manusia-komputer. Mengembangkan berbagai proyek web full-stack berskala produksi dan riset UI/UX.",
+      logoUrl: "/uploads/unnes_logo.png",
+    },
+    {
+      id: 2,
+      institution: "SMA Negeri 4 Pekalongan",
+      degree: "SMA",
+      field: "MIPA (Matematika dan Ilmu Pengetahuan Alam)",
+      startYear: 2019,
+      endYear: 2022,
+      gpa: "92.56",
+      description:
+        "Juara 3 Lomba Poster Tingkat SMA/SMK/MA se-Indonesia Dalam Acara HIMASA National Accounting Competition (HACTION) 2021. Aktif dalam berbagai kompetisi desain dan sains.",
+      logoUrl: "/uploads/sma4pekalongan_logo.png",
+    },
+  ],
 };

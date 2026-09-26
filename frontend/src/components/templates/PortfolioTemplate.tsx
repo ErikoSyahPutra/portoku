@@ -7,6 +7,7 @@ import {
   MarqueeTicker,
   ServicesSection,
   AboutSection,
+  ExperienceEducationSection,
   ProjectsSection,
   ContactSection,
 } from "@/components/organisms";
@@ -16,6 +17,8 @@ import {
   PortfolioProject,
   PortfolioReview,
   PortfolioSkillTag,
+  PortfolioExperience,
+  PortfolioAcademic,
 } from "@/types/portfolio";
 import { defaultPortfolioData } from "@/data/portfolioData";
 
@@ -26,6 +29,8 @@ export interface PortfolioTemplateProps {
   reviews?: PortfolioReview[];
   heroSkills?: PortfolioSkillTag[];
   marqueeItems?: string[];
+  experiences?: PortfolioExperience[];
+  academics?: PortfolioAcademic[];
   lang?: string;
   className?: string;
 }
@@ -37,6 +42,8 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
   reviews = defaultPortfolioData.reviews || [],
   heroSkills = defaultPortfolioData.heroSkills,
   marqueeItems = defaultPortfolioData.marqueeItems,
+  experiences = defaultPortfolioData.experiences || [],
+  academics = defaultPortfolioData.academics || [],
   lang = "en",
   className = "",
 }) => {
@@ -71,6 +78,9 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
 
         {/* Featured Projects with Dynamic Category Filter & Interactive Cards */}
         <ProjectsSection projects={projects} />
+
+        {/* Experience & Education Section (placed directly below projects) */}
+        <ExperienceEducationSection experiences={experiences} academics={academics} />
 
         {/* Interactive Contact & Inquiry Section */}
         <ContactSection profile={profile} />

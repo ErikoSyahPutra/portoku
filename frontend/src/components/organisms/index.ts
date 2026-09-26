@@ -18,3 +18,5 @@ export type { ProjectsSectionProps } from "./ProjectsSection";
 
 export { ContactSection } from "./ContactSection";
 export type { ContactSectionProps } from "./ContactSection";
+
+export { default as ExperienceEducationSection } from "./ExperienceEducationSection";

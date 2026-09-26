@@ -59,6 +59,31 @@ export interface PortfolioReview {
   avatar?: string;
 }
 
+export interface PortfolioExperience {
+  id: string | number;
+  company: string;
+  position: string;
+  location?: string;
+  startDate: string;
+  endDate?: string;
+  current?: boolean;
+  description: string;
+  skills?: string[];
+  logoUrl?: string;
+}
+
+export interface PortfolioAcademic {
+  id: string | number;
+  institution: string;
+  degree: string;
+  field: string;
+  startYear: string | number;
+  endYear?: string | number;
+  gpa?: string | number;
+  description?: string;
+  logoUrl?: string;
+}
+
 export interface PortfolioData {
   profile: PortfolioProfile;
   services: PortfolioService[];
@@ -66,4 +91,6 @@ export interface PortfolioData {
   marqueeItems: string[];
   projects: PortfolioProject[];
   reviews?: PortfolioReview[];
+  experiences?: PortfolioExperience[];
+  academics?: PortfolioAcademic[];
 }

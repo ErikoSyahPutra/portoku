@@ -13,7 +13,12 @@ import {
 } from "@/lib/api";
 import { PortfolioTemplate } from "@/components/templates";
 import { defaultPortfolioData } from "@/data/portfolioData";
-import { PortfolioProfile, PortfolioProject } from "@/types/portfolio";
+import {
+  PortfolioProfile,
+  PortfolioProject,
+  PortfolioExperience,
+  PortfolioAcademic,
+} from "@/types/portfolio";
 
 const BACKEND =
   process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
@@ -150,6 +155,39 @@ export default async function Home({
         }))
       : defaultPortfolioData.projects;
 
+  // Map experiences from NestJS / Admin, falling back gracefully to rich defaults
+  const mappedExperiences: PortfolioExperience[] =
+    experiencesData && experiencesData.length > 0
+      ? experiencesData.map((e) => ({
+          id: e.id,
+          company: e.company,
+          position: e.position,
+          location: e.location,
+          startDate: e.startDate,
+          endDate: e.endDate,
+          current: e.current,
+          description: e.description || "",
+          skills: e.skills || [],
+          logoUrl: resolveImgUrl(e.logoUrl),
+        }))
+      : defaultPortfolioData.experiences || [];
+
+  // Map academics from NestJS / Admin, falling back gracefully to rich defaults
+  const mappedAcademics: PortfolioAcademic[] =
+    academicsData && academicsData.length > 0
+      ? academicsData.map((a) => ({
+          id: a.id,
+          institution: a.institution,
+          degree: a.degree,
+          field: a.field,
+          startYear: a.startYear,
+          endYear: a.endYear,
+          gpa: a.gpa,
+          description: a.description,
+          logoUrl: resolveImgUrl(a.logoUrl),
+        }))
+      : defaultPortfolioData.academics || [];
+
   // JSON-LD structured data for SEO and search crawlers
   const jsonLd = {
     "@context": "https://schema.org",
@@ -189,6 +227,8 @@ export default async function Home({
         reviews={defaultPortfolioData.reviews}
         heroSkills={defaultPortfolioData.heroSkills}
         marqueeItems={defaultPortfolioData.marqueeItems}
+        experiences={mappedExperiences}
+        academics={mappedAcademics}
         lang={lang}
       />
     </>

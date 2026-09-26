@@ -14,6 +14,7 @@ export const defaultNavItems: NavItem[] = [
   { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
   { label: "Blog", href: "/blog" },
 ];
 
