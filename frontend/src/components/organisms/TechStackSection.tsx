@@ -113,8 +113,12 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
         </div>
       </div>
 
-      {/* Marquee Wrapper Full Width - Pause on Hover */}
+      {/* Marquee Wrapper Full Width - Pause on Hover with Smooth Fade Masks */}
       <div className="marquee-wrapper relative w-full overflow-hidden [&:hover_.marquee-group]:[animation-play-state:paused] py-2">
+        {/* Left & Right Canvas Edge Fades (Menutupi tepi secara halus) */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-36 md:w-48 bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent z-10 pointer-events-none" />
+
         <div className="flex flex-col gap-4 sm:gap-6">
           {/* Track 1: Gerak Kiri (Row 1) */}
           {row1.length > 0 && (
