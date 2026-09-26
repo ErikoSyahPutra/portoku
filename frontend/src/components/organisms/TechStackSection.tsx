@@ -95,7 +95,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
     <section
       id="tech-stack"
       aria-label="Technologies and Tools"
-      className={`py-16 md:py-24 relative overflow-hidden tech-stack-section [&:hover_.marquee-group]:[animation-play-state:paused] ${className}`}
+      className={`py-16 md:py-24 relative overflow-hidden tech-stack-section scroll-mt-20 [&:hover_.marquee-group]:[animation-play-state:paused] ${className}`}
     >
       {/* Section Header (Left-aligned matching other sections) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
