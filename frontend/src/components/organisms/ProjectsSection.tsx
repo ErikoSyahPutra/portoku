@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ExternalLink, Github } from "lucide-react";
+import { ArrowUpRight, Github } from "lucide-react";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
 import { Button } from "@/components/atoms/Button";
 import { Badge } from "@/components/atoms/Badge";
@@ -89,9 +89,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <AnimatePresence>
           {filteredProjects.map((project) => {
-            const targetUrl =
-              project.liveUrl || project.githubUrl || `/projects/${project.id}`;
-            const isExternal = targetUrl.startsWith("http");
+            const detailUrl = `/projects/${project.id}`;
 
             return (
               <motion.article
@@ -104,11 +102,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                 className="group flex flex-col justify-between rounded-3xl bg-white border border-black/10 hover:border-black/20 shadow-xs hover:shadow-xl transition-all duration-300 p-5 sm:p-6 overflow-hidden"
               >
                 <div>
-                  {/* Project Image Container */}
+                  {/* Project Image Container -> Navigate to Detail Page */}
                   <Link
-                    href={targetUrl}
-                    target={isExternal ? "_blank" : undefined}
-                    rel={isExternal ? "noopener noreferrer" : undefined}
+                    href={detailUrl}
                     className="block relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-neutral-100 mb-5 group/thumb"
                   >
                     <img
@@ -138,13 +134,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     )}
                   </Link>
 
-                  {/* Project Title */}
+                  {/* Project Title -> Navigate to Detail Page */}
                   <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F0F11] group-hover:text-[#FF462E] transition-colors">
-                    <Link
-                      href={targetUrl}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                    >
+                    <Link href={detailUrl}>
                       {project.title}
                     </Link>
                   </h3>
@@ -175,47 +167,36 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   )}
                 </div>
 
-              {/* Action Buttons Row */}
-              <div className="mt-6 pt-5 border-t border-black/5 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  {project.liveUrl && (
-                    <Button
-                      href={project.liveUrl}
-                      variant="primary"
-                      size="sm"
-                      icon={<ArrowUpRight size={14} />}
-                      iconPosition="right"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      ariaLabel={`Live demo for ${project.title}`}
-                    >
-                      Live Demo
-                    </Button>
-                  )}
+                {/* Action Row -> Navigate to Detail Page where Live Demo & Github are available */}
+                <div className="mt-6 pt-5 border-t border-black/5 flex items-center justify-between gap-3">
+                  <Button
+                    href={detailUrl}
+                    variant="primary"
+                    size="sm"
+                    icon={<ArrowUpRight size={14} />}
+                    iconPosition="right"
+                    ariaLabel={`View project details for ${project.title}`}
+                  >
+                    View Details
+                  </Button>
 
-                  {project.githubUrl && (
-                    <Button
-                      href={project.githubUrl}
-                      variant="outline"
-                      size="sm"
-                      icon={<Github size={14} />}
-                      iconPosition="left"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      ariaLabel={`GitHub repository for ${project.title}`}
-                    >
-                      Code
-                    </Button>
-                  )}
+                  <div className="flex items-center gap-2 text-xs font-semibold text-neutral-500">
+                    {project.liveUrl && (
+                      <span className="inline-flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Demo
+                      </span>
+                    )}
+                    {project.githubUrl && (
+                      <span className="inline-flex items-center gap-1 text-neutral-600 bg-neutral-100 px-2.5 py-1 rounded-full font-medium">
+                        Code
+                      </span>
+                    )}
+                  </div>
                 </div>
-
-                <div className="text-neutral-400 group-hover:text-[#FF462E] transition-colors">
-                  <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </div>
-              </div>
-            </motion.article>
-          );
-        })}
+              </motion.article>
+            );
+          })}
         </AnimatePresence>
       </motion.div>
     </section>
