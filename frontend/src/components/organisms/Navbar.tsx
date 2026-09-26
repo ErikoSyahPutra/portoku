@@ -91,8 +91,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-[#FDFBF7]/98 md:backdrop-blur-md border-b border-[#ECE8DF] shadow-sm shadow-black/[0.03]"
-          : "bg-[#FDFBF7]/92 md:backdrop-blur-sm border-b border-black/[0.04]"
+          ? "bg-white/85 backdrop-blur-md border-b border-black/[0.08] shadow-sm shadow-black/[0.03]"
+          : "bg-white/75 backdrop-blur-md border-b border-black/[0.06] shadow-xs"
       } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer / Dropdown - Pure CSS GPU-accelerated transition */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-black/10 bg-[#FDFBF7] shadow-xl ${
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-black/[0.08] bg-white/95 backdrop-blur-xl shadow-2xl ${
           isMobileMenuOpen
             ? "max-h-[500px] opacity-100 translate-y-0 visible pointer-events-auto"
             : "max-h-0 opacity-0 -translate-y-2 invisible pointer-events-none"
