@@ -90,7 +90,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.4 }}
-              className="lg:col-span-7 group relative bg-[#0F0F11] text-white rounded-3xl overflow-hidden border border-white/10 shadow-2xl min-h-[440px] sm:min-h-[500px] lg:min-h-[580px] flex flex-col justify-end"
+              className="lg:col-span-7 group relative bg-[#0F0F11] text-white rounded-3xl overflow-hidden border border-white/10 shadow-2xl min-h-[440px] sm:min-h-[480px] lg:h-full flex flex-col justify-end"
             >
               {/* Background Cover Image with Ambient Dark Overlay */}
               <div className="absolute inset-0 z-0 overflow-hidden">
@@ -157,7 +157,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
           )}
 
           {/* Secondary Stacked Articles (Right 5 Columns, 3 Articles) */}
-          <div className="lg:col-span-5 flex flex-col gap-3.5 sm:gap-4 justify-between">
+          <div className="lg:col-span-5 flex flex-col gap-5 sm:gap-6 justify-between">
             {secondaryBlogs.map((blog, idx) => {
               const detailUrl = `/blog/${blog.slug}${lang ? `?lang=${lang}` : ""}`;
 
@@ -168,13 +168,13 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.35, delay: (idx + 1) * 0.08 }}
-                  className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/50 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs hover:shadow-xl transition-all duration-300 flex-1 flex flex-col justify-between"
+                  className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/50 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex-1 flex flex-col justify-between"
                 >
                   <Link href={detailUrl} className="block h-full flex flex-col justify-between">
                     <div>
                       {/* Top Row: Thumbnail + Category Pill */}
-                      <div className="flex items-center gap-3.5 sm:gap-4 mb-3">
-                        <div className="relative w-18 h-14 sm:w-22 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-[#ECE8DF] bg-[#0F0F11] shadow-xs">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-xl overflow-hidden shrink-0 border border-[#ECE8DF] bg-[#0F0F11] shadow-xs">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={getBlogCover(blog, idx + 1)}
@@ -184,7 +184,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
                           />
                         </div>
 
-                        <div className="flex flex-col gap-1 min-w-0">
+                        <div className="flex flex-col gap-1.5 min-w-0">
                           <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#FF462E]">
                             <Sparkles className="w-3 h-3 shrink-0" />
                             <span className="truncate">{blog.tags && blog.tags[0] ? blog.tags[0] : "Tech Insight"}</span>
@@ -196,20 +196,20 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
                       </div>
 
                       {/* Headline */}
-                      <h4 className="text-sm sm:text-base font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors line-clamp-2 leading-snug mb-1.5">
+                      <h4 className="text-base sm:text-lg font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors line-clamp-2 leading-snug mb-2">
                         {blog.title}
                       </h4>
 
                       {/* Excerpt */}
                       {blog.excerpt && (
-                        <p className="text-xs sm:text-[13px] text-[#666672] line-clamp-2 leading-relaxed mb-3">
+                        <p className="text-xs sm:text-sm text-[#666672] line-clamp-2 leading-relaxed mb-4">
                           {blog.excerpt}
                         </p>
                       )}
                     </div>
 
                     {/* Bottom Action Footer */}
-                    <div className="pt-2.5 sm:pt-3 border-t border-[#ECE8DF] flex items-center justify-between text-xs">
+                    <div className="pt-3 border-t border-[#ECE8DF] flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1.5 text-[#888899] font-medium">
                         <Clock className="w-3.5 h-3.5 text-[#A0A0B8]" />
                         <span>
