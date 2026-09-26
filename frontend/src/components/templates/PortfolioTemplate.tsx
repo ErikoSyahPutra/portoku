@@ -22,6 +22,7 @@ import {
   PortfolioExperience,
   PortfolioAcademic,
   PortfolioBlog,
+  PortfolioTechStack,
 } from "@/types/portfolio";
 import { defaultPortfolioData } from "@/data/portfolioData";
 
@@ -35,6 +36,7 @@ export interface PortfolioTemplateProps {
   experiences?: PortfolioExperience[];
   academics?: PortfolioAcademic[];
   blogs?: PortfolioBlog[];
+  techStack?: PortfolioTechStack;
   lang?: string;
   className?: string;
 }
@@ -49,6 +51,7 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
   experiences = defaultPortfolioData.experiences || [],
   academics = defaultPortfolioData.academics || [],
   blogs = [],
+  techStack = defaultPortfolioData.techStack,
   lang = "en",
   className = "",
 }) => {
@@ -82,7 +85,7 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
         <AboutSection profile={profile} />
 
         {/* Technologies & Tools Dual-Track Moving Marquee (placed directly above projects) */}
-        <TechStackSection />
+        <TechStackSection techStack={techStack} />
 
         {/* Featured Projects with Dynamic Category Filter & Interactive Cards */}
         <ProjectsSection projects={projects} />

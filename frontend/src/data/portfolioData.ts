@@ -262,4 +262,32 @@ export const defaultPortfolioData: PortfolioData = {
       logoUrl: "/uploads/sma4pekalongan_logo.png",
     },
   ],
+  techStack: {
+    row1: [
+      { name: "Next.js 15", category: "Full-Stack", color: "#000000", iconName: "Next.js" },
+      { name: "React", category: "UI Library", color: "#149ECA", iconName: "React" },
+      { name: "TypeScript", category: "Language", color: "#3178C6", iconName: "TypeScript" },
+      { name: "JavaScript", category: "Language", color: "#F7DF1E", iconName: "JavaScript" },
+      { name: "Tailwind CSS", category: "Styling", color: "#06B6D4", iconName: "Tailwind CSS" },
+      { name: "Framer Motion", category: "Animation", color: "#0055FF", iconName: "Framer Motion" },
+      { name: "Redux / Zustand", category: "State Mgmt", color: "#764ABC", iconName: "Redux" },
+      { name: "HTML5", category: "Structure", color: "#E34F26", iconName: "HTML5" },
+      { name: "CSS3", category: "Styling", color: "#1572B6", iconName: "CSS3" },
+    ],
+    row2: [
+      { name: "NestJS", category: "Backend Engine", color: "#E0234E", iconName: "NestJS" },
+      { name: "Node.js", category: "Runtime", color: "#5FA04E", iconName: "Node.js" },
+      { name: "Express.js", category: "REST API", color: "#121214", iconName: "Express" },
+      { name: "PostgreSQL", category: "SQL Database", color: "#4169E1", iconName: "PostgreSQL" },
+      { name: "MySQL", category: "SQL Database", color: "#4479A1", iconName: "MySQL" },
+      { name: "Prisma ORM", category: "Data Access", color: "#2D3748", iconName: "Prisma" },
+      { name: "Supabase", category: "BaaS & Auth", color: "#3ECF8E", iconName: "Supabase" },
+      { name: "Redis", category: "In-Memory Cache", color: "#DC382D", iconName: "Redis" },
+      { name: "Docker", category: "Containers", color: "#2496ED", iconName: "Docker" },
+      { name: "Git & GitHub", category: "Version Control", color: "#F05032", iconName: "Git" },
+      { name: "Figma", category: "UI/UX Design", color: "#F24E1E", iconName: "Figma" },
+      { name: "Postman", category: "API Testing", color: "#FF6C37", iconName: "Postman" },
+    ],
+  },
 };
+

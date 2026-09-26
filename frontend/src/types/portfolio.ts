@@ -96,6 +96,18 @@ export interface PortfolioBlog {
   createdAt: string;
 }
 
+export interface PortfolioTechItem {
+  name: string;
+  category: string;
+  color?: string;
+  iconName?: string;
+}
+
+export interface PortfolioTechStack {
+  row1: PortfolioTechItem[];
+  row2: PortfolioTechItem[];
+}
+
 export interface PortfolioData {
   profile: PortfolioProfile;
   services: PortfolioService[];
@@ -106,4 +118,6 @@ export interface PortfolioData {
   experiences?: PortfolioExperience[];
   academics?: PortfolioAcademic[];
   blogs?: PortfolioBlog[];
+  techStack?: PortfolioTechStack;
 }
+

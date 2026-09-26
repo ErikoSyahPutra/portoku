@@ -23,50 +23,74 @@ import {
   SiGit,
   SiFigma,
   SiPostman,
+  SiPython,
+  SiMongodb,
+  SiGraphql,
+  SiWordpress,
+  SiVercel,
+  SiLinux,
 } from "react-icons/si";
+import { Code2 } from "lucide-react";
 import { SectionHeader } from "@/components/atoms/SectionHeader";
+import { PortfolioTechStack, PortfolioTechItem } from "@/types/portfolio";
+import { defaultPortfolioData } from "@/data/portfolioData";
 
-export interface TechItem {
-  name: string;
-  category: string;
-  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
-  color: string;
+// Icon dictionary that maps names to official SVG icons
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>> = {
+  "next.js": SiNextdotjs,
+  "next.js 15": SiNextdotjs,
+  "react": SiReact,
+  "typescript": SiTypescript,
+  "javascript": SiJavascript,
+  "tailwind css": SiTailwindcss,
+  "tailwind": SiTailwindcss,
+  "framer motion": SiFramer,
+  "redux": SiRedux,
+  "redux / zustand": SiRedux,
+  "html5": SiHtml5,
+  "css3": SiCss,
+  "css": SiCss,
+  "nestjs": SiNestjs,
+  "node.js": SiNodedotjs,
+  "express": SiExpress,
+  "express.js": SiExpress,
+  "postgresql": SiPostgresql,
+  "mysql": SiMysql,
+  "prisma": SiPrisma,
+  "prisma orm": SiPrisma,
+  "supabase": SiSupabase,
+  "redis": SiRedis,
+  "docker": SiDocker,
+  "git": SiGit,
+  "git & github": SiGit,
+  "github": SiGit,
+  "figma": SiFigma,
+  "postman": SiPostman,
+  "python": SiPython,
+  "mongodb": SiMongodb,
+  "graphql": SiGraphql,
+  "wordpress": SiWordpress,
+  "vercel": SiVercel,
+  "linux": SiLinux,
+};
+
+function getTechIcon(item: PortfolioTechItem) {
+  const key = (item.iconName || item.name).trim().toLowerCase();
+  return ICON_MAP[key] || Code2;
 }
 
-const ROW_1_TECHS: TechItem[] = [
-  { name: "Next.js 15", category: "Full-Stack", icon: SiNextdotjs, color: "#000000" },
-  { name: "React", category: "UI Library", icon: SiReact, color: "#149ECA" },
-  { name: "TypeScript", category: "Language", icon: SiTypescript, color: "#3178C6" },
-  { name: "JavaScript", category: "Language", icon: SiJavascript, color: "#F7DF1E" },
-  { name: "Tailwind CSS", category: "Styling", icon: SiTailwindcss, color: "#06B6D4" },
-  { name: "Framer Motion", category: "Animation", icon: SiFramer, color: "#0055FF" },
-  { name: "Redux / Zustand", category: "State Mgmt", icon: SiRedux, color: "#764ABC" },
-  { name: "HTML5", category: "Structure", icon: SiHtml5, color: "#E34F26" },
-  { name: "CSS3", category: "Styling", icon: SiCss, color: "#1572B6" },
-];
-
-const ROW_2_TECHS: TechItem[] = [
-  { name: "NestJS", category: "Backend Engine", icon: SiNestjs, color: "#E0234E" },
-  { name: "Node.js", category: "Runtime", icon: SiNodedotjs, color: "#5FA04E" },
-  { name: "Express.js", category: "REST API", icon: SiExpress, color: "#121214" },
-  { name: "PostgreSQL", category: "SQL Database", icon: SiPostgresql, color: "#4169E1" },
-  { name: "MySQL", category: "SQL Database", icon: SiMysql, color: "#4479A1" },
-  { name: "Prisma ORM", category: "Data Access", icon: SiPrisma, color: "#2D3748" },
-  { name: "Supabase", category: "BaaS & Auth", icon: SiSupabase, color: "#3ECF8E" },
-  { name: "Redis", category: "In-Memory Cache", icon: SiRedis, color: "#DC382D" },
-  { name: "Docker", category: "Containers", icon: SiDocker, color: "#2496ED" },
-  { name: "Git & GitHub", category: "Version Control", icon: SiGit, color: "#F05032" },
-  { name: "Figma", category: "UI/UX Design", icon: SiFigma, color: "#F24E1E" },
-  { name: "Postman", category: "API Testing", icon: SiPostman, color: "#FF6C37" },
-];
-
 export interface TechStackSectionProps {
+  techStack?: PortfolioTechStack;
   className?: string;
 }
 
 export const TechStackSection: React.FC<TechStackSectionProps> = ({
+  techStack = defaultPortfolioData.techStack,
   className = "",
 }) => {
+  const row1 = techStack?.row1 || defaultPortfolioData.techStack?.row1 || [];
+  const row2 = techStack?.row2 || defaultPortfolioData.techStack?.row2 || [];
+
   return (
     <section
       id="tech-stack"
@@ -96,80 +120,83 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-36 md:w-48 bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent z-10 pointer-events-none" />
 
         <div className="flex flex-col gap-4 sm:gap-6">
-          {/* Track 1: Gerak Kiri (Frontend & UI) */}
-          <div className="marquee-track flex w-max">
-            {/* Repeat 4 times to ensure seamless infinite looping */}
-            {[0, 1, 2, 3].map((groupIndex) => (
-              <div
-                key={`row1-group-${groupIndex}`}
-                className="marquee-group flex gap-3 sm:gap-4 pr-3 sm:pr-4"
-                aria-hidden={groupIndex > 0 ? "true" : undefined}
-              >
-                {ROW_1_TECHS.map((tech) => {
-                  const Icon = tech.icon;
-                  return (
-                    <div
-                      key={`r1-${tech.name}-${groupIndex}`}
-                      className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/40 shadow-xs hover:shadow-md transition-all duration-300 group select-none whitespace-nowrap cursor-default"
-                    >
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
-                        <Icon
-                          size={18}
-                          className="transition-transform duration-300 group-hover:scale-110"
-                          style={{ color: tech.color }}
-                        />
+          {/* Track 1: Gerak Kiri (Row 1) */}
+          {row1.length > 0 && (
+            <div className="marquee-track flex w-max">
+              {[0, 1, 2, 3].map((groupIndex) => (
+                <div
+                  key={`row1-group-${groupIndex}`}
+                  className="marquee-group flex gap-3 sm:gap-4 pr-3 sm:pr-4"
+                  aria-hidden={groupIndex > 0 ? "true" : undefined}
+                >
+                  {row1.map((tech, idx) => {
+                    const Icon = getTechIcon(tech);
+                    return (
+                      <div
+                        key={`r1-${tech.name}-${groupIndex}-${idx}`}
+                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/40 shadow-xs hover:shadow-md transition-all duration-300 group select-none whitespace-nowrap cursor-default"
+                      >
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
+                          <Icon
+                            size={18}
+                            className="transition-transform duration-300 group-hover:scale-110"
+                            style={{ color: tech.color || "#FF462E" }}
+                          />
+                        </div>
+                        <div className="flex flex-col items-start text-left">
+                          <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
+                            {tech.name}
+                          </span>
+                          <span className="text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
+                            {tech.category}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex flex-col items-start text-left">
-                        <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
-                          {tech.name}
-                        </span>
-                        <span className="text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
-                          {tech.category}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          )}
 
-          {/* Track 2: Gerak Kanan (Backend, Database & Tools) */}
-          <div className="marquee-track flex w-max">
-            {[0, 1, 2, 3].map((groupIndex) => (
-              <div
-                key={`row2-group-${groupIndex}`}
-                className="marquee-group group-right flex gap-3 sm:gap-4 pr-3 sm:pr-4"
-                aria-hidden={groupIndex > 0 ? "true" : undefined}
-              >
-                {ROW_2_TECHS.map((tech) => {
-                  const Icon = tech.icon;
-                  return (
-                    <div
-                      key={`r2-${tech.name}-${groupIndex}`}
-                      className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/40 shadow-xs hover:shadow-md transition-all duration-300 group select-none whitespace-nowrap cursor-default"
-                    >
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
-                        <Icon
-                          size={18}
-                          className="transition-transform duration-300 group-hover:scale-110"
-                          style={{ color: tech.color }}
-                        />
+          {/* Track 2: Gerak Kanan (Row 2) */}
+          {row2.length > 0 && (
+            <div className="marquee-track flex w-max">
+              {[0, 1, 2, 3].map((groupIndex) => (
+                <div
+                  key={`row2-group-${groupIndex}`}
+                  className="marquee-group group-right flex gap-3 sm:gap-4 pr-3 sm:pr-4"
+                  aria-hidden={groupIndex > 0 ? "true" : undefined}
+                >
+                  {row2.map((tech, idx) => {
+                    const Icon = getTechIcon(tech);
+                    return (
+                      <div
+                        key={`r2-${tech.name}-${groupIndex}-${idx}`}
+                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/40 shadow-xs hover:shadow-md transition-all duration-300 group select-none whitespace-nowrap cursor-default"
+                      >
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
+                          <Icon
+                            size={18}
+                            className="transition-transform duration-300 group-hover:scale-110"
+                            style={{ color: tech.color || "#FF462E" }}
+                          />
+                        </div>
+                        <div className="flex flex-col items-start text-left">
+                          <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
+                            {tech.name}
+                          </span>
+                          <span className="text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
+                            {tech.category}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex flex-col items-start text-left">
-                        <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
-                          {tech.name}
-                        </span>
-                        <span className="text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
-                          {tech.category}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
