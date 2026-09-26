@@ -1,56 +1,48 @@
-# Design Spec: Minimalist Editorial Magazine List for Blog & Articles (Option A)
+# Design Spec: Asymmetric Magazine Spread for Blog & Articles (Option B)
 
 - **Date:** 2026-09-26
-- **Status:** Approved
-- **Scope:** Redesign `frontend/src/components/organisms/BlogSection.tsx` from standard 3-column cards into a sleek, minimalist editorial magazine list matching Option A visual mockup.
+- **Status:** Approved by User (Option B chosen)
+- **Scope:** Redesign `frontend/src/components/organisms/BlogSection.tsx` into an Asymmetric Magazine Spread (1 Lead Story + 2 Stacked Cards) based on the visual mockup.
 
 ---
 
 ## 1. Problem & Motivation
-- The homepage currently showcases projects using browser mockup cards and magazine spreads.
-- Displaying blog posts as 3 standard cards creates visual monotony and redundancy (*"card fatigue"*).
-- An editorial list format provides a refreshing change in design rhythm, focusing on typography, intellectual clarity, and elegance.
+- Standard 3-column cards feel repetitive alongside the project showcases.
+- Option B introduces an asymmetric editorial hierarchy (*The Verge / Medium Featured style*):
+  - 1 Lead Flagship Article with cinematic visual impact.
+  - 2 Compact Stacked Stories for rapid scanning.
 
 ---
 
 ## 2. Visual Architecture & Component Breakdown
 
 ### 2.1 Section Header
-- Preserves the unified layout:
-  - Left: `SectionHeader` with eyebrow `— Insights & Writing`, title `Latest Articles` (Articles in sunset coral `#FF462E`), description.
-  - Right: `Button` linking to `/blog` with `variant="outline"` and `ArrowUpRight` icon.
+- Left: `SectionHeader` with eyebrow `— Insights & Writing`, title `Latest Articles` (Articles in sunset coral `#FF462E`), description.
+- Right: `Button` linking to `/blog` with `variant="outline"` and `ArrowUpRight` icon.
 
-### 2.2 Editorial Rows Container
-- Replaces `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3` with a vertical stack: `flex flex-col divide-y divide-[#ECE8DF] border-y border-[#ECE8DF]`.
+### 2.2 Asymmetric 12-Column Grid
+- `grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch`
 
-### 2.3 Individual Article Row (`<motion.article>`)
-Each item features:
-1. **Left Col (Index & Meta on desktop / compact on mobile)**:
-   - Monospace index: `01`, `02`, `03` (`font-mono text-xs sm:text-sm font-semibold text-[#888899]`).
-   - Publication date & read time badge: `Calendar` icon + formatted date, `Clock` icon + `5 min read`.
-2. **Center Col (Story Headline & Excerpt)**:
-   - Headline: `text-lg sm:text-xl md:text-2xl font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors line-clamp-2`.
-   - Excerpt: `text-xs sm:text-sm text-[#666672] line-clamp-2 mt-1.5 leading-relaxed`.
-   - Tags: Minimal tag badges (`Badge variant="subtle"`).
-3. **Right Col (Compact Thumbnail & Circular Action Arrow)**:
-   - Compact Thumbnail: `w-28 sm:w-36 h-20 sm:h-24 rounded-xl overflow-hidden shrink-0 border border-[#ECE8DF] bg-[#0F0F11]`.
-     - Supports `blog.coverImageUrl` with hover zoom effect (`group-hover:scale-105 transition-transform duration-500`).
-     - Elegant fallback graphic with `BookOpen` icon if cover image is empty.
-   - Circular Arrow Action Button: `w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#F5F2EB] group-hover:bg-[#FF462E] text-[#121214] group-hover:text-white flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-0.5`.
-4. **Interactive Hover State**:
-   - The entire row is wrapped in a clickable group link with smooth background highlight (`hover:bg-white/80 transition-colors duration-200 py-6 sm:py-8 px-3 sm:px-6 -mx-3 sm:-mx-6 rounded-2xl`).
+### 2.3 Lead Article (Left Column: 7 Cols)
+- **Container**: `lg:col-span-7 group relative bg-[#0F0F11] text-white rounded-3xl overflow-hidden border border-white/10 shadow-2xl min-h-[440px] sm:min-h-[500px] flex flex-col justify-end`.
+- **Cinematic Cover**:
+  - Full-bleed background image with subtle brightness/contrast treatment.
+  - Smooth multi-stop dark gradient overlay (`from-[#0F0F11] via-[#0F0F11]/60 to-transparent`).
+- **Overlaid Content**:
+  - Top: Tag pill badge in sunset coral `#FF462E` (`blog.tags[0]` or "Featured").
+  - Title: Large bold headline (`text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white group-hover:text-[#FF462E] transition-colors`).
+  - Excerpt: Concise 2-line snippet in `text-neutral-300`.
+  - Bottom Meta: Date, read time, and frosted circular arrow action button.
+
+### 2.4 Secondary Stacked Articles (Right Column: 5 Cols)
+- **Container**: `lg:col-span-5 flex flex-col gap-4 sm:gap-6 justify-between`.
+- **Secondary Cards** (`blogs.slice(1, 3)`):
+  - Card: `bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 flex-1`.
+  - Thumbnail: Modern rounded image frame (`w-full sm:w-36 h-36 sm:h-28 rounded-xl sm:rounded-2xl shrink-0 overflow-hidden`).
+  - Meta: Tag badge, date, bold title with hover coral transition, and read time.
 
 ---
 
 ## 3. Responsive Adaptations
-- **Mobile (360px–640px)**:
-  - Flex layout stacks smoothly: row displays index and date at top, followed by title and excerpt, with compact thumbnail and arrow row below or beside title. No horizontal overflow.
-- **Tablet (768px–1024px) & Desktop (1024px+)**:
-  - Horizontal expansive layout with index, content, thumbnail, and arrow button neatly aligned.
-
----
-
-## 4. Verification & Testing
-- `npx tsc --noEmit` in `frontend/` (0 errors).
-- Verify responsive rendering on `http://localhost:3000/`.
-- Ensure all article links route correctly to `/blog/[slug]`.
+- **Mobile (< 1024px)**: Single column stack, Lead story displays first as an engaging poster, followed by clean compact cards.
+- **Desktop (1024px+)**: 7:5 asymmetric split with matched height and strong visual anchor.
