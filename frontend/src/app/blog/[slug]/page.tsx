@@ -305,7 +305,7 @@ export default async function BlogDetail({
       />
 
       <main className="pt-8 pb-20 md:pb-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Navigation Button */}
           <div className="mb-8 flex items-center justify-between">
             <BackButton
@@ -320,7 +320,7 @@ export default async function BlogDetail({
           </div>
 
           {/* Article Header */}
-          <header className="mb-10">
+          <header className="mb-10 max-w-4xl">
             {/* Tags Row */}
             {blog.tags && blog.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
@@ -375,9 +375,9 @@ export default async function BlogDetail({
             </div>
           </header>
 
-          {/* Hero Cover Image */}
+          {/* Hero Cover Image (Full Width Cinematic) */}
           {coverImg ? (
-            <div className="w-full h-72 sm:h-96 rounded-3xl overflow-hidden mb-10 border border-[#ECE8DF] shadow-md bg-[#0F0F11]">
+            <div className="w-full h-80 sm:h-[460px] lg:h-[540px] rounded-3xl overflow-hidden mb-12 border border-[#ECE8DF] shadow-xl bg-[#0F0F11]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={coverImg}
@@ -386,70 +386,147 @@ export default async function BlogDetail({
               />
             </div>
           ) : (
-            <div className="w-full h-56 sm:h-64 rounded-3xl bg-gradient-to-br from-[#1A1A1E] to-[#0F0F11] border border-white/10 flex flex-col items-center justify-center text-center p-6 mb-10 relative overflow-hidden shadow-md">
-              <div className="w-14 h-14 rounded-2xl bg-[#FF462E]/20 border border-[#FF462E]/40 flex items-center justify-center text-[#FF462E] mb-3">
-                <BookOpen className="w-7 h-7" />
+            <div className="w-full h-64 sm:h-80 rounded-3xl bg-gradient-to-br from-[#1A1A1E] to-[#0F0F11] border border-white/10 flex flex-col items-center justify-center text-center p-6 mb-12 relative overflow-hidden shadow-xl">
+              <div className="w-16 h-16 rounded-2xl bg-[#FF462E]/20 border border-[#FF462E]/40 flex items-center justify-center text-[#FF462E] mb-3">
+                <BookOpen className="w-8 h-8" />
               </div>
-              <span className="text-sm font-bold text-white/90 uppercase tracking-widest">
-                Technical Insight
+              <span className="text-base font-bold text-white/90 uppercase tracking-widest">
+                Technical Insight & Case Study
               </span>
             </div>
           )}
 
-          {/* Article Body */}
-          <div className="bg-white/95 backdrop-blur-sm border border-[#ECE8DF] rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm mb-12">
-            {renderContent(blog.content)}
-          </div>
+          {/* Article Layout Grid (8 Cols Article + 4 Cols Sticky Sidebar) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-14">
+            {/* Main Article Body (8 Cols) */}
+            <div className="lg:col-span-8 bg-white/95 backdrop-blur-sm border border-[#ECE8DF] rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm">
+              {renderContent(blog.content)}
+            </div>
 
-          {/* Author Card Footer */}
-          <div className="bg-[#0F0F11] text-white rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            {profile.avatarUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={profile.avatarUrl}
-                alt={profile.name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-[#FF462E] flex-shrink-0"
-              />
-            )}
-            <div className="flex-1 text-center sm:text-left">
-              <div className="text-xs uppercase tracking-wider text-[#FF462E] font-bold mb-1">
-                Written by
+            {/* Sticky Sidebar (4 Cols) */}
+            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+              {/* Author Card */}
+              <div className="bg-[#0F0F11] text-white rounded-3xl p-6 sm:p-7 border border-white/10 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF462E]/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="relative z-10 flex items-start gap-4 mb-4">
+                  {profile.avatarUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={profile.avatarUrl}
+                      alt={profile.name}
+                      className="w-14 h-14 rounded-full object-cover border-2 border-[#FF462E] flex-shrink-0"
+                    />
+                  )}
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-[#FF462E] font-bold">
+                      Written by
+                    </div>
+                    <h4 className="text-lg font-bold">{profile.name}</h4>
+                    <p className="text-xs text-[#A0A0B8]">{profile.title}</p>
+                  </div>
+                </div>
+                <p className="relative z-10 text-xs sm:text-sm text-[#A0A0B8] leading-relaxed mb-5">
+                  {profile.bio}
+                </p>
+                <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
+                  <Link
+                    href="/#about"
+                    className="font-semibold text-[#FF462E] hover:underline"
+                  >
+                    Tentang Penulis →
+                  </Link>
+                  <Link
+                    href="/#contact"
+                    className="font-semibold text-white/70 hover:text-white hover:underline"
+                  >
+                    Hubungi Saya →
+                  </Link>
+                </div>
               </div>
-              <h4 className="text-lg font-bold">{profile.name}</h4>
-              <p className="text-xs sm:text-sm text-[#A0A0B8] mt-1 line-clamp-2">
-                {profile.bio}
-              </p>
-              <div className="mt-4 flex flex-wrap justify-center sm:justify-start gap-3">
-                <Link
-                  href="/#about"
-                  className="text-xs font-semibold text-[#FF462E] hover:underline"
-                >
-                  About the Author →
-                </Link>
+
+              {/* Quick Article Info & Share Card */}
+              <div className="bg-white/90 border border-[#ECE8DF] rounded-3xl p-6 shadow-xs">
+                <h5 className="text-xs font-bold uppercase tracking-wider text-[#888899] mb-3">
+                  Informasi Artikel
+                </h5>
+                <div className="space-y-3 text-xs text-[#4A4A57]">
+                  <div className="flex justify-between py-1.5 border-b border-[#ECE8DF]">
+                    <span className="text-[#888899]">Dipublikasikan</span>
+                    <span className="font-semibold text-[#121214]">{formattedDate}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-[#ECE8DF]">
+                    <span className="text-[#888899]">Estimasi Baca</span>
+                    <span className="font-semibold text-[#121214]">{blog.readTime || 5} Menit</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-[#ECE8DF]">
+                    <span className="text-[#888899]">Kategori</span>
+                    <span className="font-semibold text-[#FF462E]">Engineering & Web</span>
+                  </div>
+                </div>
+
+                {blog.tags && blog.tags.length > 0 && (
+                  <div className="mt-4 pt-3">
+                    <span className="text-[11px] font-bold text-[#888899] block mb-2">
+                      Topik Terkait:
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {blog.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="px-2.5 py-1 rounded-full bg-[#F5F2EB] text-[#4A4A57] text-[11px] font-medium"
+                        >
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Consultation / Work with me Card */}
+              <div className="rounded-3xl p-6 bg-gradient-to-br from-[#FFF1EE] to-white border border-[#FF462E]/20 shadow-xs">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#FF462E] block mb-1">
+                  Kolaborasi & Konsultasi
+                </span>
+                <h5 className="text-sm font-bold text-[#121214] mb-2">
+                  Punya proyek web yang ingin dibangun?
+                </h5>
+                <p className="text-xs text-[#666672] leading-relaxed mb-4">
+                  Saya terbuka untuk kerja sama pengembangan aplikasi skala penuh maupun konsultasi arsitektur.
+                </p>
                 <Link
                   href="/#contact"
-                  className="text-xs font-semibold text-white/70 hover:text-white hover:underline"
+                  className="inline-flex items-center justify-center w-full px-4 py-2 rounded-full bg-[#FF462E] hover:bg-[#E63B24] text-white text-xs font-semibold shadow-xs transition-all"
                 >
-                  Get in Touch →
+                  Mulai Diskusi Proyek
                 </Link>
               </div>
-            </div>
+            </aside>
           </div>
 
           {/* Bottom Navigation & Call to Action */}
-          <div className="pt-4 border-t border-[#ECE8DF] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="pt-6 border-t border-[#ECE8DF] flex flex-col sm:flex-row items-center justify-between gap-4">
             <BackButton
               href="/#blog"
               label={lang === "en" ? "Back to All Articles" : "Kembali ke Semua Artikel"}
               sublabel={lang === "en" ? "Explore More" : "Eksplorasi Lainnya"}
             />
-            <Button
-              href="/#projects"
-              variant="outline"
-              size="sm"
-            >
-              {lang === "en" ? "Explore Case Studies" : "Eksplorasi Studi Kasus"}
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                href="/#projects"
+                variant="outline"
+                size="sm"
+              >
+                {lang === "en" ? "Explore Case Studies" : "Eksplorasi Studi Kasus"}
+              </Button>
+              <Button
+                href="/#contact"
+                variant="primary"
+                size="sm"
+              >
+                {lang === "en" ? "Get in Touch" : "Hubungi Saya"}
+              </Button>
+            </div>
           </div>
         </div>
       </main>
