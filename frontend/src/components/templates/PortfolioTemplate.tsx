@@ -57,7 +57,7 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
   }, []);
   return (
     <div
-      className={`min-h-screen bg-[#FDFBF7] bg-grid-canvas text-[#121214] font-sans antialiased relative selection:bg-[#FF462E] selection:text-white overflow-x-hidden ${className}`}
+      className={`min-h-screen bg-[#FDFBF7] bg-grid-canvas text-[#121214] font-sans antialiased relative selection:bg-[#FF462E] selection:text-white overflow-x-clip ${className}`}
     >
       {/* Fixed / Sticky Navigation Bar */}
       <Navbar profile={profile} />
