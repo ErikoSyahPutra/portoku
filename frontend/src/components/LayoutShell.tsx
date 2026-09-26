@@ -8,8 +8,13 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/";
+  const isCustomShell =
+    isHome ||
+    isAdmin ||
+    pathname.startsWith("/blog") ||
+    pathname.startsWith("/projects");
 
-  if (isAdmin || isHome) {
+  if (isCustomShell) {
     return <>{children}</>;
   }
 

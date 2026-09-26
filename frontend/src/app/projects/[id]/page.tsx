@@ -1,14 +1,22 @@
 export const dynamic = "force-dynamic";
 
-import { api } from "@/lib/api";
+import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-  HiOutlineGlobeAlt,
-  HiOutlineCodeBracket,
-  HiOutlineComputerDesktop,
-} from "react-icons/hi2";
+  Globe,
+  Github,
+  ArrowLeft,
+  ArrowUpRight,
+  Sparkles,
+  Layers,
+  Laptop,
+} from "lucide-react";
+import { api } from "@/lib/api";
+import { Navbar, ContactSection } from "@/components/organisms";
+import { Badge, Button } from "@/components/atoms";
+import { defaultPortfolioData } from "@/data/portfolioData";
 
 function getAbsoluteImageUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -16,15 +24,42 @@ function getAbsoluteImageUrl(url?: string): string | undefined {
   return `https://erikosyah.my.id${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
-export async function generateMetadata(
-  { params, searchParams }: {
-    params: Promise<{ id: string }>;
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+const BACKEND =
+  process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+
+function resolveImg(url?: string) {
+  if (!url) return null;
+  return url.startsWith("http") ? url : `${BACKEND}${url}`;
+}
+
+function formatUrl(url?: string): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("mailto:") ||
+    trimmed.startsWith("tel:") ||
+    trimmed.startsWith("/")
+  ) {
+    return trimmed;
   }
-): Promise<Metadata> {
+  return `https://${trimmed}`;
+}
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
   const { id } = await params;
   const resolvedSearchParams = await searchParams;
-  const lang = typeof resolvedSearchParams.lang === "string" ? resolvedSearchParams.lang : "id";
+  const lang =
+    typeof resolvedSearchParams.lang === "string"
+      ? resolvedSearchParams.lang
+      : "id";
 
   try {
     const project = await api.getProject(Number(id), lang);
@@ -33,7 +68,7 @@ export async function generateMetadata(
     const ogImage = getAbsoluteImageUrl(project.imageUrl);
 
     return {
-      title: `${project.title} | Projects`,
+      title: `${project.title} | Eriko Syah Putra`,
       description: project.description,
       keywords: project.technologies?.join(", "),
       openGraph: {
@@ -48,13 +83,6 @@ export async function generateMetadata(
         title: project.title,
         description: project.description,
         images: ogImage ? [ogImage] : [],
-      },
-      alternates: {
-        canonical: `https://erikosyah.my.id/projects/${id}`,
-        languages: {
-          "id-ID": `https://erikosyah.my.id/projects/${id}?lang=id`,
-          "en-US": `https://erikosyah.my.id/projects/${id}?lang=en`,
-        },
       },
     };
   } catch {
@@ -71,55 +99,95 @@ export default async function ProjectDetail({
 }) {
   const { id } = await params;
   const resolvedSearchParams = await searchParams;
-  const lang = typeof resolvedSearchParams.lang === "string" ? resolvedSearchParams.lang : "id";
+  const lang =
+    typeof resolvedSearchParams.lang === "string"
+      ? resolvedSearchParams.lang
+      : "id";
 
   let project;
+  let profile = defaultPortfolioData.profile;
+
   try {
-    project = await api.getProject(Number(id), lang);
+    const [projectRes, profileRes] = await Promise.allSettled([
+      api.getProject(Number(id), lang),
+      api.getProfile(lang),
+    ]);
+
+    if (projectRes.status === "fulfilled") project = projectRes.value;
+    if (profileRes.status === "fulfilled" && profileRes.value) {
+      profile = {
+        ...defaultPortfolioData.profile,
+        name: profileRes.value.name || defaultPortfolioData.profile.name,
+        title: profileRes.value.title || defaultPortfolioData.profile.title,
+        avatarUrl:
+          resolveImg(profileRes.value.avatarUrl) ||
+          defaultPortfolioData.profile.avatarUrl,
+        email: profileRes.value.email || defaultPortfolioData.profile.email,
+        githubUrl:
+          profileRes.value.githubUrl || defaultPortfolioData.profile.githubUrl,
+        linkedinUrl:
+          profileRes.value.linkedinUrl ||
+          defaultPortfolioData.profile.linkedinUrl,
+      };
+    }
   } catch {
     notFound();
   }
-  if (!project) notFound();
 
-  const BACKEND = "http://localhost:3001";
-  const pImg = project.imageUrl
-    ? project.imageUrl.startsWith("http") ? project.imageUrl : `${BACKEND}${project.imageUrl}`
-    : null;
-
-  function formatUrl(url?: string): string {
-    if (!url) return "";
-    const trimmed = url.trim();
-    if (
-      trimmed.startsWith("http://") ||
-      trimmed.startsWith("https://") ||
-      trimmed.startsWith("mailto:") ||
-      trimmed.startsWith("tel:") ||
-      trimmed.startsWith("/")
-    ) {
-      return trimmed;
+  // Fallback to sample project from dummy data if not found in backend
+  if (!project) {
+    const fallbackProj = defaultPortfolioData.projects.find(
+      (p) => String(p.id) === String(id)
+    );
+    if (fallbackProj) {
+      project = {
+        id: Number(fallbackProj.id),
+        title: fallbackProj.title,
+        description: fallbackProj.description,
+        category: fallbackProj.category,
+        technologies: fallbackProj.tags,
+        imageUrl: fallbackProj.imageUrl,
+        liveUrl: fallbackProj.liveUrl,
+        githubUrl: fallbackProj.githubUrl,
+        figmaUrl: undefined,
+        behanceUrl: undefined,
+        content: undefined,
+        featured: fallbackProj.featured,
+        order: 1,
+      };
+    } else {
+      notFound();
     }
-    return `https://${trimmed}`;
   }
 
+  const pImg = resolveImg(project.imageUrl);
+
+  // Markdown inline parser
   const parseInlineMarkdown = (text: string) => {
     const parts: React.ReactNode[] = [];
     let currentIdx = 0;
-    
-    // Regex matching either **bold**, *italic*, or [text](url)
     const regex = /(\*\*(.*?)\*\*|\*(.*?)\*|\[(.*?)\]\((.*?)\))/g;
     let match;
-    
+
     while ((match = regex.exec(text)) !== null) {
       const matchIndex = match.index;
-      
+
       if (matchIndex > currentIdx) {
         parts.push(text.substring(currentIdx, matchIndex));
       }
-      
+
       if (match[0].startsWith("**")) {
-        parts.push(<strong key={matchIndex} style={{ color: "var(--text-primary)", fontWeight: 600 }}>{match[2]}</strong>);
+        parts.push(
+          <strong key={matchIndex} className="font-bold text-[#121214]">
+            {match[2]}
+          </strong>
+        );
       } else if (match[0].startsWith("*")) {
-        parts.push(<em key={matchIndex} style={{ fontStyle: "italic" }}>{match[3]}</em>);
+        parts.push(
+          <em key={matchIndex} className="italic text-[#121214]">
+            {match[3]}
+          </em>
+        );
       } else {
         parts.push(
           <a
@@ -127,50 +195,116 @@ export default async function ProjectDetail({
             href={match[5]}
             target="_blank"
             rel="noreferrer"
-            style={{ color: "var(--color-primary, #3b82f6)", textDecoration: "underline" }}
+            className="text-[#FF462E] hover:underline font-semibold"
           >
             {match[4]}
           </a>
         );
       }
-      
+
       currentIdx = regex.lastIndex;
     }
-    
+
     if (currentIdx < text.length) {
       parts.push(text.substring(currentIdx));
     }
-    
+
     return parts.length > 0 ? parts : text;
   };
 
-  // Simple markdown-like rendering
   const renderContent = (content: string) => {
     return content.split("\n").map((line, i) => {
-      // Check block-level image
       const imgMatch = line.match(/^\s*!\[(.*?)\]\((.*?)\)\s*$/);
       if (imgMatch) {
         return (
-          <div key={i} style={{ margin: "24px 0", borderRadius: 12, overflow: "hidden", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", padding: 8 }}>
+          <div
+            key={i}
+            className="my-8 rounded-2xl overflow-hidden border border-[#ECE8DF] bg-[#0F0F11] p-2 shadow-md"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imgMatch[2]} alt={imgMatch[1] || "Project Image"} style={{ maxWidth: "100%", height: "auto", display: "block", margin: "0 auto", borderRadius: 8 }} />
+            <img
+              src={imgMatch[2]}
+              alt={imgMatch[1] || "Project Image"}
+              className="max-w-full h-auto mx-auto rounded-xl"
+            />
           </div>
         );
       }
 
-      if (line.startsWith("### ")) return <h3 key={i} style={{ marginTop: 24, marginBottom: 12, color: "var(--text-primary)" }}>{parseInlineMarkdown(line.slice(4))}</h3>;
-      if (line.startsWith("## ")) return <h2 key={i} style={{ marginTop: 32, marginBottom: 16, color: "var(--text-primary)" }}>{parseInlineMarkdown(line.slice(3))}</h2>;
-      if (line.startsWith("# ")) return <h1 key={i} style={{ marginTop: 40, marginBottom: 20, color: "var(--text-primary)" }}>{parseInlineMarkdown(line.slice(2))}</h1>;
-      if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} style={{ marginLeft: 16, marginBottom: 8 }}>{parseInlineMarkdown(line.slice(2))}</li>;
-      if (line.match(/^\d+\.\s/)) return <li key={i} style={{ marginLeft: 16, marginBottom: 8 }}>{parseInlineMarkdown(line.replace(/^\d+\.\s/, ""))}</li>;
+      if (line.startsWith("### ")) {
+        return (
+          <h3
+            key={i}
+            className="text-lg sm:text-xl font-bold text-[#121214] mt-8 mb-3 tracking-tight flex items-center gap-2"
+          >
+            <span className="w-1.5 h-4 bg-[#FF462E] rounded-full inline-block" />
+            {parseInlineMarkdown(line.slice(4))}
+          </h3>
+        );
+      }
+      if (line.startsWith("## ")) {
+        return (
+          <h2
+            key={i}
+            className="text-xl sm:text-2xl font-bold text-[#121214] mt-10 mb-4 tracking-tight"
+          >
+            {parseInlineMarkdown(line.slice(3))}
+          </h2>
+        );
+      }
+      if (line.startsWith("# ")) {
+        return (
+          <h1
+            key={i}
+            className="text-2xl sm:text-3xl font-extrabold text-[#121214] mt-12 mb-5 tracking-tight"
+          >
+            {parseInlineMarkdown(line.slice(2))}
+          </h1>
+        );
+      }
+      if (line.startsWith("- ") || line.startsWith("* ")) {
+        return (
+          <li
+            key={i}
+            className="flex items-start gap-2.5 text-sm sm:text-base text-[#4A4A57] leading-relaxed mb-2.5 pl-2"
+          >
+            <span className="w-2 h-2 rounded-full bg-[#FF462E] mt-2 flex-shrink-0" />
+            <span>{parseInlineMarkdown(line.slice(2))}</span>
+          </li>
+        );
+      }
+      if (line.match(/^\d+\.\s/)) {
+        return (
+          <li
+            key={i}
+            className="flex items-start gap-2.5 text-sm sm:text-base text-[#4A4A57] leading-relaxed mb-2.5 pl-2"
+          >
+            <span className="w-5 h-5 rounded-full bg-[#FFF1EE] text-[#FF462E] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+              {line.match(/^\d+/)?.[0]}
+            </span>
+            <span>{parseInlineMarkdown(line.replace(/^\d+\.\s/, ""))}</span>
+          </li>
+        );
+      }
       if (line.startsWith("```")) return null;
-      if (line.trim() === "") return <br key={i} />;
-      return <p key={i} style={{ marginBottom: 16 }}>{parseInlineMarkdown(line)}</p>;
+      if (line.trim() === "") return <div key={i} className="h-4" />;
+      return (
+        <p
+          key={i}
+          className="text-sm sm:text-base text-[#4A4A57] leading-relaxed mb-5"
+        >
+          {parseInlineMarkdown(line)}
+        </p>
+      );
     });
   };
 
   return (
-    <div className="project-detail">
+    <div className="min-h-screen bg-[#FDFBF7] bg-grid-canvas text-[#121214] font-sans antialiased relative selection:bg-[#FF462E] selection:text-white overflow-x-clip">
+      {/* Sticky Modern Navbar */}
+      <Navbar profile={profile} />
+
+      {/* Structured SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -185,60 +319,154 @@ export default async function ProjectDetail({
             url: `https://erikosyah.my.id/projects/${id}`,
             author: {
               "@type": "Person",
-              name: "Eriko Syah Putra Friyadi",
+              name: profile.name,
               url: "https://erikosyah.my.id",
             },
           }),
         }}
       />
-      <div className="container">
-        <div className="project-detail-content">
-          <Link href={`/?lang=${lang}#projects`} className="btn btn-secondary" style={{ marginBottom: 32, padding: "8px 16px", fontSize: "0.85rem", display: "inline-flex", alignItems: "center", gap: 8 }}>
-            {lang === "en" ? "← Back to Projects" : "← Kembali ke Proyek"}
-          </Link>
-          
-          <div className="project-detail-header" style={{ marginBottom: 40 }}>
-            <h1 className="gradient-text" style={{ fontSize: "2.5rem", marginBottom: 16 }}>{project.title}</h1>
-            <div className="project-techs" style={{ marginBottom: 24, display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {project.technologies?.map((t) => (
-                <span className="tech-tag" key={t} style={{ fontSize: "0.85rem" }}>{t}</span>
-              ))}
-            </div>
 
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {project.liveUrl && (
-                <a href={formatUrl(project.liveUrl)} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  <HiOutlineGlobeAlt size={16} /> {lang === "en" ? "Live Demo" : "Demo Langsung"}
-                </a>
-              )}
-              {project.githubUrl && (
-                <a href={formatUrl(project.githubUrl)} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  <HiOutlineCodeBracket size={16} /> {lang === "en" ? "Source Code" : "Kode Sumber"}
-                </a>
-              )}
-            </div>
+      <main className="pt-8 pb-20 md:pb-28">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Back Button */}
+          <div className="mb-8">
+            <Button
+              href="/#projects"
+              variant="outline"
+              icon={<ArrowLeft className="w-4 h-4" />}
+              iconPosition="left"
+              size="sm"
+            >
+              {lang === "en" ? "Back to Projects" : "Kembali ke Proyek"}
+            </Button>
           </div>
 
+          {/* Project Header */}
+          <header className="mb-10">
+            {/* Category Eyebrow */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF1EE] text-[#FF462E] text-xs font-bold uppercase tracking-wider mb-4">
+              <Layers className="w-3.5 h-3.5" />
+              <span>{project.category || "Featured Case Study"}</span>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#121214] tracking-tight leading-tight mb-4">
+              {project.title}
+            </h1>
+
+            {/* Description */}
+            <p className="text-base sm:text-lg text-[#666672] leading-relaxed max-w-3xl mb-6">
+              {project.description}
+            </p>
+
+            {/* Technologies Pills */}
+            {project.technologies && project.technologies.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-8">
+                {project.technologies.map((tech: string, idx: number) => (
+                  <Badge key={idx} variant="subtle">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Action Links Buttons */}
+            <div className="flex flex-wrap gap-3.5 items-center">
+              {project.liveUrl && (
+                <Button
+                  href={formatUrl(project.liveUrl)}
+                  variant="primary"
+                  icon={<Globe className="w-4 h-4" />}
+                  size="md"
+                >
+                  {lang === "en" ? "Live Demo" : "Lihat Demo"}
+                </Button>
+              )}
+
+              {project.githubUrl && (
+                <Button
+                  href={formatUrl(project.githubUrl)}
+                  variant="outline"
+                  icon={<Github className="w-4 h-4" />}
+                  size="md"
+                >
+                  {lang === "en" ? "Source Code" : "Lihat Kode"}
+                </Button>
+              )}
+
+              {project.figmaUrl && (
+                <Button
+                  href={formatUrl(project.figmaUrl)}
+                  variant="dark"
+                  icon={<ArrowUpRight className="w-4 h-4" />}
+                  size="md"
+                >
+                  Figma Prototype
+                </Button>
+              )}
+            </div>
+          </header>
+
+          {/* Project Featured Image / Mockup Display */}
           {pImg ? (
-            <div style={{ width: "100%", maxHeight: "500px", borderRadius: 16, overflow: "hidden", border: "1px solid var(--border-color)", marginBottom: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={pImg} alt={project.title} style={{ width: "100%", height: "100%", maxHeight: "500px", objectFit: "cover", display: "block" }} />
+            <div className="w-full rounded-3xl overflow-hidden border border-[#ECE8DF] bg-white shadow-xl mb-12 relative group">
+              {/* Browser-style Top Bar Header */}
+              <div className="h-10 bg-[#F5F2EB] border-b border-[#ECE8DF] px-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+                <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+                <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                <span className="ml-3 text-xs text-[#888899] font-mono truncate max-w-xs sm:max-w-md">
+                  {project.liveUrl || `https://erikosyah.my.id/projects/${id}`}
+                </span>
+              </div>
+
+              {/* Main Image */}
+              <div className="max-h-[580px] overflow-hidden bg-[#0F0F11]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={pImg}
+                  alt={project.title}
+                  className="w-full h-auto object-cover object-top"
+                />
+              </div>
             </div>
           ) : (
-            <div style={{ width: "100%", height: "300px", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--accent-glow)", border: "1px solid var(--border-color)", color: "var(--accent-secondary)", marginBottom: 40 }}>
-              <HiOutlineComputerDesktop size={64} />
+            <div className="w-full h-72 rounded-3xl bg-[#0F0F11] border border-white/10 flex flex-col items-center justify-center text-white mb-12 shadow-lg">
+              <Laptop className="w-12 h-12 text-[#FF462E] mb-3" />
+              <span className="text-sm font-semibold tracking-wide">
+                Project Showcase Preview
+              </span>
             </div>
           )}
 
-          <div style={{ fontSize: "1.1rem", lineHeight: "1.75", color: "var(--text-secondary)" }}>
+          {/* Detailed Project Story / Case Study Content */}
+          <div className="bg-white/95 backdrop-blur-sm border border-[#ECE8DF] rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm mb-12">
+            <div className="border-b border-[#ECE8DF] pb-4 mb-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#121214] flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-[#FF462E]" />
+                <span>Project Case Study & Overview</span>
+              </h2>
+            </div>
+
             {project.content ? (
-              renderContent(project.content)
+              <div className="prose-container">{renderContent(project.content)}</div>
             ) : (
-              <p>{project.description}</p>
+              <div className="space-y-4 text-base text-[#4A4A57] leading-relaxed">
+                <p>{project.description}</p>
+                <p>
+                  Proyek ini dibangun dengan memadukan estetika UI/UX tingkat tinggi
+                  serta arsitektur kode modern yang modular dan skalabel. Menawarkan
+                  pengalaman interaktif yang intuitif, waktu respons cepat, serta
+                  keamanan data yang andal.
+                </p>
+              </div>
             )}
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Global Contact Section */}
+      <ContactSection profile={profile} />
     </div>
   );
 }
