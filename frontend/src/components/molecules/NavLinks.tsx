@@ -13,6 +13,7 @@ export const defaultNavItems: NavItem[] = [
   { label: "Home", href: "#hero" },
   { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
+  { label: "Tech Stack", href: "#tech-stack" },
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
   { label: "Blog", href: "#blog" },

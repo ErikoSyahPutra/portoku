@@ -7,6 +7,7 @@ import {
   MarqueeTicker,
   ServicesSection,
   AboutSection,
+  TechStackSection,
   ExperienceEducationSection,
   ProjectsSection,
   BlogSection,
@@ -79,6 +80,9 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
 
         {/* About Eriko Section with Photo, Bio & Experience/Education Stats */}
         <AboutSection profile={profile} />
+
+        {/* Technologies & Tools Dual-Track Moving Marquee (placed directly above projects) */}
+        <TechStackSection />
 
         {/* Featured Projects with Dynamic Category Filter & Interactive Cards */}
         <ProjectsSection projects={projects} />

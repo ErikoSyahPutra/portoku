@@ -23,3 +23,7 @@ export { default as ExperienceEducationSection } from "./ExperienceEducationSect
 
 export { BlogSection } from "./BlogSection";
 export type { BlogSectionProps } from "./BlogSection";
+
+export { TechStackSection } from "./TechStackSection";
+export type { TechStackSectionProps } from "./TechStackSection";
+
