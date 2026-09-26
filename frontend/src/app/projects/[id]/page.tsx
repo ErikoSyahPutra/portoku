@@ -28,9 +28,18 @@ function getAbsoluteImageUrl(url?: string): string | undefined {
 const BACKEND =
   process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
 
-function resolveImg(url?: string) {
-  if (!url) return null;
-  return url.startsWith("http") ? url : `${BACKEND}${url}`;
+function resolveImg(url?: string | null): string | null {
+  if (!url || !url.trim()) return null;
+  const trimmed = url.trim();
+  const fullUrl =
+    trimmed.startsWith("http://") || trimmed.startsWith("https://")
+      ? trimmed
+      : `${BACKEND}${trimmed.startsWith("/") ? "" : "/"}${trimmed}`;
+  if (fullUrl.includes("ik.imagekit.io") && !fullUrl.includes("tr=")) {
+    const separator = fullUrl.includes("?") ? "&" : "?";
+    return `${fullUrl}${separator}tr=w-1200,q-85,f-auto`;
+  }
+  return fullUrl;
 }
 
 function formatUrl(url?: string): string {
@@ -66,7 +75,14 @@ export async function generateMetadata({
     const project = await api.getProject(Number(id), lang);
     if (!project) return {};
 
-    const ogImage = getAbsoluteImageUrl(project.imageUrl);
+    const matchedDefault = defaultPortfolioData.projects.find(
+      (p) =>
+        String(p.id) === String(id) ||
+        (project?.title && p.title.toLowerCase().trim() === project.title.toLowerCase().trim())
+    );
+
+    const projectImg = resolveImg(project.imageUrl) || matchedDefault?.imageUrl;
+    const ogImage = getAbsoluteImageUrl(projectImg || undefined);
 
     return {
       title: `${project.title} | Eriko Syah Putra`,
@@ -161,7 +177,18 @@ export default async function ProjectDetail({
     }
   }
 
-  const pImg = resolveImg(project.imageUrl);
+  // Match fallback project from dummy data by ID or Title so image is 100% synchronized with homepage cards
+  const matchedDefault = defaultPortfolioData.projects.find(
+    (p) =>
+      String(p.id) === String(id) ||
+      (project?.title && p.title.toLowerCase().trim() === project.title.toLowerCase().trim())
+  );
+
+  const rawImg = resolveImg(project.imageUrl);
+  const pImg =
+    rawImg ||
+    matchedDefault?.imageUrl ||
+    defaultPortfolioData.projects[0].imageUrl;
 
   // Markdown inline parser
   const parseInlineMarkdown = (text: string) => {

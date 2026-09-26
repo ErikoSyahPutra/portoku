@@ -149,6 +149,9 @@ export default async function Home({
               : ["Web"],
           imageUrl:
             resolveImgUrl(p.imageUrl) ||
+            defaultPortfolioData.projects.find(
+              (dp) => dp.title.toLowerCase().trim() === p.title.toLowerCase().trim()
+            )?.imageUrl ||
             defaultPortfolioData.projects[idx % defaultPortfolioData.projects.length]
               ?.imageUrl ||
             defaultPortfolioData.projects[0].imageUrl,

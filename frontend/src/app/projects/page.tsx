@@ -92,6 +92,9 @@ export default async function ProjectsPage({
               : ["Web"],
           imageUrl:
             resolveImg(p.imageUrl) ||
+            defaultPortfolioData.projects.find(
+              (dp) => dp.title.toLowerCase().trim() === p.title.toLowerCase().trim()
+            )?.imageUrl ||
             defaultPortfolioData.projects[idx % defaultPortfolioData.projects.length]?.imageUrl ||
             defaultPortfolioData.projects[0].imageUrl,
           liveUrl: p.liveUrl || undefined,
