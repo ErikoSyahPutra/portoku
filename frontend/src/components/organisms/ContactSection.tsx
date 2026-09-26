@@ -149,7 +149,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 websiteUrl={profile.websiteUrl}
                 email={profile.email}
                 size="md"
-                variant="dark"
+                variant="white"
               />
             </div>
           </div>

@@ -23,10 +23,16 @@ export interface SocialMediaGroupProps {
   className?: string;
 }
 
+const sizeClasses: Record<"sm" | "md" | "lg", string> = {
+  sm: "w-8 h-8 text-xs",
+  md: "w-10 h-10 text-sm",
+  lg: "w-12 h-12 text-base",
+};
+
 const variantStyles: Record<"dark" | "outline" | "white", string> = {
-  dark: "bg-[#0F0F11] text-white hover:bg-[#FF462E] hover:text-white border border-white/10 hover:border-transparent shadow-sm",
-  outline: "bg-white/80 text-[#0F0F11] hover:bg-[#FF462E] hover:text-white border border-black/10 hover:border-transparent shadow-sm",
-  white: "bg-white text-[#0F0F11] hover:bg-[#FF462E] hover:text-white border border-neutral-200/80 hover:border-transparent shadow-sm",
+  dark: "bg-white/10 text-white hover:bg-[#FF462E] hover:text-white border border-white/15 hover:border-transparent shadow-sm",
+  outline: "bg-white/90 text-[#0F0F11] hover:bg-[#FF462E] hover:text-white border border-black/10 hover:border-transparent shadow-sm",
+  white: "bg-white text-[#0F0F11] hover:bg-[#FF462E] hover:text-white border border-black/5 hover:border-transparent shadow-md",
 };
 
 export const SocialMediaGroup: React.FC<SocialMediaGroupProps> = ({
@@ -35,7 +41,7 @@ export const SocialMediaGroup: React.FC<SocialMediaGroupProps> = ({
   websiteUrl = "https://erikosyah.my.id",
   email = "erikosyahputra@gmail.com",
   size = "md",
-  variant = "dark",
+  variant = "white",
   customLinks,
   className = "",
 }) => {
@@ -97,17 +103,15 @@ export const SocialMediaGroup: React.FC<SocialMediaGroupProps> = ({
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.15 }}
           >
-            <Button
-              variant="icon-circle"
-              size={size}
+            <a
               href={link.url}
               target={isMailto ? undefined : "_blank"}
               rel={isMailto ? undefined : "noreferrer noopener"}
-              ariaLabel={link.ariaLabel || link.name}
-              className={`transition-all duration-200 ${variantStyles[variant]}`}
+              aria-label={link.ariaLabel || link.name}
+              className={`inline-flex items-center justify-center rounded-full select-none cursor-pointer transition-all duration-200 active:scale-95 ${sizeClasses[size]} ${variantStyles[variant]}`}
             >
               {link.icon}
-            </Button>
+            </a>
           </motion.div>
         );
       })}
