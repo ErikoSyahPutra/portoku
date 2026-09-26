@@ -13,11 +13,15 @@ import { defaultPortfolioData } from "@/data/portfolioData";
 export interface ProjectsSectionProps {
   projects?: PortfolioProject[];
   className?: string;
+  limit?: number;
+  showDiscoveryCard?: boolean;
 }
 
 export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   projects = defaultPortfolioData.projects,
   className = "",
+  limit = 3,
+  showDiscoveryCard = true,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
@@ -42,6 +46,14 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     if (!featuredProject) return [];
     return filteredProjects.filter((p) => p.id !== featuredProject.id);
   }, [filteredProjects, featuredProject]);
+
+  // Curated alternating list based on limit
+  const displayedAlternating = useMemo(() => {
+    if (limit && limit > 0) {
+      return alternatingProjects.slice(0, Math.max(0, limit - 1));
+    }
+    return alternatingProjects;
+  }, [alternatingProjects, limit]);
 
   return (
     <section
@@ -246,7 +258,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         {/* ======================================================== */}
         <div className="space-y-10 sm:space-y-14">
           <AnimatePresence>
-            {alternatingProjects.map((project, idx) => {
+            {displayedAlternating.map((project, idx) => {
               const isEven = idx % 2 === 1;
               const detailUrl = `/projects/${project.id}`;
 
@@ -346,27 +358,29 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         </div>
 
         {/* Bottom Catalog Discovery Card */}
-        <div className="pt-8 text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-4 sm:px-8 sm:py-5 rounded-3xl bg-white border border-[#ECE8DF] shadow-xs">
-            <div className="text-left">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#FF462E] block">
-                Arsip Proyek Lengkap
-              </span>
-              <span className="text-sm font-semibold text-[#121214]">
-                Tertarik melihat seluruh eksperimen dan arsitektur kode lainnya?
-              </span>
+        {showDiscoveryCard && projects.length > (limit || 3) && (
+          <div className="pt-8 text-center">
+            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 p-4 sm:px-8 sm:py-5 rounded-3xl bg-white border border-[#ECE8DF] shadow-xs">
+              <div className="text-left">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#FF462E] block">
+                  Katalog Direktori Proyek ({projects.length} Total)
+                </span>
+                <span className="text-sm font-semibold text-[#121214]">
+                  Tertarik melihat seluruh eksperimen dan arsitektur kode lainnya?
+                </span>
+              </div>
+              <Button
+                href="/projects"
+                variant="primary"
+                size="md"
+                icon={<ArrowUpRight size={15} />}
+                iconPosition="right"
+              >
+                Lihat Semua Proyek ({projects.length})
+              </Button>
             </div>
-            <Button
-              href="/projects"
-              variant="primary"
-              size="md"
-              icon={<ArrowUpRight size={15} />}
-              iconPosition="right"
-            >
-              Buka Katalog Direktori
-            </Button>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

@@ -129,7 +129,11 @@ export default async function ProjectsPage({
           </div>
 
           {/* Full Projects Section with Category Filtering */}
-          <ProjectsSection projects={mappedProjects} />
+          <ProjectsSection
+            projects={mappedProjects}
+            limit={0}
+            showDiscoveryCard={false}
+          />
         </div>
       </main>
 
