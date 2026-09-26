@@ -115,7 +115,6 @@ export default async function ProjectsPage({
             <BackButton
               href="/"
               label={lang === "en" ? "Back to Home" : "Kembali ke Beranda"}
-              sublabel={lang === "en" ? "Navigation" : "Navigasi"}
             />
           </div>
 

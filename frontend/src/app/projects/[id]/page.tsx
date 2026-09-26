@@ -361,7 +361,6 @@ export default async function ProjectDetail({
             <BackButton
               href="/#projects"
               label={lang === "en" ? "Back to Projects" : "Kembali ke Proyek"}
-              sublabel={lang === "en" ? "Portfolio" : "Koleksi Proyek"}
             />
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-pulse" />
@@ -496,7 +495,6 @@ export default async function ProjectDetail({
             <BackButton
               href="/#projects"
               label={lang === "en" ? "Back to All Projects" : "Kembali ke Semua Proyek"}
-              sublabel={lang === "en" ? "Explore More" : "Eksplorasi Lainnya"}
             />
             <div className="flex flex-wrap items-center gap-3">
               <Button
