@@ -289,5 +289,55 @@ export const defaultPortfolioData: PortfolioData = {
       { name: "Postman", category: "API Testing", color: "#FF6C37", iconName: "Postman" },
     ],
   },
+  blogs: [
+    {
+      id: 4,
+      title: "Mastering Full-Stack Next.js 15: Server Actions & Caching",
+      slug: "mastering-fullstack-nextjs-15",
+      excerpt:
+        "Membedah arsitektur App Router Next.js 15, optimasi server-side rendering, streaming SSR, dan strategi caching modern untuk skalabilitas tinggi.",
+      coverImageUrl:
+        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop",
+      tags: ["Next.js", "Full-Stack", "Performance"],
+      readTime: 6,
+      createdAt: "2024-04-10",
+    },
+    {
+      id: 1,
+      title: "Building Scalable APIs with NestJS",
+      slug: "building-scalable-apis-nestjs",
+      excerpt:
+        "Panduan arsitektur enterprise untuk membangun RESTful API dan microservices berkinerja tinggi menggunakan NestJS, TypeScript, dan PostgreSQL.",
+      coverImageUrl:
+        "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop",
+      tags: ["NestJS", "Backend", "Architecture"],
+      readTime: 5,
+      createdAt: "2024-03-15",
+    },
+    {
+      id: 2,
+      title: "Modern CSS Techniques for 2024",
+      slug: "modern-css-techniques-2024",
+      excerpt:
+        "Eksplorasi teknik styling modern dengan Tailwind CSS, CSS Grid, container queries, dan micro-interactions untuk UI web responsif kelas dunia.",
+      coverImageUrl:
+        "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop",
+      tags: ["CSS", "Frontend", "UI/UX"],
+      readTime: 4,
+      createdAt: "2024-02-28",
+    },
+    {
+      id: 3,
+      title: "Getting Started with TypeScript in 2024",
+      slug: "getting-started-typescript-2024",
+      excerpt:
+        "Fundamental dan best practices TypeScript untuk developer modern, mulai dari strict type checking hingga integrasi ke ekosistem React.",
+      coverImageUrl:
+        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop",
+      tags: ["TypeScript", "Frontend", "JavaScript"],
+      readTime: 3,
+      createdAt: "2024-01-20",
+    },
+  ],
 };
 

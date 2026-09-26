@@ -195,7 +195,7 @@ export default async function Home({
       : defaultPortfolioData.academics || [];
 
   // Map blogs from NestJS / Admin, falling back gracefully
-  const mappedBlogs: PortfolioBlog[] =
+  const mappedApiBlogs: PortfolioBlog[] =
     blogsData && blogsData.length > 0
       ? blogsData.map((b) => ({
           id: b.id,
@@ -208,6 +208,18 @@ export default async function Home({
           createdAt: b.createdAt,
         }))
       : [];
+
+  // Ensure at least 4 articles are available for the 1 lead + 3 secondary stacked layout
+  const fallbackBlogs = defaultPortfolioData.blogs || [];
+  const mappedBlogs: PortfolioBlog[] =
+    mappedApiBlogs.length >= 4
+      ? mappedApiBlogs
+      : [
+          ...mappedApiBlogs,
+          ...fallbackBlogs.filter(
+            (fb) => !mappedApiBlogs.some((mb) => mb.slug === fb.slug || mb.id === fb.id)
+          ),
+        ];
 
   // JSON-LD structured data for SEO and search crawlers
   const jsonLd = {
