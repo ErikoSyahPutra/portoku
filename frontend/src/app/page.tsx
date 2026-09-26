@@ -18,6 +18,7 @@ import {
   PortfolioProject,
   PortfolioExperience,
   PortfolioAcademic,
+  PortfolioBlog,
 } from "@/types/portfolio";
 
 const BACKEND =
@@ -130,6 +131,7 @@ export default async function Home({
           ? organizationsData.length
           : defaultPortfolioData.profile.stats.organizations,
     },
+    showBlog: profileData?.showBlog !== false,
   };
 
   // Map projects from NestJS / Admin, falling back gracefully to rich defaults
@@ -188,6 +190,21 @@ export default async function Home({
         }))
       : defaultPortfolioData.academics || [];
 
+  // Map blogs from NestJS / Admin, falling back gracefully
+  const mappedBlogs: PortfolioBlog[] =
+    blogsData && blogsData.length > 0
+      ? blogsData.map((b) => ({
+          id: b.id,
+          title: b.title,
+          slug: b.slug,
+          excerpt: b.excerpt,
+          coverImageUrl: resolveImgUrl(b.coverImageUrl),
+          tags: Array.isArray(b.tags) ? b.tags : [],
+          readTime: b.readTime || 5,
+          createdAt: b.createdAt,
+        }))
+      : [];
+
   // JSON-LD structured data for SEO and search crawlers
   const jsonLd = {
     "@context": "https://schema.org",
@@ -229,6 +246,7 @@ export default async function Home({
         marqueeItems={defaultPortfolioData.marqueeItems}
         experiences={mappedExperiences}
         academics={mappedAcademics}
+        blogs={mappedBlogs}
         lang={lang}
       />
     </>

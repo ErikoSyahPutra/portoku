@@ -15,7 +15,7 @@ export const defaultNavItems: NavItem[] = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
-  { label: "Blog", href: "/blog" },
+  { label: "Blog", href: "#blog" },
 ];
 
 export interface NavLinksProps {

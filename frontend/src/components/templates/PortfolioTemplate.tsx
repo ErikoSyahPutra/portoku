@@ -9,6 +9,7 @@ import {
   AboutSection,
   ExperienceEducationSection,
   ProjectsSection,
+  BlogSection,
   ContactSection,
 } from "@/components/organisms";
 import {
@@ -19,6 +20,7 @@ import {
   PortfolioSkillTag,
   PortfolioExperience,
   PortfolioAcademic,
+  PortfolioBlog,
 } from "@/types/portfolio";
 import { defaultPortfolioData } from "@/data/portfolioData";
 
@@ -31,6 +33,7 @@ export interface PortfolioTemplateProps {
   marqueeItems?: string[];
   experiences?: PortfolioExperience[];
   academics?: PortfolioAcademic[];
+  blogs?: PortfolioBlog[];
   lang?: string;
   className?: string;
 }
@@ -44,6 +47,7 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
   marqueeItems = defaultPortfolioData.marqueeItems,
   experiences = defaultPortfolioData.experiences || [],
   academics = defaultPortfolioData.academics || [],
+  blogs = [],
   lang = "en",
   className = "",
 }) => {
@@ -81,6 +85,11 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
 
         {/* Experience & Education Section (placed directly below projects) */}
         <ExperienceEducationSection experiences={experiences} academics={academics} />
+
+        {/* Blog & Articles Section (rendered when enabled in Admin & articles exist) */}
+        {profile.showBlog !== false && blogs && blogs.length > 0 && (
+          <BlogSection blogs={blogs} lang={lang} />
+        )}
 
         {/* Interactive Contact & Inquiry Section */}
         <ContactSection profile={profile} />

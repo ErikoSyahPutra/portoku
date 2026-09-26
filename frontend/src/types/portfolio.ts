@@ -21,6 +21,7 @@ export interface PortfolioProfile {
     articles: number;
     organizations: number;
   };
+  showBlog?: boolean;
 }
 
 export interface PortfolioService {
@@ -84,6 +85,17 @@ export interface PortfolioAcademic {
   logoUrl?: string;
 }
 
+export interface PortfolioBlog {
+  id: string | number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverImageUrl?: string;
+  tags: string[];
+  readTime: number;
+  createdAt: string;
+}
+
 export interface PortfolioData {
   profile: PortfolioProfile;
   services: PortfolioService[];
@@ -93,4 +105,5 @@ export interface PortfolioData {
   reviews?: PortfolioReview[];
   experiences?: PortfolioExperience[];
   academics?: PortfolioAcademic[];
+  blogs?: PortfolioBlog[];
 }
