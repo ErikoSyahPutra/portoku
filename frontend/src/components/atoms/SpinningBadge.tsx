@@ -39,15 +39,11 @@ export const SpinningBadge: React.FC<SpinningBadgeProps> = ({
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      {/* Rotating SVG text ring */}
-      <motion.div
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        animate={{ rotate: 360 }}
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration: isHovered ? 7 : 14,
-        }}
+      {/* Rotating SVG text ring - pure CSS GPU accelerated */}
+      <div
+        className={`absolute inset-0 w-full h-full pointer-events-none animate-spin-badge ${
+          isHovered ? "is-hovered" : ""
+        }`}
       >
         <svg
           viewBox="0 0 160 160"
@@ -72,7 +68,7 @@ export const SpinningBadge: React.FC<SpinningBadgeProps> = ({
             </textPath>
           </text>
         </svg>
-      </motion.div>
+      </div>
 
       {/* Center circle badge with icon */}
       <div

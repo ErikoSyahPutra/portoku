@@ -35,7 +35,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-black/10 shadow-xs mb-4 select-none"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 sm:backdrop-blur-sm border border-black/10 shadow-xs mb-4 select-none"
           >
             <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-ping" />
             <span className="text-xs sm:text-sm font-semibold tracking-wide text-[#0F0F11]">
@@ -67,31 +67,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span className="text-[#0F0F11] font-semibold">{profile.location}</span>
           </motion.p>
 
-          {/* Top-Right Floating Spinning Badge (Desktop / Tablet) */}
-          <div className="hidden md:block absolute right-4 lg:right-12 top-0 z-30">
-            <SpinningBadge
-              text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
-              href="#contact"
-              size={136}
-            />
-          </div>
-
-          {/* Top-Right Compact Spinning Badge (Mobile) */}
-          <div className="block md:hidden absolute right-1 sm:right-3 top-0 z-30">
-            <SpinningBadge
-              text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
-              href="#contact"
-              size={84}
-            />
+          {/* Top-Right Floating Spinning Badge */}
+          <div className="absolute right-1 sm:right-3 md:right-4 lg:right-12 top-0 z-30">
+            <div className="hidden md:block">
+              <SpinningBadge
+                text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
+                href="#contact"
+                size={136}
+              />
+            </div>
+            <div className="block md:hidden">
+              <SpinningBadge
+                text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
+                href="#contact"
+                size={84}
+              />
+            </div>
           </div>
         </div>
 
         {/* Centerpiece Visual & Overlaid Floating Cards */}
         <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center pt-2 pb-4">
-          {/* Subtle Ambient Glow Behind Arch */}
+          {/* Subtle Ambient Glow Behind Arch (lighter on mobile to prevent GPU fill-rate drops) */}
           <div
             aria-hidden="true"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[500px] h-[400px] sm:h-[550px] bg-[#FF462E]/15 rounded-full blur-3xl pointer-events-none -z-10"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[500px] h-[300px] sm:h-[550px] bg-[#FF462E]/15 rounded-full blur-xl sm:blur-3xl pointer-events-none -z-10"
           />
 
           {/* Concentric Geometric Rings Behind Arch */}

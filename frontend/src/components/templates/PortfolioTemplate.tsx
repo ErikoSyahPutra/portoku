@@ -85,21 +85,31 @@ export const PortfolioTemplate: React.FC<PortfolioTemplateProps> = ({
         <AboutSection profile={profile} />
 
         {/* Technologies & Tools Dual-Track Moving Marquee (placed directly above projects) */}
-        <TechStackSection techStack={techStack} />
+        <div className="section-lazy-render">
+          <TechStackSection techStack={techStack} />
+        </div>
 
         {/* Featured Projects with Dynamic Category Filter & Interactive Cards */}
-        <ProjectsSection projects={projects} />
+        <div className="section-lazy-render">
+          <ProjectsSection projects={projects} />
+        </div>
 
         {/* Experience & Education Section (placed directly below projects) */}
-        <ExperienceEducationSection experiences={experiences} academics={academics} />
+        <div className="section-lazy-render">
+          <ExperienceEducationSection experiences={experiences} academics={academics} />
+        </div>
 
         {/* Blog & Articles Section (rendered when enabled in Admin & articles exist) */}
         {profile.showBlog !== false && blogs && blogs.length > 0 && (
-          <BlogSection blogs={blogs} lang={lang} />
+          <div className="section-lazy-render">
+            <BlogSection blogs={blogs} lang={lang} />
+          </div>
         )}
 
         {/* Interactive Contact & Inquiry Section */}
-        <ContactSection profile={profile} />
+        <div className="section-lazy-render">
+          <ContactSection profile={profile} />
+        </div>
       </main>
     </div>
   );

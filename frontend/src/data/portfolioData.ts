@@ -26,6 +26,7 @@ export const defaultPortfolioData: PortfolioData = {
       awards: 4,
       articles: 8,
       organizations: 5,
+      academics: 2,
     },
   },
   services: [

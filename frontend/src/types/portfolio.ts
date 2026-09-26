@@ -20,8 +20,14 @@ export interface PortfolioProfile {
     awards: number;
     articles: number;
     organizations: number;
+    academics?: number;
   };
   showBlog?: boolean;
+  showProjects?: boolean;
+  showExperiences?: boolean;
+  showAcademics?: boolean;
+  showAwards?: boolean;
+  showOrganizations?: boolean;
 }
 
 export interface PortfolioService {

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 
 export type BadgeVariant = "default" | "coral" | "dark" | "subtle";
 
@@ -39,19 +38,13 @@ export const Badge: React.FC<BadgeProps> = ({
 
   if (floating) {
     return (
-      <motion.span
-        className={combinedClasses}
-        animate={{ y: [-4, 4, -4] }}
-        transition={{
-          duration: 3.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay,
-        }}
+      <span
+        className={`${combinedClasses} animate-badge-float`}
+        style={delay ? { animationDelay: `${delay}s` } : undefined}
       >
         {icon && <span className="inline-flex shrink-0">{icon}</span>}
         <span>{children}</span>
-      </motion.span>
+      </span>
     );
   }
 

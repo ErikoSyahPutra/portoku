@@ -40,13 +40,30 @@ export const NavLinks: React.FC<NavLinksProps> = ({
     if (href.startsWith("#")) {
       e.preventDefault();
       const targetId = href.substring(1);
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      } else if (typeof window !== "undefined" && window.location.pathname !== "/") {
+
+      if (typeof window !== "undefined" && window.location.pathname !== "/") {
         window.location.href = `/${href}`;
+        return;
       }
+
+      onNavigate?.(href);
+
+      // Perform smooth scroll after a tiny delay so mobile drawer closing doesn't disrupt scroll
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          const navOffset = 70;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: "smooth",
+          });
+        }
+      }, 50);
+      return;
     }
+
     onNavigate?.(href);
   };
 
@@ -80,11 +97,15 @@ export const NavLinks: React.FC<NavLinksProps> = ({
           <>
             <span>{item.label}</span>
             {active && (
-              <motion.span
-                layoutId="navActiveDot"
-                className="w-1.5 h-1.5 rounded-full bg-[#FF462E] shrink-0"
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
+              orientation === "horizontal" ? (
+                <motion.span
+                  layoutId="navActiveDot"
+                  className="w-1.5 h-1.5 rounded-full bg-[#FF462E] shrink-0"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              ) : (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF462E] shrink-0" />
+              )
             )}
           </>
         );

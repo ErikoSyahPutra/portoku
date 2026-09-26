@@ -73,11 +73,14 @@ body {
   overflow-x: clip;
 }
 
-/* Background noise texture */
+/* Background noise texture - absolute to avoid heavy scroll repainting on mobile */
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
   background: var(--radial-glow);
   pointer-events: none;
   z-index: 0;
@@ -1204,6 +1207,60 @@ a { color: inherit; text-decoration: none; }
   100% {
     transform: translate3d(0, 0, 0);
   }
+}
+
+/* Hardware-accelerated animations for mobile & low-power devices */
+@keyframes marquee-ticker-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee-ticker {
+  animation: marquee-ticker-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spin-continuous {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-badge {
+  animation: spin-continuous 14s linear infinite;
+  will-change: transform;
+}
+
+.animate-spin-badge.is-hovered {
+  animation-duration: 7s;
+}
+
+/* Float animation for badges using pure CSS hardware acceleration */
+@keyframes badge-float {
+  0%, 100% {
+    transform: translate3d(0, -4px, 0);
+  }
+  50% {
+    transform: translate3d(0, 4px, 0);
+  }
+}
+
+.animate-badge-float {
+  animation: badge-float 3.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Below-the-fold content optimization for smooth 60fps mobile scrolling */
+.section-lazy-render {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
 }
 
 @media (prefers-reduced-motion: reduce) {

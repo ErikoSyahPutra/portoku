@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Award, Briefcase, Calendar, Code, Sparkles, FileText } from "lucide-react";
+import { ArrowUpRight, Award, Briefcase, Calendar, Code, Sparkles, FileText, GraduationCap, Users } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { Badge } from "@/components/atoms/Badge";
 import { PortfolioProfile } from "@/types/portfolio";
@@ -21,28 +21,83 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     .split("\n\n")
     .filter(Boolean);
 
-  const stats = [
-    {
+  // Dynamically assemble visible stats based on real counts & profile settings
+  const candidateStats: {
+    label: string;
+    value: string;
+    icon: React.ReactNode;
+  }[] = [];
+
+  // 1. Years Experience (always shown if experiences enabled or available)
+  if (profile.showExperiences !== false) {
+    candidateStats.push({
       label: "Years Experience",
-      value: `${profile.stats?.yearsExp ?? 3}+`,
+      value: `${profile.stats?.yearsExp ?? 0}+`,
       icon: <Calendar size={18} className="text-[#FF462E]" />,
-    },
-    {
+    });
+  }
+
+  // 2. Projects Completed (always shown if projects enabled or available)
+  if (profile.showProjects !== false) {
+    candidateStats.push({
       label: "Projects Completed",
-      value: `${profile.stats?.projects ?? 20}+`,
+      value: `${profile.stats?.projects ?? 0}+`,
       icon: <Briefcase size={18} className="text-[#FF462E]" />,
-    },
-    {
+    });
+  }
+
+  // 3. Awards & Honors (shown if awards enabled in admin and count > 0)
+  if (profile.showAwards !== false && (profile.stats?.awards ?? 0) > 0) {
+    candidateStats.push({
       label: "Awards & Honors",
-      value: `${profile.stats?.awards ?? 4}`,
+      value: `${profile.stats?.awards ?? 0}`,
       icon: <Award size={18} className="text-[#FF462E]" />,
-    },
-    {
+    });
+  }
+
+  // 4. Articles & Pubs (shown if blog enabled in admin and count > 0)
+  if (profile.showBlog !== false && (profile.stats?.articles ?? 0) > 0) {
+    candidateStats.push({
       label: "Articles & Pubs",
-      value: `${profile.stats?.articles ?? 8}`,
+      value: `${profile.stats?.articles ?? 0}`,
       icon: <FileText size={18} className="text-[#FF462E]" />,
-    },
-  ];
+    });
+  }
+
+  // 5. Academic Degrees (shown if academics enabled and count > 0)
+  if (profile.showAcademics !== false && (profile.stats?.academics ?? 0) > 0) {
+    candidateStats.push({
+      label: "Academic Degrees",
+      value: `${profile.stats?.academics ?? 0}`,
+      icon: <GraduationCap size={18} className="text-[#FF462E]" />,
+    });
+  }
+
+  // 6. Organizations (shown if organizations enabled and count > 0)
+  if (profile.showOrganizations !== false && (profile.stats?.organizations ?? 0) > 0) {
+    candidateStats.push({
+      label: "Organizations",
+      value: `${profile.stats?.organizations ?? 0}`,
+      icon: <Users size={18} className="text-[#FF462E]" />,
+    });
+  }
+
+  // Fallback: If after filtering we have fewer than 2 items, ensure at least primary metrics
+  const stats =
+    candidateStats.length >= 2
+      ? candidateStats.slice(0, 4)
+      : [
+          {
+            label: "Years Experience",
+            value: `${profile.stats?.yearsExp ?? 0}+`,
+            icon: <Calendar size={18} className="text-[#FF462E]" />,
+          },
+          {
+            label: "Projects Completed",
+            value: `${profile.stats?.projects ?? 0}+`,
+            icon: <Briefcase size={18} className="text-[#FF462E]" />,
+          },
+        ];
 
   return (
     <section
@@ -52,14 +107,14 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     >
       {/* Standout Dark Contrast Card Container */}
       <div className="relative bg-[#0F0F11] text-white rounded-3xl md:rounded-[36px] p-6 sm:p-10 md:p-14 lg:p-16 border border-white/10 shadow-2xl overflow-hidden">
-        {/* Ambient Decorative Glows */}
+        {/* Ambient Decorative Glows (hidden on mobile to save GPU fill-rate) */}
         <div
           aria-hidden="true"
-          className="absolute -top-32 -left-32 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-[100px] pointer-events-none"
+          className="hidden sm:block absolute -top-32 -left-32 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-[100px] pointer-events-none"
         />
         <div
           aria-hidden="true"
-          className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#FF462E]/10 rounded-full blur-[100px] pointer-events-none"
+          className="hidden sm:block absolute -bottom-32 -right-32 w-96 h-96 bg-[#FF462E]/10 rounded-full blur-[100px] pointer-events-none"
         />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -85,7 +140,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 
               {/* Overlaid Floating Status Pill */}
               <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15 shadow-lg">
+                <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-black/85 sm:backdrop-blur-md border border-white/15 shadow-lg">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#22c55e] animate-pulse shrink-0" />
                   <span className="text-xs sm:text-sm font-medium text-white/90 truncate">
                     {profile.availableBadge || "Available for Opportunities"}
@@ -131,7 +186,15 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             </div>
 
             {/* Numerical Stats Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mt-8 pt-8 border-t border-white/10">
+            <div
+              className={`grid gap-4 w-full mt-8 pt-8 border-t border-white/10 ${
+                stats.length <= 2
+                  ? "grid-cols-2"
+                  : stats.length === 3
+                  ? "grid-cols-2 sm:grid-cols-3"
+                  : "grid-cols-2 sm:grid-cols-4"
+              }`}
+            >
               {stats.map((stat) => (
                 <div
                   key={stat.label}

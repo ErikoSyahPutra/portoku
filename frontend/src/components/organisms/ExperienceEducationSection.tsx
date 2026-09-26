@@ -156,7 +156,7 @@ export default function ExperienceEducationSection({
                 return (
                   <div
                     key={exp.id || index}
-                    className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-5 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+                    className="group bg-white/95 sm:backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-5 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
                   >
                     {/* Left Meta: Date & Location */}
                     <div className="lg:col-span-4 flex flex-col gap-2.5">
@@ -234,7 +234,7 @@ export default function ExperienceEducationSection({
                 return (
                   <div
                     key={acad.id || index}
-                    className="group bg-white/90 backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-5 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+                    className="group bg-white/95 sm:backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/40 rounded-2xl p-5 sm:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF462E]/5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
                   >
                     {/* Left Meta: Years & GPA */}
                     <div className="lg:col-span-4 flex flex-col gap-2.5">

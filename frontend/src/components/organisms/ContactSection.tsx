@@ -74,10 +74,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     >
       {/* Main Contact Container */}
       <div className="rounded-3xl md:rounded-[36px] bg-[#0F0F11] text-white p-6 sm:p-10 md:p-16 border border-white/10 shadow-2xl relative overflow-hidden mb-16">
-        {/* Ambient Top Glow */}
+        {/* Ambient Top Glow (hidden on mobile) */}
         <div
           aria-hidden="true"
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#FF462E]/15 rounded-full blur-[120px] pointer-events-none"
+          className="hidden sm:block absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#FF462E]/15 rounded-full blur-[120px] pointer-events-none"
         />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -155,7 +155,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           </div>
 
           {/* Right Column: Interactive Form */}
-          <div className="lg:col-span-7 bg-white/[0.03] border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 backdrop-blur-sm">
+          <div className="lg:col-span-7 bg-[#16161A] lg:bg-white/[0.03] border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 lg:backdrop-blur-sm">
             <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
               Send a Direct Message
             </h3>

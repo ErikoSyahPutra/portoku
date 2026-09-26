@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { NavLinks, defaultNavItems, NavItem } from "@/components/molecules/NavLinks";
@@ -66,20 +65,23 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
-
   const handleMobileNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
+    if (href.startsWith("#")) {
+      const targetId = href.substring(1);
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          const navOffset = 70;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: "smooth",
+          });
+        }
+      }, 50);
+    }
     onNavigate?.(href);
   };
 
@@ -89,8 +91,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-[#FDFBF7]/95 backdrop-blur-md border-b border-[#ECE8DF] shadow-sm shadow-black/[0.03]"
-          : "bg-[#FDFBF7]/80 backdrop-blur-sm border-b border-black/[0.04]"
+          ? "bg-[#FDFBF7]/98 md:backdrop-blur-md border-b border-[#ECE8DF] shadow-sm shadow-black/[0.03]"
+          : "bg-[#FDFBF7]/92 md:backdrop-blur-sm border-b border-black/[0.04]"
       } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -146,57 +148,53 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer / Dropdown */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="md:hidden border-b border-black/10 bg-[#FDFBF7]/98 backdrop-blur-xl overflow-hidden"
-          >
-            <div className="px-5 pt-4 pb-8 space-y-6">
-              {/* Navigation Items */}
-              <NavLinks
-                items={navItems}
-                activeSection={currentSection}
-                orientation="vertical"
-                onNavigate={handleMobileNavClick}
-                itemClassName="text-base py-2.5 px-4 font-medium"
+      {/* Mobile Drawer / Dropdown - Pure CSS GPU-accelerated transition */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-black/10 bg-[#FDFBF7] shadow-xl ${
+          isMobileMenuOpen
+            ? "max-h-[500px] opacity-100 translate-y-0 visible pointer-events-auto"
+            : "max-h-0 opacity-0 -translate-y-2 invisible pointer-events-none"
+        }`}
+      >
+        <div className="px-5 pt-4 pb-8 space-y-6">
+          {/* Navigation Items */}
+          <NavLinks
+            items={navItems}
+            activeSection={currentSection}
+            orientation="vertical"
+            onNavigate={handleMobileNavClick}
+            itemClassName="text-base py-2.5 px-4 font-medium"
+          />
+
+          {/* Mobile CTA */}
+          <div className="pt-2 border-t border-black/5 flex flex-col gap-4">
+            <Button
+              href="#contact"
+              variant="primary"
+              size="md"
+              icon={<ArrowUpRight size={16} />}
+              iconPosition="right"
+              className="w-full justify-center"
+              onClick={() => handleMobileNavClick("#contact")}
+            >
+              Contact Me
+            </Button>
+
+            {/* Social Media Links */}
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-xs text-neutral-500 font-medium">Follow along:</span>
+              <SocialMediaGroup
+                githubUrl={profile.githubUrl}
+                linkedinUrl={profile.linkedinUrl}
+                websiteUrl={profile.websiteUrl}
+                email={profile.email}
+                size="sm"
+                variant="outline"
               />
-
-              {/* Mobile CTA */}
-              <div className="pt-2 border-t border-black/5 flex flex-col gap-4">
-                <Button
-                  href="#contact"
-                  variant="primary"
-                  size="md"
-                  icon={<ArrowUpRight size={16} />}
-                  iconPosition="right"
-                  className="w-full justify-center"
-                  onClick={() => handleMobileNavClick("#contact")}
-                >
-                  Contact Me
-                </Button>
-
-                {/* Social Media Links */}
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-neutral-500 font-medium">Follow along:</span>
-                  <SocialMediaGroup
-                    githubUrl={profile.githubUrl}
-                    linkedinUrl={profile.linkedinUrl}
-                    websiteUrl={profile.websiteUrl}
-                    email={profile.email}
-                    size="sm"
-                    variant="outline"
-                  />
-                </div>
-              </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </header>
   );
 };

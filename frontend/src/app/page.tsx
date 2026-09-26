@@ -41,6 +41,30 @@ function resolveImgUrl(url?: string | null): string {
   return fullUrl;
 }
 
+function calculateYearsExp(experiences: Experience[]): number {
+  if (!experiences || experiences.length === 0) return 0;
+  let earliestYear = new Date().getFullYear();
+  let hasValidDate = false;
+
+  for (const exp of experiences) {
+    if (exp.startDate) {
+      const year = parseInt(exp.startDate.substring(0, 4), 10);
+      if (!isNaN(year) && year >= 2000 && year <= new Date().getFullYear()) {
+        earliestYear = Math.min(earliestYear, year);
+        hasValidDate = true;
+      }
+    }
+  }
+
+  if (hasValidDate) {
+    const currentYear = new Date().getFullYear();
+    const diff = currentYear - earliestYear;
+    return Math.max(diff > 0 ? diff : 1, Math.min(experiences.length, 3));
+  }
+
+  return experiences.length;
+}
+
 export default async function Home({
   searchParams,
 }: {
@@ -56,6 +80,13 @@ export default async function Home({
   let blogsData: Blog[] = [];
   let awardsData: Award[] = [];
   let organizationsData: Organization[] = [];
+
+  let isProjectsLoaded = false;
+  let isExperiencesLoaded = false;
+  let isAcademicsLoaded = false;
+  let isBlogsLoaded = false;
+  let isAwardsLoaded = false;
+  let isOrganizationsLoaded = false;
 
   try {
     const [
@@ -77,12 +108,30 @@ export default async function Home({
     ]);
 
     if (profileRes.status === "fulfilled") profileData = profileRes.value;
-    if (projectsRes.status === "fulfilled") projectsData = projectsRes.value;
-    if (experiencesRes.status === "fulfilled") experiencesData = experiencesRes.value;
-    if (academicsRes.status === "fulfilled") academicsData = academicsRes.value;
-    if (blogsRes.status === "fulfilled") blogsData = blogsRes.value;
-    if (awardsRes.status === "fulfilled") awardsData = awardsRes.value;
-    if (organizationsRes.status === "fulfilled") organizationsData = organizationsRes.value;
+    if (projectsRes.status === "fulfilled") {
+      projectsData = projectsRes.value;
+      isProjectsLoaded = true;
+    }
+    if (experiencesRes.status === "fulfilled") {
+      experiencesData = experiencesRes.value;
+      isExperiencesLoaded = true;
+    }
+    if (academicsRes.status === "fulfilled") {
+      academicsData = academicsRes.value;
+      isAcademicsLoaded = true;
+    }
+    if (blogsRes.status === "fulfilled") {
+      blogsData = blogsRes.value;
+      isBlogsLoaded = true;
+    }
+    if (awardsRes.status === "fulfilled") {
+      awardsData = awardsRes.value;
+      isAwardsLoaded = true;
+    }
+    if (organizationsRes.status === "fulfilled") {
+      organizationsData = organizationsRes.value;
+      isOrganizationsLoaded = true;
+    }
   } catch (err) {
     console.warn(
       "Backend API unavailable or error fetching data, using default portfolio data:",
@@ -112,28 +161,31 @@ export default async function Home({
     reviewsLabel: defaultPortfolioData.profile.reviewsLabel,
     quote: defaultPortfolioData.profile.quote,
     stats: {
-      projects:
-        projectsData.length > 0
-          ? projectsData.length
-          : defaultPortfolioData.profile.stats.projects,
-      yearsExp:
-        experiencesData.length > 0
-          ? experiencesData.length
-          : defaultPortfolioData.profile.stats.yearsExp,
-      awards:
-        awardsData.length > 0
-          ? awardsData.length
-          : defaultPortfolioData.profile.stats.awards,
-      articles:
-        blogsData.length > 0
-          ? blogsData.length
-          : defaultPortfolioData.profile.stats.articles,
-      organizations:
-        organizationsData.length > 0
-          ? organizationsData.length
-          : defaultPortfolioData.profile.stats.organizations,
+      projects: isProjectsLoaded
+        ? projectsData.length
+        : defaultPortfolioData.profile.stats.projects,
+      yearsExp: isExperiencesLoaded
+        ? calculateYearsExp(experiencesData)
+        : defaultPortfolioData.profile.stats.yearsExp,
+      awards: isAwardsLoaded
+        ? awardsData.length
+        : defaultPortfolioData.profile.stats.awards,
+      articles: isBlogsLoaded
+        ? blogsData.length
+        : defaultPortfolioData.profile.stats.articles,
+      organizations: isOrganizationsLoaded
+        ? organizationsData.length
+        : defaultPortfolioData.profile.stats.organizations,
+      academics: isAcademicsLoaded
+        ? academicsData.length
+        : (defaultPortfolioData.profile.stats.academics ?? 2),
     },
     showBlog: profileData?.showBlog !== false,
+    showProjects: profileData?.showProjects !== false,
+    showExperiences: profileData?.showExperiences !== false,
+    showAcademics: profileData?.showAcademics !== false,
+    showAwards: profileData?.showAwards !== false,
+    showOrganizations: profileData?.showOrganizations !== false,
   };
 
   // Map projects from NestJS / Admin, falling back gracefully to rich defaults
