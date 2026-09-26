@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -22,20 +23,22 @@ jobs:
             echo "🚀 Memulai proses deploy ke VPS..."
             cd /var/www/portfolio
 
-            # 1. Pull perubahan terbaru dari git
-            echo "📥 Menarik kode terbaru dari branch main..."
-            git pull origin main
+            # 1. Sinkronisasi kode terbaru dari git main (reset perubahan lokal pada package-lock jika ada)
+            echo "📥 Mengambil kode terbaru dari branch main..."
+            git fetch origin main
+            git checkout -- frontend/package-lock.json backend/package-lock.json 2>/dev/null || true
+            git reset --hard origin/main
 
             # 2. Build Backend (NestJS)
             echo "📦 Memasang dependensi & build Backend..."
             cd /var/www/portfolio/backend
-            npm install --omit=dev=false
+            npm install --legacy-peer-deps
             npm run build
 
             # 3. Build Frontend (Next.js)
             echo "📦 Memasang dependensi & build Frontend..."
             cd /var/www/portfolio/frontend
-            npm install --omit=dev=false
+            npm install --legacy-peer-deps
             npm run build
 
             # 4. Reload PM2 (Zero Downtime)
@@ -45,3 +48,4 @@ jobs:
             pm2 save
 
             echo "🎉 Deploy selesai dengan sukses!"
+
