@@ -95,7 +95,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
     <section
       id="tech-stack"
       aria-label="Technologies and Tools"
-      className={`py-16 md:py-24 relative overflow-hidden ${className}`}
+      className={`py-16 md:py-24 relative overflow-hidden tech-stack-section [&:hover_.marquee-group]:[animation-play-state:paused] ${className}`}
     >
       {/* Section Header (Left-aligned matching other sections) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
@@ -113,12 +113,8 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
         </div>
       </div>
 
-      {/* Marquee Wrapper with Smooth Canvas Edge Fades */}
-      <div className="relative w-full overflow-hidden">
-        {/* Left & Right Canvas Edge Gradients */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-36 md:w-48 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-36 md:w-48 bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent z-10 pointer-events-none" />
-
+      {/* Marquee Wrapper Full Width - Pause on Hover */}
+      <div className="marquee-wrapper relative w-full overflow-hidden [&:hover_.marquee-group]:[animation-play-state:paused] py-2">
         <div className="flex flex-col gap-4 sm:gap-6">
           {/* Track 1: Gerak Kiri (Row 1) */}
           {row1.length > 0 && (
@@ -134,7 +130,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                     return (
                       <div
                         key={`r1-${tech.name}-${groupIndex}-${idx}`}
-                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/40 shadow-xs hover:shadow-md transition-all duration-300 group select-none whitespace-nowrap cursor-default"
+                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
                       >
                         <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
                           <Icon
@@ -173,7 +169,7 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                     return (
                       <div
                         key={`r2-${tech.name}-${groupIndex}-${idx}`}
-                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/40 shadow-xs hover:shadow-md transition-all duration-300 group select-none whitespace-nowrap cursor-default"
+                        className="inline-flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
                       >
                         <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
                           <Icon

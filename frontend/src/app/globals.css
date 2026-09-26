@@ -1142,8 +1142,11 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (hover: hover) {
-  .marquee-wrapper:hover .marquee-group {
-    animation-play-state: paused;
+  .marquee-wrapper:hover .marquee-group,
+  .marquee-track:hover .marquee-group,
+  #tech-stack:hover .marquee-group,
+  .tech-stack-section:hover .marquee-group {
+    animation-play-state: paused !important;
   }
 }
 
