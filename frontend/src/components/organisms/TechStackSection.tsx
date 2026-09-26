@@ -134,23 +134,18 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                     return (
                       <div
                         key={`r1-${tech.name}-${groupIndex}-${idx}`}
-                        className="inline-flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
                       >
-                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
                           <Icon
                             size={16}
                             className="transition-transform duration-300 group-hover:scale-110 sm:w-[18px] sm:h-[18px]"
                             style={{ color: tech.color || "#FF462E" }}
                           />
                         </div>
-                        <div className="flex flex-col items-start text-left">
-                          <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
-                            {tech.name}
-                          </span>
-                          <span className="text-[9px] sm:text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
-                            {tech.category}
-                          </span>
-                        </div>
+                        <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
+                          {tech.name}
+                        </span>
                       </div>
                     );
                   })}
@@ -173,23 +168,18 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
                     return (
                       <div
                         key={`r2-${tech.name}-${groupIndex}-${idx}`}
-                        className="inline-flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/90 hover:bg-white border border-[#ECE8DF] hover:border-[#FF462E]/50 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group select-none whitespace-nowrap cursor-pointer"
                       >
-                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#F5F2EB] group-hover:bg-[#FFF1EE] flex items-center justify-center shrink-0 transition-colors duration-300">
                           <Icon
                             size={16}
                             className="transition-transform duration-300 group-hover:scale-110 sm:w-[18px] sm:h-[18px]"
                             style={{ color: tech.color || "#FF462E" }}
                           />
                         </div>
-                        <div className="flex flex-col items-start text-left">
-                          <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
-                            {tech.name}
-                          </span>
-                          <span className="text-[9px] sm:text-[10px] font-semibold text-[#888899] tracking-wider uppercase">
-                            {tech.category}
-                          </span>
-                        </div>
+                        <span className="text-xs sm:text-sm font-bold text-[#121214] group-hover:text-[#FF462E] transition-colors tracking-tight">
+                          {tech.name}
+                        </span>
                       </div>
                     );
                   })}
