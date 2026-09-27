@@ -19,7 +19,7 @@ export interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
   profile = defaultPortfolioData.profile,
-  navItems = defaultNavItems,
+  navItems,
   activeSection,
   onNavigate,
   className = "",
@@ -27,6 +27,39 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState<string>(activeSection || "hero");
+
+  // Dynamically derive nav items based on admin profile visibility toggles
+  const effectiveNavItems = React.useMemo(() => {
+    if (navItems) {
+      return navItems;
+    }
+    const items: NavItem[] = [
+      { label: "Home", href: "#hero" },
+      { label: "Services", href: "#services" },
+      { label: "About", href: "#about" },
+      { label: "Tech Stack", href: "#tech-stack" },
+    ];
+
+    if (profile.showProjects !== false) {
+      items.push({ label: "Projects", href: "#projects" });
+    }
+
+    if (profile.showExperiences !== false || profile.showAcademics !== false) {
+      items.push({ label: "Experience", href: "#experience" });
+    }
+
+    if (profile.showBlog !== false) {
+      items.push({ label: "Blog", href: "#blog" });
+    }
+
+    return items;
+  }, [navItems, profile]);
+
+  const sectionIds = React.useMemo(() => {
+    return effectiveNavItems
+      .map((item) => item.href.replace(/^#/, ""))
+      .filter((id) => !id.startsWith("/") && !id.startsWith("http"));
+  }, [effectiveNavItems]);
 
   useEffect(() => {
     if (activeSection) {
@@ -52,22 +85,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         return;
       }
 
-      const sectionIds = [
-        "hero",
-        "services",
-        "about",
-        "tech-stack",
-        "projects",
-        "experience",
-        "blog",
-      ];
-
       // 2. If user scrolled to the bottom of the page, activate the last existing nav section
       const isAtBottom =
         scrollY > 300 &&
         window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60;
 
-      if (isAtBottom) {
+      if (isAtBottom && sectionIds.length > 0) {
         for (let i = sectionIds.length - 1; i >= 0; i--) {
           if (document.getElementById(sectionIds[i])) {
             setCurrentSection(sectionIds[i]);
@@ -97,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [sectionIds]);
 
   const handleMobileNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
@@ -147,7 +170,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center justify-center">
             <NavLinks
-              items={navItems}
+              items={effectiveNavItems}
               activeSection={currentSection}
               onNavigate={handleNavClick}
               className="bg-black/[0.03] border border-black/5 px-3 py-1.5 rounded-full"
@@ -194,7 +217,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="px-5 pt-4 pb-8 space-y-6">
           {/* Navigation Items */}
           <NavLinks
-            items={navItems}
+            items={effectiveNavItems}
             activeSection={currentSection}
             orientation="vertical"
             onNavigate={handleMobileNavClick}
