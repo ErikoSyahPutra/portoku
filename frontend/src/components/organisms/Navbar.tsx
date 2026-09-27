@@ -34,9 +34,23 @@ export const Navbar: React.FC<NavbarProps> = ({
     }
   }, [activeSection]);
 
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("#")) {
+      setCurrentSection(href.substring(1));
+    }
+    onNavigate?.(href);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 20);
+
+      // 1. If near the top of the page, always keep 'hero' active
+      if (scrollY < 120) {
+        setCurrentSection("hero");
+        return;
+      }
 
       const sectionIds = [
         "hero",
@@ -46,17 +60,37 @@ export const Navbar: React.FC<NavbarProps> = ({
         "projects",
         "experience",
         "blog",
-        "contact",
       ];
-      const scrollPosition = window.scrollY + 140;
 
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el && el.offsetTop <= scrollPosition) {
-          setCurrentSection(sectionIds[i]);
-          break;
+      // 2. If user scrolled to the bottom of the page, activate the last existing nav section
+      const isAtBottom =
+        scrollY > 300 &&
+        window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60;
+
+      if (isAtBottom) {
+        for (let i = sectionIds.length - 1; i >= 0; i--) {
+          if (document.getElementById(sectionIds[i])) {
+            setCurrentSection(sectionIds[i]);
+            return;
+          }
         }
       }
+
+      // 3. Find which section is currently in view under the navbar
+      const navThreshold = 180;
+      let active = "hero";
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= navThreshold && rect.bottom > 80) {
+            active = id;
+          }
+        }
+      }
+
+      setCurrentSection(active);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -69,6 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     setIsMobileMenuOpen(false);
     if (href.startsWith("#")) {
       const targetId = href.substring(1);
+      setCurrentSection(targetId);
       setTimeout(() => {
         const element = document.getElementById(targetId);
         if (element) {
@@ -114,7 +149,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <NavLinks
               items={navItems}
               activeSection={currentSection}
-              onNavigate={onNavigate}
+              onNavigate={handleNavClick}
               className="bg-black/[0.03] border border-black/5 px-3 py-1.5 rounded-full"
             />
           </div>
