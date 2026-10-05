@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/atoms/Badge";
@@ -131,12 +130,12 @@ export const ServiceAccordionItem: React.FC<ServiceAccordionItemProps> = ({
                 {/* Right: Chamfered Preview Thumbnail */}
                 {service.previewImage && (
                   <div className="relative w-full lg:w-72 xl:w-80 h-44 sm:h-48 rounded-2xl overflow-hidden border border-white/15 shrink-0 [clip-path:polygon(0_0,calc(100%-20px)_0,100%_20px,100%_100%,0_100%)] group/img shadow-xl">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={service.previewImage}
                       alt={service.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 320px"
-                      className="object-cover transition-transform duration-500 group-hover/img:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                     <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-mono text-white/80 border border-white/10">

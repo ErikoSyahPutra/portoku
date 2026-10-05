@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowUpRight, Sparkles } from "lucide-react";
@@ -95,12 +94,12 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
             >
               {/* Background Cover Image with Ambient Dark Overlay */}
               <div className="absolute inset-0 z-0 overflow-hidden">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={getBlogCover(leadBlog, 0)}
                   alt={leadBlog.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 58vw"
-                  className="object-cover object-center filter brightness-[0.55] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                  className="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                  loading="lazy"
                 />
                 {/* Multi-stop smooth dark gradient for optimal readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/75 to-transparent pointer-events-none z-10" />
@@ -176,12 +175,12 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
                       {/* Top Row: Thumbnail + Category Pill */}
                       <div className="flex items-center gap-4 mb-4">
                         <div className="relative w-20 h-16 sm:w-24 sm:h-[72px] rounded-xl overflow-hidden shrink-0 border border-[#ECE8DF] bg-[#0F0F11] shadow-sm">
-                          <Image
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
                             src={getBlogCover(blog, idx + 1)}
                             alt={blog.title}
-                            fill
-                            sizes="96px"
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
                           />
                         </div>
 

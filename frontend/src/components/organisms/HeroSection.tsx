@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { SpinningBadge } from "@/components/atoms/SpinningBadge";
@@ -95,16 +94,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/20 pointer-events-none z-10" />
 
             {/* Profile Cutout Image with matching smooth arch */}
-            <div className="relative w-full h-full overflow-hidden rounded-t-full">
-              <Image
-                src={profile.avatarUrl}
-                alt={profile.name}
-                fill
-                priority
-                sizes="(max-width: 768px) 256px, 384px"
-                className="object-cover object-top rounded-t-full filter contrast-[1.05]"
-              />
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              className="w-full h-full object-cover object-top rounded-t-full filter contrast-[1.05]"
+              loading="eager"
+              fetchPriority="high"
+            />
           </div>
 
           {/* Dynamic Floating Skill Pills (Desktop lg+) */}

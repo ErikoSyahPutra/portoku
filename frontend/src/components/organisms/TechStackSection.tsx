@@ -91,22 +91,9 @@ export const TechStackSection: React.FC<TechStackSectionProps> = ({
   const row1 = techStack?.row1 || defaultPortfolioData.techStack?.row1 || [];
   const row2 = techStack?.row2 || defaultPortfolioData.techStack?.row2 || [];
 
-  const sectionRef = React.useRef<HTMLElement | null>(null);
-  React.useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => el.classList.toggle("is-offscreen", !entry.isIntersecting),
-      { rootMargin: "200px 0px 200px 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
       id="tech-stack"
-      ref={sectionRef}
       aria-label="Technologies and Tools"
       className={`py-16 md:py-24 relative overflow-hidden tech-stack-section scroll-mt-20 [&:hover_.marquee-group]:[animation-play-state:paused] ${className}`}
     >
