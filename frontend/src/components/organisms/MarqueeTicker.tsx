@@ -19,8 +19,21 @@ export const MarqueeTicker: React.FC<MarqueeTickerProps> = ({
   // Triple the items array to ensure flawless, infinite wrapping on any viewport width
   const loopedItems = [...items, ...items, ...items, ...items];
 
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => el.classList.toggle("is-offscreen", !entry.isIntersecting),
+      { rootMargin: "200px 0px 200px 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       aria-label="Technology and Skill Highlights"
       className={`relative w-full bg-[#0F0F11] text-white py-4 sm:py-5 border-y border-white/10 overflow-hidden select-none ${className}`}
     >

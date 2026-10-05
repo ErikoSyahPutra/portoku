@@ -14,9 +14,9 @@ export interface IconWrapperProps {
 
 const shapeStyles: Record<IconShape, string> = {
   none: "",
-  circle: "rounded-full border border-black/5 shadow-xs p-2",
-  rounded: "rounded-xl border border-black/5 shadow-xs p-2",
-  square: "rounded-md border border-black/5 shadow-xs p-2",
+  circle: "rounded-full border border-black/5 shadow-sm p-2",
+  rounded: "rounded-xl border border-black/5 shadow-sm p-2",
+  square: "rounded-md border border-black/5 shadow-sm p-2",
 };
 
 export const IconWrapper: React.FC<IconWrapperProps> = ({

@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 export interface NavItem {
   label: string;
@@ -97,15 +96,13 @@ export const NavLinks: React.FC<NavLinksProps> = ({
           <>
             <span>{item.label}</span>
             {active && (
-              orientation === "horizontal" ? (
-                <motion.span
-                  layoutId="navActiveDot"
-                  className="w-1.5 h-1.5 rounded-full bg-[#FF462E] shadow-[0_0_8px_#FF462E] shrink-0"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              ) : (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF462E] shadow-[0_0_6px_#FF462E] shrink-0" />
-              )
+              <span
+                className={`w-1.5 h-1.5 rounded-full bg-[#FF462E] shrink-0 ${
+                  orientation === "horizontal"
+                    ? "shadow-[0_0_8px_#FF462E]"
+                    : "shadow-[0_0_6px_#FF462E]"
+                }`}
+              />
             )}
           </>
         );
@@ -113,7 +110,7 @@ export const NavLinks: React.FC<NavLinksProps> = ({
         const sharedClasses = `relative inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm tracking-tight transition-all duration-200 select-none ${
           active
             ? orientation === "horizontal"
-              ? "text-[#0F0F11] font-semibold bg-white shadow-xs border border-black/[0.08]"
+              ? "text-[#0F0F11] font-semibold bg-white shadow-sm border border-black/[0.08]"
               : "text-[#0F0F11] font-semibold bg-black/[0.06]"
             : "text-neutral-600 hover:text-[#0F0F11] hover:bg-black/[0.03] font-medium"
         } ${itemClassName}`;

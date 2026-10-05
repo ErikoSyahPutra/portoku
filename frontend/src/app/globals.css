@@ -1141,7 +1141,12 @@ a { color: inherit; text-decoration: none; }
   gap: 1.5rem;
   padding-right: 1.5rem; /* Menjaga jarak antar grup */
   animation: marquee-left 35s linear infinite;
-  will-change: transform;
+}
+
+/* Pause marquees while they are off-screen to cut idle GPU/compositor load */
+.is-offscreen .marquee-group,
+.is-offscreen .animate-marquee-ticker {
+  animation-play-state: paused;
 }
 
 @media (hover: hover) {
@@ -1257,22 +1262,27 @@ a { color: inherit; text-decoration: none; }
   will-change: transform;
 }
 
-/* Below-the-fold content optimization for smooth 60fps mobile scrolling */
+/* Below-the-fold content optimization for smooth 60fps mobile scrolling.
+   `auto` makes the browser remember the real rendered height after first layout,
+   so the placeholder no longer causes scroll-height jumps on every pass. */
 .section-lazy-render {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 700px;
+  contain-intrinsic-size: auto 1000px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Disabled to force animation even if OS reduced motion is active */
-  /* .marquee-track {
-    animation: none;
-    flex-wrap: wrap;
-    justify-content: center;
-  } */
+  .marquee-group,
+  .animate-marquee-ticker,
+  .animate-spin-badge,
+  .animate-badge-float {
+    animation: none !important;
+  }
   .marquee-wrapper {
     mask-image: none;
     -webkit-mask-image: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }
 

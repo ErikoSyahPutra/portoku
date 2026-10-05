@@ -77,7 +77,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         {/* Ambient Top Glow (hidden on mobile) */}
         <div
           aria-hidden="true"
-          className="hidden sm:block absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#FF462E]/15 rounded-full blur-[120px] pointer-events-none"
+          className="hidden sm:block absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-[#FF462E]/15 rounded-full blur-3xl pointer-events-none"
         />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">

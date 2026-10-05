@@ -137,7 +137,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               {/* ======================================================== */}
               <article className="bg-[#0F0F11] text-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-12 border border-white/10 shadow-2xl relative overflow-hidden group">
                 {/* Ambient Coral Glow (hidden on mobile) */}
-                <div className="hidden sm:block absolute top-0 right-0 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="hidden sm:block absolute top-0 right-0 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-2xl pointer-events-none" />
 
                 <div className="relative z-10">
                   {/* Eyebrow & Badges */}
@@ -269,12 +269,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               return (
                 <motion.article
                   key={project.id}
-                  layout
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className={`bg-white/95 sm:backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/30 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col ${
+                  className={`bg-white/95 sm:backdrop-blur-sm border border-[#ECE8DF] hover:border-[#FF462E]/30 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col ${
                     isEven ? "lg:flex-row-reverse" : "lg:flex-row"
                   } items-center gap-6 sm:gap-8 lg:gap-12 group`}
                 >
@@ -364,7 +363,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         {/* Bottom Catalog Discovery Card */}
         {showDiscoveryCard && projects.length > (limit || 3) && (
           <div className="pt-8 text-center">
-            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 p-4 sm:px-8 sm:py-5 rounded-3xl bg-white border border-[#ECE8DF] shadow-xs">
+            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 p-4 sm:px-8 sm:py-5 rounded-3xl bg-white border border-[#ECE8DF] shadow-sm">
               <div className="text-left">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#FF462E] block">
                   Katalog Direktori Proyek ({projects.length} Total)

@@ -27,7 +27,7 @@ export default function PreviewProjectsPage() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] bg-grid-canvas text-[#121214] font-sans antialiased pb-32 selection:bg-[#FF462E] selection:text-white">
       {/* Sticky Top Control Bar */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#ECE8DF] py-4 px-4 sm:px-8 shadow-xs">
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#ECE8DF] py-4 px-4 sm:px-8 shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
@@ -158,7 +158,7 @@ export default function PreviewProjectsPage() {
                         ))}
                       </div>
 
-                      <span className="w-10 h-10 rounded-full bg-[#F5F2EB] group-hover:bg-[#FF462E] text-[#121214] group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0 group-hover:scale-110 shadow-xs">
+                      <span className="w-10 h-10 rounded-full bg-[#F5F2EB] group-hover:bg-[#FF462E] text-[#121214] group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0 group-hover:scale-110 shadow-sm">
                         <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                     </div>

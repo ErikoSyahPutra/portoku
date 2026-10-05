@@ -110,11 +110,11 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         {/* Ambient Decorative Glows (hidden on mobile to save GPU fill-rate) */}
         <div
           aria-hidden="true"
-          className="hidden sm:block absolute -top-32 -left-32 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-[100px] pointer-events-none"
+          className="hidden sm:block absolute -top-32 -left-32 w-96 h-96 bg-[#FF462E]/15 rounded-full blur-2xl pointer-events-none"
         />
         <div
           aria-hidden="true"
-          className="hidden sm:block absolute -bottom-32 -right-32 w-96 h-96 bg-[#FF462E]/10 rounded-full blur-[100px] pointer-events-none"
+          className="hidden sm:block absolute -bottom-32 -right-32 w-96 h-96 bg-[#FF462E]/10 rounded-full blur-2xl pointer-events-none"
         />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">

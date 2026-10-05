@@ -41,7 +41,7 @@ export const RatingBadge: React.FC<RatingBadgeProps> = ({
             key={index}
             src={avatarUrl}
             alt={`Client ${index + 1}`}
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white border border-black/5 shadow-xs"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-white border border-black/5 shadow-sm"
             loading="lazy"
           />
         ))}

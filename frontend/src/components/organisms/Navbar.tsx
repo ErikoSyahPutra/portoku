@@ -74,23 +74,37 @@ export const Navbar: React.FC<NavbarProps> = ({
     onNavigate?.(href);
   };
 
+  // Cheap: only toggles the compact navbar style, no layout reads.
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 20);
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-      // 1. If near the top of the page, always keep 'hero' active
+  // Track the active section, but batch the layout reads to one pass per
+  // animation frame instead of running getBoundingClientRect for every section
+  // on every scroll event (which forced a reflow multiple times per frame).
+  useEffect(() => {
+    if (sectionIds.length === 0) return;
+    let rafId = 0;
+
+    const update = () => {
+      rafId = 0;
+      const scrollY = window.scrollY;
+
+      // Near the top, always keep 'hero' active
       if (scrollY < 120) {
         setCurrentSection("hero");
         return;
       }
 
-      // 2. If user scrolled to the bottom of the page, activate the last existing nav section
+      // At the bottom, activate the last existing nav section
       const isAtBottom =
         scrollY > 300 &&
         window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60;
 
-      if (isAtBottom && sectionIds.length > 0) {
+      if (isAtBottom) {
         for (let i = sectionIds.length - 1; i >= 0; i--) {
           if (document.getElementById(sectionIds[i])) {
             setCurrentSection(sectionIds[i]);
@@ -99,10 +113,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         }
       }
 
-      // 3. Find which section is currently in view under the navbar
       const navThreshold = 180;
       let active = "hero";
-
       for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (el) {
@@ -112,14 +124,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           }
         }
       }
-
       setCurrentSection(active);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    const handleScroll = () => {
+      if (!rafId) rafId = requestAnimationFrame(update);
+    };
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    update();
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [sectionIds]);
 
   const handleMobileNavClick = (href: string) => {
@@ -149,8 +167,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-white/85 backdrop-blur-md border-b border-black/[0.08] shadow-sm shadow-black/[0.03]"
-          : "bg-white/75 backdrop-blur-md border-b border-black/[0.06] shadow-xs"
+          ? "bg-white border-b border-black/[0.08] shadow-sm shadow-black/[0.03]"
+          : "bg-white/95 border-b border-black/[0.06] shadow-sm"
       } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

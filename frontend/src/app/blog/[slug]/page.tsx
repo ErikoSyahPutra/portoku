@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -313,7 +311,7 @@ export default async function BlogDetail({
               href="/#blog"
               label={lang === "en" ? "Back to Articles" : "Kembali ke Artikel"}
             />
-            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-xs">
+            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-pulse" />
               <span>{lang === "en" ? "Editorial Article" : "Artikel Editorial"}</span>
             </div>
@@ -445,7 +443,7 @@ export default async function BlogDetail({
               </div>
 
               {/* Quick Article Info & Share Card */}
-              <div className="bg-white/90 border border-[#ECE8DF] rounded-3xl p-6 shadow-xs">
+              <div className="bg-white/90 border border-[#ECE8DF] rounded-3xl p-6 shadow-sm">
                 <h5 className="text-xs font-bold uppercase tracking-wider text-[#888899] mb-3">
                   Informasi Artikel
                 </h5>
@@ -484,7 +482,7 @@ export default async function BlogDetail({
               </div>
 
               {/* Consultation / Work with me Card */}
-              <div className="rounded-3xl p-6 bg-gradient-to-br from-[#FFF1EE] to-white border border-[#FF462E]/20 shadow-xs">
+              <div className="rounded-3xl p-6 bg-gradient-to-br from-[#FFF1EE] to-white border border-[#FF462E]/20 shadow-sm">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#FF462E] block mb-1">
                   Kolaborasi & Konsultasi
                 </span>
@@ -496,7 +494,7 @@ export default async function BlogDetail({
                 </p>
                 <Link
                   href="/#contact"
-                  className="inline-flex items-center justify-center w-full px-4 py-2 rounded-full bg-[#FF462E] hover:bg-[#E63B24] text-white text-xs font-semibold shadow-xs transition-all"
+                  className="inline-flex items-center justify-center w-full px-4 py-2 rounded-full bg-[#FF462E] hover:bg-[#E63B24] text-white text-xs font-semibold shadow-sm transition-all"
                 >
                   Mulai Diskusi Proyek
                 </Link>

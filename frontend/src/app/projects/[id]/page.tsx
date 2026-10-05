@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -362,7 +360,7 @@ export default async function ProjectDetail({
               href="/#projects"
               label={lang === "en" ? "Back to Projects" : "Kembali ke Proyek"}
             />
-            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-xs">
+            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#ECE8DF] text-xs font-medium text-[#888899] shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-pulse" />
               <span>{lang === "en" ? "Featured Case Study" : "Studi Kasus Proyek"}</span>
             </div>

@@ -1,8 +1,13 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
+// Cache backend reads briefly so a page render does not hit the API 7 times per request.
+const REVALIDATE_SECONDS = 60;
+
 async function fetcher<T>(endpoint: string, lang?: string): Promise<T> {
   const query = lang ? `?lang=${lang}` : '';
-  const res = await fetch(`${API}${endpoint}${query}`, { cache: "no-store" });
+  const res = await fetch(`${API}${endpoint}${query}`, {
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
@@ -35,7 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 sm:backdrop-blur-sm border border-black/10 shadow-xs mb-4 select-none"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 sm:backdrop-blur-sm border border-black/10 shadow-sm mb-4 select-none"
           >
             <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-ping" />
             <span className="text-xs sm:text-sm font-semibold tracking-wide text-[#0F0F11]">
@@ -67,22 +68,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span className="text-[#0F0F11] font-semibold">{profile.location}</span>
           </motion.p>
 
-          {/* Top-Right Floating Spinning Badge */}
-          <div className="absolute right-1 sm:right-3 md:right-4 lg:right-12 top-0 z-30">
-            <div className="hidden md:block">
-              <SpinningBadge
-                text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
-                href="#contact"
-                size={136}
-              />
-            </div>
-            <div className="block md:hidden">
-              <SpinningBadge
-                text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
-                href="#contact"
-                size={84}
-              />
-            </div>
+          {/* Top-Right Floating Spinning Badge (single instance, scaled down on mobile) */}
+          <div className="absolute right-1 sm:right-3 md:right-4 lg:right-12 top-0 z-30 origin-top-right scale-[0.62] md:scale-100">
+            <SpinningBadge
+              text="✦ HIRE ME ✦ AVAILABLE NOW ✦ HIRE ME ✦ AVAILABLE NOW "
+              href="#contact"
+              size={136}
+            />
           </div>
         </div>
 
@@ -91,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Subtle Ambient Glow Behind Arch (lighter on mobile to prevent GPU fill-rate drops) */}
           <div
             aria-hidden="true"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[500px] h-[300px] sm:h-[550px] bg-[#FF462E]/15 rounded-full blur-xl sm:blur-3xl pointer-events-none -z-10"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[500px] h-[300px] sm:h-[550px] bg-[#FF462E]/15 rounded-full blur-xl sm:blur-2xl pointer-events-none -z-10"
           />
 
           {/* Concentric Geometric Rings Behind Arch */}
@@ -115,12 +107,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/20 pointer-events-none z-10" />
 
             {/* Profile Cutout Image with matching smooth arch */}
-            <img
-              src={profile.avatarUrl}
-              alt={profile.name}
-              className="w-full h-full object-cover object-top rounded-t-full filter contrast-[1.05]"
-              loading="eager"
-            />
+            <div className="relative w-full h-full overflow-hidden rounded-t-full">
+              <Image
+                src={profile.avatarUrl}
+                alt={profile.name}
+                fill
+                priority
+                sizes="(max-width: 768px) 256px, 384px"
+                className="object-cover object-top rounded-t-full filter contrast-[1.05]"
+              />
+            </div>
           </motion.div>
 
           {/* Dynamic Floating Skill Pills (Desktop lg+) */}
@@ -169,7 +165,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               key={skill.label}
               variant="default"
               icon={<Sparkles size={11} className="text-[#FF462E]" />}
-              className="bg-white/95 text-[#0F0F11] font-semibold text-[11px] sm:text-xs shadow-xs border-black/10 py-1 px-3"
+              className="bg-white/95 text-[#0F0F11] font-semibold text-[11px] sm:text-xs shadow-sm border-black/10 py-1 px-3"
             >
               {skill.label}
             </Badge>
@@ -199,7 +195,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               href="#contact"
               variant="white"
               size="lg"
-              className="px-7 py-3.5 border border-black/10 hover:border-black/20 shadow-xs hover:shadow-md"
+              className="px-7 py-3.5 border border-black/10 hover:border-black/20 shadow-sm hover:shadow-md"
             >
               Hire Me
             </Button>
