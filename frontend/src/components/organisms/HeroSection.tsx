@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { SpinningBadge } from "@/components/atoms/SpinningBadge";
@@ -32,41 +31,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Top Header Area: Intro Pill + Spinning Badge Floating Top-Right */}
         <div className="flex flex-col items-center text-center relative z-20 mb-8 sm:mb-12">
           {/* Top Pill Greeting */}
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 sm:backdrop-blur-sm border border-black/10 shadow-sm mb-4 select-none"
-          >
+          <div className="animate-hero-rise inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 sm:backdrop-blur-sm border border-black/10 shadow-sm mb-4 select-none">
             <span className="w-2 h-2 rounded-full bg-[#FF462E] animate-ping" />
             <span className="text-xs sm:text-sm font-semibold tracking-wide text-[#0F0F11]">
               — Hello There!
             </span>
-          </motion.div>
+          </div>
 
           {/* Main Hero Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-[#0F0F11] leading-[1.06]"
+          <h1
+            style={{ animationDelay: "0.1s" }}
+            className="animate-hero-rise-solid text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-[#0F0F11] leading-[1.06]"
           >
             I&apos;m{" "}
             <span className="text-[#FF462E] underline decoration-[#FF462E]/20 decoration-wavy underline-offset-8">
               {profile.name}
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Subtitle / Role Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 sm:mt-6 text-base sm:text-xl md:text-2xl text-neutral-600 font-medium max-w-2xl"
+          <p
+            style={{ animationDelay: "0.2s" }}
+            className="animate-hero-rise mt-4 sm:mt-6 text-base sm:text-xl md:text-2xl text-neutral-600 font-medium max-w-2xl"
           >
             {profile.title} based in{" "}
             <span className="text-[#0F0F11] font-semibold">{profile.location}</span>
-          </motion.p>
+          </p>
 
           {/* Top-Right Floating Spinning Badge (single instance, scaled down on mobile) */}
           <div className="absolute right-1 sm:right-3 md:right-4 lg:right-12 top-0 z-30 origin-top-right scale-[0.62] md:scale-100">
@@ -97,11 +87,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           {/* Center Coral Arch Portrait Frame with Pure Geometric Curve */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="relative w-64 sm:w-72 md:w-80 lg:w-96 aspect-[4/5] rounded-t-full bg-gradient-to-b from-[#FF462E] via-[#FF543D] to-[#E63B24] p-2.5 sm:p-3 pb-0 shadow-2xl shadow-[#FF462E]/25 overflow-hidden"
+          <div
+            style={{ animationDelay: "0.15s" }}
+            className="animate-hero-pop relative w-64 sm:w-72 md:w-80 lg:w-96 aspect-[4/5] rounded-t-full bg-gradient-to-b from-[#FF462E] via-[#FF543D] to-[#E63B24] p-2.5 sm:p-3 pb-0 shadow-2xl shadow-[#FF462E]/25 overflow-hidden"
           >
             {/* Soft inner highlight overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/20 pointer-events-none z-10" />
@@ -117,7 +105,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="object-cover object-top rounded-t-full filter contrast-[1.05]"
               />
             </div>
-          </motion.div>
+          </div>
 
           {/* Dynamic Floating Skill Pills (Desktop lg+) */}
           <div className="hidden lg:block">
@@ -173,11 +161,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* Bottom Actions Row: Dual CTAs + Social Media Icons */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8"
+        <div
+          style={{ animationDelay: "0.4s" }}
+          className="animate-hero-rise mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8"
         >
           {/* Dual Pill CTA Buttons */}
           <div className="flex items-center gap-3">
@@ -213,7 +199,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             size="md"
             variant="outline"
           />
-        </motion.div>
+        </div>
       </div>
     </section>
   );
