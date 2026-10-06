@@ -7,7 +7,8 @@
     "dev": "nest start --watch",
     "start": "nest start",
     "start:prod": "node dist/main",
-    "seed": "ts-node src/seed.ts"
+    "seed": "ts-node src/seed.ts",
+    "migrate:images": "ts-node scripts/migrate-imagekit-to-local.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
