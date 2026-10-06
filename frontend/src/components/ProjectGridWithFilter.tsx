@@ -22,7 +22,7 @@ interface Props {
   showAllLink?: boolean;
 }
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "http://localhost:3001";
 
 function img(url?: string, width: number = 600): string | null {
   if (!url) return null;

@@ -25,7 +25,7 @@ import {
   HiOutlineEnvelope,
 } from "react-icons/hi2";
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "http://localhost:3001";
 
 const TABS = [
   { key: "profile", label: "Profile", icon: HiOutlineUser },

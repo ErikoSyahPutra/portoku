@@ -22,7 +22,7 @@ import {
 } from "@/types/portfolio";
 
 const BACKEND =
-  process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "http://localhost:3001";
 
 function resolveImgUrl(url?: string | null): string {
   if (!url) return "";

@@ -24,7 +24,7 @@ interface CvModalProps {
   lang: string;
 }
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+const BACKEND = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "http://localhost:3001";
 
 function formatUrl(url?: string): string {
   if (!url) return "";

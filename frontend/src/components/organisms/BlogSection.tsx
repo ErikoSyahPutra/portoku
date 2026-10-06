@@ -25,7 +25,7 @@ const getBlogCover = (blog: PortfolioBlog, idx: number): string => {
     const trimmed = blog.coverImageUrl.trim();
     if (trimmed.startsWith("http")) return trimmed;
     const BACKEND =
-      process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3001";
+      process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "http://localhost:3001";
     return `${BACKEND}${trimmed.startsWith("/") ? "" : "/"}${trimmed}`;
   }
   return defaultBlogCovers[idx % defaultBlogCovers.length];
