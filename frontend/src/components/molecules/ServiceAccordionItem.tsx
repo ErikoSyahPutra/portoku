@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/atoms/Badge";
 import { PortfolioService } from "@/types/portfolio";
@@ -32,7 +31,7 @@ export const ServiceAccordionItem: React.FC<ServiceAccordionItemProps> = ({
 
   return (
     <div
-      className={`group relative w-full rounded-2xl md:rounded-3xl transition-all duration-300 overflow-hidden ${
+      className={`group relative w-full rounded-2xl md:rounded-3xl transition-colors duration-300 overflow-hidden ${
         isOpen
           ? "bg-[#0F0F11] text-white border border-white/15 shadow-2xl before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-[#FF462E] before:via-[#FF7A68] before:to-transparent"
           : "bg-[#FDFBF7] text-[#0F0F11] border border-black/10 hover:border-black/20 hover:bg-[#F9F7F1]"
@@ -89,18 +88,18 @@ export const ServiceAccordionItem: React.FC<ServiceAccordionItemProps> = ({
       </button>
 
       {/* Expanded Stylized Content Body */}
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
+      <div
+        className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div
             id={`service-panel-${service.id}`}
             role="region"
             aria-labelledby={`service-header-${service.id}`}
-            key="accordion-content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
-            className="overflow-hidden"
+            aria-hidden={!isOpen}
+            inert={!isOpen}
           >
             <div className="pt-2 pb-6 md:pb-8 px-5 md:px-8 border-t border-white/10 mt-1 md:mt-2">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pt-4">
@@ -138,16 +137,16 @@ export const ServiceAccordionItem: React.FC<ServiceAccordionItemProps> = ({
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-mono text-white/80 border border-white/10">
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/80 text-[10px] font-mono text-white/80 border border-white/10">
                       PREVIEW
                     </div>
                   </div>
                 )}
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
