@@ -3,13 +3,12 @@ module.exports = {
     {
       name: 'portfolio-backend',
       cwd: './backend',
-      script: 'dist/main.js',
+      script: './server',
       exec_mode: 'fork',
       autorestart: true,
       watch: false,
-      max_memory_restart: '300M',
+      max_memory_restart: '100M',
       env: {
-        NODE_ENV: 'production',
         PORT: 3001,
       },
     },

@@ -209,16 +209,14 @@ ls -la
 
 ## Tahap 4: Build Proyek di VPS (Backend & Frontend)
 
-### 4.1 Install & Build Backend (NestJS)
+### 4.1 Install & Build Backend (Golang)
 
 ```bash
 cd /var/www/portfolio/backend
 
 # Install dependensi backend
-npm install --omit=dev=false
-
-# Build project menjadi JavaScript siap produksi di folder dist/
-npm run build
+go mod tidy
+go build -o server ./cmd/server
 ```
 
 ✅ **Verifikasi**: Pastikan folder `/var/www/portfolio/backend/dist/main.js` telah berhasil terbuat tanpa error.
@@ -442,8 +440,8 @@ git pull origin main
 
 # 3. Update backend jika ada perubahan di backend
 cd /var/www/portfolio/backend
-npm install
-npm run build
+go mod tidy
+go build -o server ./cmd/server
 
 # 4. Update frontend jika ada perubahan di frontend
 cd /var/www/portfolio/frontend

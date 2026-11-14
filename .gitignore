@@ -37,5 +37,13 @@ backend/uploads/*
 # Build Info
 *.tsbuildinfo
 
+# Go build binaries
+backend/server
+backend/server.exe
+*.exe
+
+# NestJS Backup
+backend-nestjs-backup/
+
 # Brainstorm Companion
 .superpowers/
