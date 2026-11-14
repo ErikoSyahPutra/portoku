@@ -26,14 +26,13 @@ jobs:
             # 1. Sinkronisasi kode terbaru dari git main (reset perubahan lokal pada package-lock jika ada)
             echo "📥 Mengambil kode terbaru dari branch main..."
             git fetch origin main
-            git checkout -- frontend/package-lock.json backend/package-lock.json 2>/dev/null || true
+            git checkout -- frontend/package-lock.json 2>/dev/null || true
             git reset --hard origin/main
 
-            # 2. Build Backend (NestJS)
-            echo "📦 Memasang dependensi & build Backend..."
+            # 2. Build Backend (Go)
+            echo "📦 Build Backend (Go)..."
             cd /var/www/portfolio/backend
-            npm install --legacy-peer-deps
-            npm run build
+            go build -o server ./cmd/server
 
             # 3. Build Frontend (Next.js)
             echo "📦 Memasang dependensi & build Frontend..."
