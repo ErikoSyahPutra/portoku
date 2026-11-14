@@ -47,3 +47,8 @@ backend-nestjs-backup/
 
 # Brainstorm Companion
 .superpowers/
+
+# Local Agent & Scratch Artifacts
+.codex/
+.impeccable/
+deliverables/
